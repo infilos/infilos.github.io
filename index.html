@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>Paradox</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="js/page.js"></script>
+<script type="text/javascript" src="js/warnOldVersion.js"></script>
+<script type="text/javascript" src="js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="index.html" class="active">
+<span class="home-icon">⌂</span>Paradox
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="contents/intro.html" class="page">Introduction</a></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="index.html" class="active">Paradox</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="index.html" class="active">
+<span class="home-icon">⌂</span>Paradox
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="contents/intro.html" class="page">Introduction</a></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#paradox" name="paradox" class="anchor"><span class="anchor-link"></span></a>Paradox</h1>
+<p>Paradox is a Markdown documentation tool for software projects. The GitHub repo is <a href="https://github.com/lightbend/paradox">lightbend/paradox</a>.</p>
+<p><strong>Paradox is NOT supported under the Lightbend subscription.</strong></p>
+<h3><a href="#setup" name="setup" class="anchor"><span class="anchor-link"></span></a>Setup</h3>
+<p>Find <a href="https://github.com/lightbend/paradox/releases">the latest</a> version, and create <code>project/paradox.sbt</code>:</p>
+<pre class="prettyprint"><code class="language-scala">addSbtPlugin(&quot;com.lightbend.paradox&quot; % &quot;sbt-paradox&quot; % &quot;$version$&quot;)
+</code></pre>
+<p>Inside <code>build.sbt</code>, add <code>ParadoxPlugin</code> to a subproject:</p>
+<pre class="prettyprint"><code class="language-scala">lazy val root = (project in file(&quot;.&quot;)).
+  enablePlugins(ParadoxPlugin).
+  settings(
+    name := &quot;Hello Project&quot;,
+    paradoxTheme := Some(builtinParadoxTheme(&quot;generic&quot;))
+  )
+</code></pre>
+<p>Then call <code>paradox</code> which will generate the site in <code>target/paradox/site/main</code>.</p>
+<p>Your markdown documentation will go inside <code>src/main/paradox/</code>. For example, you can start with <code>src/main/paradox/index.md</code>.</p>
+<h3><a href="#key-features" name="key-features" class="anchor"><span class="anchor-link"></span></a>Key features</h3>
+<ul>
+  <li>Supports Multi-configuration.</li>
+  <li>Supports <a href="contents/intro.html">Introduction</a>.</li>
+  <li>Principled markdown extension using generic directives syntax.</li>
+  <li>GitHub-friendly Markdown source (links work).</li>
+  <li>Code snippet inclusion for compilable code examples.</li>
+  <li>Templating and theming.</li>
+  <li>Documentation overlay.</li>
+</ul>
+<h3><a href="#generic-directive" name="generic-directive" class="anchor"><span class="anchor-link"></span></a>Generic directive</h3>
+<p>Paradox extends Markdown in a principled manner called generic directives syntax, which basically means that all of our extensions would start with <code>@</code> (for inline), <code>@@</code> (leaf block), or <code>@@@</code> (container block).</p>
+<h3><a href="#license-and-credits" name="license-and-credits" class="anchor"><span class="anchor-link"></span></a>License and credits</h3>
+<ul>
+  <li>Copyright 2015-2018 Lightbend, Inc. Paradox is provided under the Apache 2.0 license.</li>
+  <li>The markdown engine is based on Mathias&rsquo;s <a href="https://github.com/sirthias/pegdown/">Pegdown</a>.</li>
+</ul>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="contents/intro.html">Introduction</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="index.html#paradox" class="header">Paradox</a>
+  <ul>
+    <li><a href="index.html#setup" class="header">Setup</a></li>
+    <li><a href="index.html#key-features" class="header">Key features</a></li>
+    <li><a href="index.html#generic-directive" class="header">Generic directive</a></li>
+    <li><a href="index.html#license-and-credits" class="header">License and credits</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="js/magellan.js"></script>
+
+<style type="text/css">@import "lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>
