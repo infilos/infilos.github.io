@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Zipkin Internals · Infilos</title>
+<title>Tracing · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -59,7 +59,7 @@
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
-    <li><a href="../../monitoring-tracing/zipkin/index.html" class="active page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
   </ul></li>
 </ul>
 </div>
@@ -120,7 +120,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
-    <li><a href="../../monitoring-tracing/zipkin/index.html" class="active page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
   </ul></li>
 </ul>
 </div>
@@ -139,7 +139,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
   <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
-  <li>Zipkin Internals</li>
+  <li><a href="../../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></li>
+  <li>Tracing</li>
 </ul>
 </div>
 </div>
@@ -147,20 +148,100 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#zipkin-internals" name="zipkin-internals" class="anchor"><span class="anchor-link"></span></a>Zipkin Internals</h1>
-<p>Introduction about Zipkin Internals.</p>
-<div class="toc ">
+<h1><a href="#tracing" name="tracing" class="anchor"><span class="anchor-link"></span></a>Tracing</h1>
+<p>Brave 是兼容 Zipkin 协议的客户端实现，用于以代码形式创建追踪信息(即 Span)。</p>
+<h2><a href="#tracing" name="tracing" class="anchor"><span class="anchor-link"></span></a>Tracing</h2>
+<p><code>Tracing</code> 类用于设置最基本的信息，并用于创建或获取追踪操作入口 <code>Tracer</code> 类的实例。<code>Traceing</code> 是一个抽象类，并在内部提供了一个 <code>Defualt</code> 默认实现以及对应的 <code>Builder</code>。因此我们可以直接阅读其 Builder 实现来观察其构建过程。</p>
+<pre class="prettyprint"><code class="language-java">public static final class Builder {
+    String localServiceName;
+    Endpoint endpoint;
+    Reporter&lt;zipkin2.Span&gt; reporter;
+    Clock clock;
+    Sampler sampler = Sampler.ALWAYS_SAMPLE;
+    CurrentTraceContext currentTraceContext = CurrentTraceContext.Default.inheritable();
+    boolean traceId128Bit = false;
+    boolean supportsJoin = true;
+    Propagation.Factory propagationFactory = B3Propagation.FACTORY;
+    ErrorParser errorParser = new ErrorParser();
+ 	
+    // omitted....
+    
+	public Tracing build() {
+      	if (clock == null) clock = Platform.get().clock();
+      	if (endpoint == null) {
+        	endpoint = Platform.get().endpoint();
+        	if (localServiceName != null) {
+          	endpoint = endpoint.toBuilder().serviceName(localServiceName).build();
+        	}
+      	}
+      	if (reporter == null) reporter = Platform.get().reporter();
+      	return new Default(this);
+    }
+}
+</code></pre>
+<p><code>Builder</code> 中的核心属性包括：</p>
 <ul>
-  <li><a href="../../monitoring-tracing/zipkin/overview.html" class="page">OpenTracing Overview</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/integration.html" class="page">OpenTracing Integration</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/tracing.html" class="page">Tracing</a></li>
+  <li>localServiceName，当前服务的名称。</li>
+  <li>endpoint，当前服务的端点信息，包括：serviceName、ipv4、ipv6、port。</li>
+  <li>reporter，用于向 Zipkin 发送追踪信息(Span)，在一个<a href="https://github.com/openzipkin/zipkin-reporter-java">独立的仓库</a>中实现。</li>
+  <li>clock，用于获取当前微秒单位时间的时钟，Zipkin 中所有时间的单位均为微秒。</li>
+  <li>sampler，采样器，包含一组策略来决定当前 Traceid 是否需要被采样(即需要被发送)。</li>
+  <li>currentTraceContext，用于获取当前 TraceContext 的辅助方法，用于在进程内传播追踪信息。</li>
+  <li>traceId128Bit，Traceid 是否采用 128 位。</li>
+  <li>supportsJoin，是否支持 Span 的连接，如果支持，则客户端与服务端将共用一个 Spanid，即不是在服务端创建一个子 Span。</li>
+  <li>propagationFactory，传播器工厂，用于创建传播器实例，传播器决定了在跨进程传播追踪信息时如何向载体(Carrier)中注入追踪信息、如何从载体中提取追踪信息。比如以 HTTP 载体，客户端将追踪信息添加到 HTTP 首部，服务端再从 HTTP 首部中提取追踪信息。</li>
+  <li>errorParser，用于格式化异常信息，比如将异常的 message 添加到追踪信息中，并为追踪信息添加一个 Error 的标签。</li>
 </ul>
-</div>
-<div class="nav-next">
-<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/overview.html">OpenTracing Overview</a></p>
-</div>
+<p>调用 <code>build</code> 方法内部将会创建一个 <code>Tracing.Defautl</code> 实例并返回：</p>
+<pre class="prettyprint"><code class="language-java">static final class Default extends Tracing {
+    final Tracer tracer;
+    final Propagation.Factory propagationFactory;
+    final Propagation&lt;String&gt; stringPropagation;
+    final CurrentTraceContext currentTraceContext;
+    final Sampler sampler;
+    final Clock clock;
+    final ErrorParser errorParser;
+
+    Default(Builder builder) {
+      this.clock = builder.clock;
+      this.errorParser = builder.errorParser;
+      this.propagationFactory = builder.propagationFactory;
+      this.stringPropagation = builder.propagationFactory.create(Propagation.KeyFactory.STRING);
+      this.currentTraceContext = builder.currentTraceContext;
+      this.sampler = builder.sampler;
+      this.tracer = new Tracer(
+          builder.clock,
+          builder.propagationFactory,
+          builder.reporter,
+          new Recorder(builder.endpoint, clock, builder.reporter, noop),
+          builder.sampler,
+          builder.errorParser,
+          builder.currentTraceContext,
+          builder.traceId128Bit || propagationFactory.requires128BitTraceId(),
+          builder.supportsJoin &amp;&amp; propagationFactory.supportsJoin(),
+          noop
+      );
+      maybeSetCurrent();
+    }
+    // omitted....
+}
+</code></pre>
+<p>在创建 <code>Tracing.Default</code> 实例的同时，会在其构造器内部创建一个 <code>Tracer</code> 实例并赋值给 <code>Tracing</code> 的 <code>tracer</code> 字段，后续则可以通过 <code>Tracing</code> 的静态方法 <code>currentTracer</code> 来获得当前的 <code>Tracer</code> 实例。</p>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../monitoring-tracing/zipkin/tracing.html#tracing" class="header">Tracing</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/zipkin/tracing.html#tracing" class="header">Tracing</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
 </div>
 </div>
 
