@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Intro · Infilos</title>
+<title>Recorder · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -140,9 +140,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../scala-lang/index.html">Scala Lang</a></li>
-  <li><a href="../../scala-lang/puzzles/index.html">Puzzles</a></li>
-  <li>Intro</li>
+  <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
+  <li><a href="../../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></li>
+  <li>Recorder</li>
 </ul>
 </div>
 </div>
@@ -150,11 +150,94 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#intro" name="intro" class="anchor"><span class="anchor-link"></span></a>Intro</h1>
-<h2><a href="#a" name="a" class="anchor"><span class="anchor-link"></span></a>A</h2>
-<h2><a href="#b" name="b" class="anchor"><span class="anchor-link"></span></a>B</h2>
+<h1><a href="#recorder" name="recorder" class="anchor"><span class="anchor-link"></span></a>Recorder</h1>
+<p>Recorder 主要用于在本地保存 Span，并执行对 Span 中数据的操作，直到 Span 被发送给 Zipkin。</p>
+<h2><a href="#recorder" name="recorder" class="anchor"><span class="anchor-link"></span></a>Recorder</h2>
+<p><code>Recorder</code> 是一个实现类，它拥有 4 个字段：</p>
+<pre class="prettyprint"><code class="language-java">final MutableSpanMap spanMap;
+final Clock clock;
+final Reporter&lt;zipkin2.Span&gt; reporter;
+final AtomicBoolean noop;
+</code></pre>
+<ul>
+  <li>noop 用来标记是否真的需要执行实际的数据操作。</li>
+  <li>clock 用来获取平台相关的时间信息。</li>
+  <li>spanMap 用来保存实际的 Span 数据。</li>
+  <li>reporter 用来向 Zipkin 发送 Span。</li>
+</ul>
+<p>除了在结束 Span 时需要使用 reporter 向 Zipkin 发送数据，其他操作在非 noop 的情况下均围绕对 spanMap 的操作展开。</p>
+<h2><a href="#mutablespanmap" name="mutablespanmap" class="anchor"><span class="anchor-link"></span></a>MutableSpanMap</h2>
+<p><code>MutableSpanMap</code> 内部使用一个 <code>ConcurrentMap&lt;Object, MutableSpan&gt;</code> 来保存具体的 Span 数据，奇妙的是这个 Key 的类型为 <code>Object</code>，因为在存数据时使用 <code>RealKey</code>，而查找数据时使用 <code>LookupKey</code>，下面是这两个键类型的声明：</p>
+<pre class="prettyprint"><code class="language-java">static final class RealKey extends WeakReference&lt;TraceContext&gt; {
+	RealKey(TraceContext context, ReferenceQueue&lt;TraceContext&gt; queue) {
+      	super(context, queue);
+      	hashCode = context.hashCode();
+    }
+    // omit..
+}
+
+tatic final class LookupKey {
+	LookupKey(TraceContext context) {
+      	this.context = context;
+    }
+    
+    @Override public int hashCode() {
+      	return context.hashCode();
+    }
+    // omit..
+}
+</code></pre>
+<p><code>TraceContext</code> 的 <code>hashCode</code> 是 final 的，因此 <code>RealKey</code> 和 <code>LookupKey</code> 均以其 <code>hashCode</code> 作为自身的 <code>hashCode</code>，以实现在 Map 中对同一 <code>TraceContext</code> 的存取。</p>
+<p>而 <code>RealKey</code> 实现为一个 <code>WeakReference</code>，使用弱引用作为 Map 的键可以利用 GC 将没有被引用的对象移除。<code>MutableSpanMap</code> 本身继承了 <code>ReferenceQueue</code>，当这些 <code>RealKey</code> 关联的 Span 被 GC 移除时会被放置到 <code>ReferenceQueue</code> 的队列中。这时，<code>MutableSpanMap</code> 再在每次存取数据时顺便调用 <code>reportOrphanedSpans</code> 读取该队列中被 GC 的 Span，执行最后的操作，将这些 Span 发送给 Zipkin。这样避免忘记被关闭的 Span 在内存中堆积，并且不会丢失任何 Span：</p>
+<pre class="prettyprint"><code class="language-java">void reportOrphanedSpans() {
+	Reference&lt;? extends TraceContext&gt; reference;
+	while ((reference = poll()) != null) {
+      	TraceContext context = reference.get();
+      	MutableSpan value = delegate.remove(reference);
+      	if (value == null || noop.get()) continue;
+      	try {
+        	value.annotate(value.clock.currentTimeMicroseconds(), &quot;brave.flush&quot;);
+        	reporter.report(value.toSpan());
+      	} catch (RuntimeException e) {
+        	// don&#39;t crash the caller if there was a problem reporting an unrelated span.
+        	if (context != null &amp;&amp; logger.isLoggable(Level.FINE)) {
+          		logger.log(Level.FINE, &quot;error flushing &quot; + context, e);
+        	}
+		}
+	}
+}
+</code></pre>
+<p>这便是一个典型的、利用 <code>WeakReference</code> 和 <code>ReferenceQueue</code> 实现的<a href="">弱引用缓存</a>。</p>
+<p>另外，其 <code>getOrCreate</code> 方法会基于 TraceContext 尝试查找已存在的 Span，如果不存在，在创建一个新的 Span 并返回：</p>
+<pre class="prettyprint"><code class="language-java">MutableSpan getOrCreate(TraceContext context) {
+    MutableSpan result = get(context);
+    if (result != null) return result;
+
+    // save overhead calculating time if the parent is in-progress (usually is)
+    Clock clock = maybeClockFromParent(context);
+    if (clock == null) {
+      clock = new TickClock(this.clock.currentTimeMicroseconds(), System.nanoTime());
+    }
+
+    MutableSpan newSpan = new MutableSpan(clock, context, endpoint);
+    MutableSpan previousSpan = delegate.putIfAbsent(new RealKey(context, this), newSpan);
+    if (previousSpan != null) return previousSpan; // lost race
+    return newSpan;
+}
+</code></pre>
+<p>而 <code>remove</code> 方法则会将对应 TraceContext 的 Span 移除：</p>
+<pre class="prettyprint"><code class="language-java">@Nullable MutableSpan remove(TraceContext context) {
+    if (context == null) throw new NullPointerException(&quot;context == null&quot;);
+    MutableSpan result = delegate.remove(new LookupKey(context));
+    // also clears the reference relating to the recent remove
+    reportOrphanedSpans();
+    return result;
+}
+</code></pre>
+<h2><a href="#mutablespan" name="mutablespan" class="anchor"><span class="anchor-link"></span></a>MutableSpan</h2>
+<p><code>MutableSpanMap</code> 的值类型 <code>MutableSpan</code> 是一个包可见的类，主要是对 Span 数据操作方法的封装。</p>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../scala-concur/index.html">Scala Concurrency</a></p>
+<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/reporter.html">Reporter</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -163,10 +246,11 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../../scala-lang/puzzles/intro.html#intro" class="header">Intro</a>
+  <li><a href="../../monitoring-tracing/zipkin/recorder.html#recorder" class="header">Recorder</a>
   <ul>
-    <li><a href="../../scala-lang/puzzles/intro.html#a" class="header">A</a></li>
-    <li><a href="../../scala-lang/puzzles/intro.html#b" class="header">B</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/recorder.html#recorder" class="header">Recorder</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/recorder.html#mutablespanmap" class="header">MutableSpanMap</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/recorder.html#mutablespan" class="header">MutableSpan</a></li>
   </ul></li>
 </ul>
 </div>

@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>Reporter · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../java-concur/index.html" class="page">Java Concurrency</a>
+  <ul>
+    <li><a href="../../java-concur/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
+  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
+    <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../java-concur/index.html" class="page">Java Concurrency</a>
+  <ul>
+    <li><a href="../../java-concur/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
+  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
+    <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
+  <li><a href="../../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></li>
+  <li>Reporter</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#reporter" name="reporter" class="anchor"><span class="anchor-link"></span></a>Reporter</h1>
+<p>Reporter 用于向 Zipkin 发送数据，实现在一个单独的<a href="https://github.com/openzipkin/zipkin-reporter-java">仓库</a>中。</p>
+<h2><a href="#reporter" name="reporter" class="anchor"><span class="anchor-link"></span></a>Reporter</h2>
+<p><code>Reporter</code> 的具体实现类为 <code>BoundedAsyncReporter</code>：</p>
+<pre class="prettyprint"><code class="language-java">// abstract class AsyncReporter&lt;S&gt; extends Component implements Reporter&lt;S&gt;, Flushable
+static final class BoundedAsyncReporter&lt;S&gt; extends AsyncReporter&lt;S&gt; {
+    final AtomicBoolean closed = new AtomicBoolean(false);
+    final BytesEncoder&lt;S&gt; encoder;
+    final ByteBoundedQueue pending;
+    final Sender sender;
+    final int messageMaxBytes;
+    final long messageTimeoutNanos;
+    final long closeTimeoutNanos;
+    final CountDownLatch close;
+    final ReporterMetrics metrics;
+ 	// omit...   
+}
+</code></pre>
+<p>包含如下几个核心类：</p>
+<ul>
+  <li>BytesEncoder：Span的编码器，将Span编码成二进制，便于 sender 发送给 Zipkin</li>
+  <li>ByteBoundedQueue：类似于 BlockingQueue，是一个既有数量限制，又有字节数限制的阻塞队列</li>
+  <li>Sender：将编码后的二进制数据，发送给 Zipkin</li>
+  <li>ReporterMetrics：Span 的 report 相关的统计信息</li>
+  <li>BufferNextMessage：Consumer，Span 信息的消费者，依靠 Sender 上报 Span 信息</li>
+</ul>
+<h2><a href="#初始化逻辑" name="初始化逻辑" class="anchor"><span class="anchor-link"></span></a>初始化逻辑</h2>
+<pre class="prettyprint"><code class="language-java">public &lt;S&gt; AsyncReporter&lt;S&gt; build(BytesEncoder&lt;S&gt; encoder) {
+  if (encoder == null) throw new NullPointerException(&quot;encoder == null&quot;);
+
+  if (encoder.encoding() != sender.encoding()) {
+    throw new IllegalArgumentException(String.format(
+        &quot;Encoder doesn&#39;t match Sender: %s %s&quot;, encoder.encoding(), sender.encoding()));
+  }
+
+  final BoundedAsyncReporter&lt;S&gt; result = new BoundedAsyncReporter&lt;&gt;(this, encoder);
+
+  // Start a thread that flushes the queue in a loop.
+  if (messageTimeoutNanos &gt; 0) { 
+    final BufferNextMessage consumer =
+        new BufferNextMessage(sender, messageMaxBytes, messageTimeoutNanos);
+    final Thread flushThread = new Thread(() -&gt; {
+      try {
+        while (!result.closed.get()) {
+          result.flush(consumer);
+        }
+      } finally {
+        for (byte[] next : consumer.drain()) result.pending.offer(next);
+        result.close.countDown();
+      }
+    }, &quot;AsyncReporter(&quot; + sender + &quot;)&quot;);
+    flushThread.setDaemon(true);
+    flushThread.start();
+  }
+  return result;
+}
+</code></pre>
+<p>当 <code>messageTimeoutNanos</code> 大于 0 时，将会启动一个守护线程 <code>flushThread</code>，循环调用 <code>BoundedAsyncReporter</code> 的 flush 方法，将内存中的 <code>Span</code> 数据发送给 Zipkin；而当 <code>messageTimeoutNanos</code> 等于 0 时，客户端需要手动调用 <code>flush</code> 来上报 <code>Span</code> 数据。</p>
+<h2><a href="#关闭逻辑" name="关闭逻辑" class="anchor"><span class="anchor-link"></span></a>关闭逻辑</h2>
+<pre class="prettyprint"><code class="language-java">@Override public void close() {
+  if (!closed.compareAndSet(false, true)) return; // already closed
+  try {
+    // wait for in-flight spans to send
+    if (!close.await(closeTimeoutNanos, TimeUnit.NANOSECONDS)) {
+      logger.warning(&quot;Timed out waiting for in-flight spans to send&quot;);
+    }
+  } catch (InterruptedException e) {
+    logger.warning(&quot;Interrupted waiting for in-flight spans to send&quot;);
+    Thread.currentThread().interrupt();
+  }
+  int count = pending.clear();
+  if (count &gt; 0) {
+    metrics.incrementSpansDropped(count);
+    logger.warning(&quot;Dropped &quot; + count + &quot; spans due to AsyncReporter.close()&quot;);
+  }
+}
+</code></pre>
+<p>该 <code>close</code> 方法和 <code>FlushThread</code> 中 <code>while</code> 循环相呼应。在 <code>close</code> 方法中，首先将 <code>closed</code> 原子变量置为 <code>true</code>，然后调用 <code>close.await()</code>，等待 <code>close</code> 信号量(CountDownLatch)的释放，此处代码会阻塞，一直到 <code>FlushThread</code> 中 <code>finally</code> 中调用 <code>result.close.countDown()</code>。</p>
+<p>而在 <code>close</code> 方法中将 <code>closed</code> 变量置为 <code>true</code> 后，<code>FlushThread</code> 中的 <code>while</code> 循环将结束执行，然后执行 <code>finally</code> 代码块，系统会将内存中还未上报的 <code>Span</code>，添加到 <code>queue(result.pending)</code> 中，然后调用 <code>result.close.countDown()</code>。</p>
+<p><code>close</code> 方法中阻塞的代码会继续执行，将调用 <code>metrics.incrementSpansDropped(count)</code> 将这些 <code>Span</code> 的数量添加到 <code>metrics</code> 统计信息中。</p>
+<h2><a href="#发送逻辑" name="发送逻辑" class="anchor"><span class="anchor-link"></span></a>发送逻辑</h2>
+<pre class="prettyprint"><code class="language-java">@Override public void report(S span) {
+  if (span == null) throw new NullPointerException(&quot;span == null&quot;);
+
+  metrics.incrementSpans(1);
+  byte[] next = encoder.encode(span);
+  int messageSizeOfNextSpan = sender.messageSizeInBytes(Collections.singletonList(next));
+  metrics.incrementSpanBytes(next.length);
+  if (closed.get() ||
+      // don&#39;t enqueue something larger than we can drain
+      messageSizeOfNextSpan &gt; messageMaxBytes ||
+      !pending.offer(next)) {
+    metrics.incrementSpansDropped(1);
+  }
+}
+</code></pre>
+<p>在循环调用的 <code>flush</code> 方法中，会调用 <code>Reporter</code> 的 <code>report</code> 方法，该 <code>report</code> 方法会将 <code>Span</code> 转换为字节数组，然后计算出 <code>messageSize</code> 并添加到 <code>quene(pending)</code> 中，同时记录对应的统计信息。</p>
+<p>接下来看具体的 <code>flush</code> 方法实现：</p>
+<pre class="prettyprint"><code class="language-java">@Override public final void flush() {
+  flush(new BufferNextMessage(sender, messageMaxBytes, 0));
+}
+
+void flush(BufferNextMessage bundler) {
+  if (closed.get()) throw new IllegalStateException(&quot;closed&quot;);
+
+  //将队列中的数据，全部提取到BufferNextMessage中，直到buffer(bundler)满为止
+  pending.drainTo(bundler, bundler.remainingNanos());
+
+  // record after flushing reduces the amount of gauge events vs on doing this on report
+  metrics.updateQueuedSpans(pending.count);
+  metrics.updateQueuedBytes(pending.sizeInBytes);
+
+  // loop around if we are running, and the bundle isn&#39;t full
+  // if we are closed, try to send what&#39;s pending
+  if (!bundler.isReady() &amp;&amp; !closed.get()) return;
+
+  // Signal that we are about to send a message of a known size in bytes
+  metrics.incrementMessages();
+  metrics.incrementMessageBytes(bundler.sizeInBytes());
+  List&lt;byte[]&gt; nextMessage = bundler.drain();
+
+  try {
+    sender.sendSpans(nextMessage).execute();
+  } catch (IOException | RuntimeException | Error t) {
+    // In failure case, we increment messages and spans dropped.
+    int count = nextMessage.size();
+    Call.propagateIfFatal(t);
+    metrics.incrementMessagesDropped(t);
+    metrics.incrementSpansDropped(count);
+    if (logger.isLoggable(FINE)) {
+      logger.log(FINE,
+          format(&quot;Dropped %s spans due to %s(%s)&quot;, count, t.getClass().getSimpleName(),
+              t.getMessage() == null ? &quot;&quot; : t.getMessage()), t);
+    }
+    // Raise in case the sender was closed out-of-band.
+    if (t instanceof IllegalStateException) throw (IllegalStateException) t;
+  }
+}
+</code></pre>
+<p>第一个 <code>public</code> 方法供外部手动调用。</p>
+<p>第二个由 <code>FlushThread</code> 循环调用，分为 3 个步骤：</p>
+<ol>
+  <li>先将队列 <code>pending</code> 中的数据，全部提取到 <code>BufferNextMessage(bundler)</code> 中，直到 <code>bundler</code> 满为止。</li>
+  <li>当 <code>bundler</code> 就绪，即 <code>isReady()</code> 返回 <code>true</code>，取出 <code>bundler</code> 中的所有 <code>message</code>。</li>
+  <li>将取出的所有 <code>message</code>，调用 <code>Sender</code> 的 <code>sendSpans</code> 方法，发送到 <code>Zipkin</code>。</li>
+</ol>
+<h2><a href="#byteboundedqueue" name="byteboundedqueue" class="anchor"><span class="anchor-link"></span></a>ByteBoundedQueue</h2>
+<p>类似于 <code>BlockingQueue</code>，是一个既有数量限制，又有字节数限制的阻塞队列，提供了 <code>offer</code>，<code>drainTo</code>，<code>clear</code> 三个方法，供调用者向 <code>queue</code> 里存放，提取和清空数据。</p>
+<pre class="prettyprint"><code class="language-java">final class ByteBoundedQueue {
+  final ReentrantLock lock = new ReentrantLock(false);
+  final Condition available = lock.newCondition();
+
+  final int maxSize;
+  final int maxBytes;
+
+  final byte[][] elements;
+  int count;
+  int sizeInBytes;
+  int writePos;
+  int readPos;
+
+  ByteBoundedQueue(int maxSize, int maxBytes) {
+    this.elements = new byte[maxSize][];
+    this.maxSize = maxSize;
+    this.maxBytes = maxBytes;
+  }
+}
+</code></pre>
+<p><code>ByteBoundedQueue</code> 接收两个 <code>int</code> 参数，<code>maxSize</code> 是 <code>queue</code> 能够接收的最大元素数量，<code>maxBytes</code> 是 <code>queue</code> 能够接收的所有元素的最大字节数。<code>ByteBoundedQueue</code> 内部使用一个二维 <code>byte</code> 数组 <code>elements</code> 来存储 <code>message</code>，并使用 <code>writePos</code> 和 <code>readPos</code> 两个游标，分别记录写和读的位置。<code>ByteBoundedQueue</code> 中使用了典型的可重入锁 <code>ReentrantLock</code>，确保 <code>offer</code>、<code>drainTo</code>、<code>clear</code> 等方法的线程安全。</p>
+<pre class="prettyprint"><code class="language-java">/**
+ * Returns true if the element could be added or false if it could not due to its size.
+ */
+boolean offer(byte[] next) {
+  lock.lock();
+  try {
+    if (count == elements.length) return false;
+    if (sizeInBytes + next.length &gt; maxBytes) return false;
+
+    elements[writePos++] = next;
+
+    if (writePos == elements.length) writePos = 0; // circle back to the front of the array
+
+    count++;
+    sizeInBytes += next.length;
+
+    available.signal(); // alert any drainers
+    return true;
+  } finally {
+    lock.unlock();
+  }
+}
+</code></pre>
+<p><code>offer</code> 方法用于将 <code>message</code> 添加到 <code>queue</code> 中，使用了标准的 <code>try-lock</code> 结构，即先获得锁、然后在 <code>finally</code> 里释放锁。在获取锁以后，当 <code>count</code> 等于 <code>elements.length</code> 时，意味着 <code>queue</code> 是满的，不能再继续添加；当 <code>sizeInBytes + next.length &gt; maxBytes</code> 时，意味着该消息加入队列后会超出队列的最大字节限制，因此也不能继续添加；如果以上两个条件均不满足，则表明可以继续添加 <code>message</code>，将 <code>writePos+1</code>，并将 <code>message</code> 放置到 <code>writePos+1</code> 处；当 <code>writePos</code> 到达数组尾部，则将 <code>writePos</code> 置为 0，让下一次添加从数组头部开始，然后将 <code>count</code> 计数器 +1，并更新总字节数；最后调用 <code>available.signal()</code> 来通知其他在 <code>lock</code> 上等待的线程(在 <code>drainTo</code> 方法中阻塞的线程)继续竞争线程资源。</p>
+<pre class="prettyprint"><code class="language-java">/** Blocks for up to nanosTimeout for elements to appear. Then, consume as many as possible. */
+int drainTo(Consumer consumer, long nanosTimeout) {
+  try {
+    // This may be called by multiple threads. If one is holding a lock, another is waiting. We
+    // use lockInterruptibly to ensure the one waiting can be interrupted.
+    lock.lockInterruptibly();
+    try {
+      long nanosLeft = nanosTimeout;
+      while (count == 0) {
+        if (nanosLeft &lt;= 0) return 0;
+        nanosLeft = available.awaitNanos(nanosLeft);
+      }
+      return doDrain(consumer);
+    } finally {
+      lock.unlock();
+    }
+  } catch (InterruptedException e) {
+    return 0;
+  }
+}
+</code></pre>
+<p><code>drainTo</code> 方法用于提取消息到 <code>Consumer</code> 中消费，如果当时 <code>queue</code> 类没有消息，则每次等待 <code>nanosTimeout</code>，直到 <code>queue</code> 里存入消息为止；当 <code>while</code> 循环退出时，表名 <code>queue</code> 中已经有新的 <code>message</code> 添加了进来，可以消息，则调用 <code>doDrain</code> 方法。</p>
+<pre class="prettyprint"><code class="language-java">int doDrain(Consumer consumer) {
+  int drainedCount = 0;
+  int drainedSizeInBytes = 0;
+  while (drainedCount &lt; count) {
+    byte[] next = elements[readPos];
+
+    if (next == null) break;
+    if (consumer.accept(next)) {
+      drainedCount++;
+      drainedSizeInBytes += next.length;
+
+      elements[readPos] = null;
+      if (++readPos == elements.length) readPos = 0; // circle back to the front of the array
+    } else {
+      break;
+    }
+  }
+  count -= drainedCount;
+  sizeInBytes -= drainedSizeInBytes;
+  return drainedCount;
+}
+</code></pre>
+<p><code>doDrain</code> 方法依然是一个 <code>while</code> 循环，当 <code>drainedCount &lt;1</code> 时，即提取的 <code>message</code> 数量总数小于 <code>queue</code> 里面的消息总数，尝试调用 <code>consumer.accept</code> 方法；如果 <code>accept</code> 方法返回 <code>true</code>，则将 <code>drainedCount +1</code>，并且 <code>drainedSizeInBytes</code> 加上当前消息的字节数；如果 <code>accept</code> 方法返回 <code>false</code>，则跳出循环，将 <code>queue</code> 的 <code>count</code> 减掉提取的总消息数 <code>drainedCount</code>，<code>sizeInBytes</code> 减去提取的总字节数 <code>drainedSizeInBytes</code>。</p>
+<pre class="prettyprint"><code class="language-java">int clear() {
+  lock.lock();
+  try {
+    int result = count;
+    count = sizeInBytes = readPos = writePos = 0;
+    Arrays.fill(elements, null);
+    return result;
+  } finally {
+    lock.unlock();
+  }
+}
+</code></pre>
+<p><code>clear</code> 方法用于清空队列，该方法比较简单，就是将所有存储的数据清除，该方法会在 <code>Reporter</code> 的 <code>close</code> 方法中被调用。</p>
+<h2><a href="#buffernextmessage" name="buffernextmessage" class="anchor"><span class="anchor-link"></span></a>BufferNextMessage</h2>
+<p><code>BufferNextMessage</code> 是 <code>ByteDoundedQueue.Consumer</code> 的默认实现。</p>
+<pre class="prettyprint"><code class="language-java">final class BufferNextMessage implements ByteBoundedQueue.Consumer {
+  private final Sender sender;
+  private final int maxBytes;
+  private final long timeoutNanos;
+  private final List&lt;byte[]&gt; buffer = new LinkedList&lt;&gt;();
+
+  long deadlineNanoTime;
+  int sizeInBytes;
+  boolean bufferFull;
+
+  BufferNextMessage(Sender sender, int maxBytes, long timeoutNanos) {
+    this.sender = sender;
+    this.maxBytes = maxBytes;
+    this.timeoutNanos = timeoutNanos;
+  }
+}
+</code></pre>
+<p>其内部使用一个 <code>LinkedList</code> 来存储接收到的 <code>Message</code>。</p>
+<pre class="prettyprint"><code class="language-java">@Override
+public boolean accept(byte[] next) {
+  buffer.add(next); // speculatively add to the buffer so we can size it
+  int x = sender.messageSizeInBytes(buffer);
+  int y = maxBytes;
+  int includingNextVsMaxBytes = (x &lt; y) ? -1 : ((x == y) ? 0 : 1);
+
+  // If we can fit queued spans and the next into one message...
+  if (includingNextVsMaxBytes &lt;= 0) {
+    sizeInBytes = x;
+
+    if (includingNextVsMaxBytes == 0) {
+      bufferFull = true;
+    }
+    return true;
+  } else {
+    buffer.remove(buffer.size() - 1);
+    return false; // we couldn&#39;t fit the next message into this buffer
+  }
+}
+</code></pre>
+<p>在 <code>accept</code> 方法中，先将 <code>message</code> 放入 <code>buffer</code>，然后调用 <code>sender</code> 的 <code>messageSiziInBytes</code> 方法统计所有 <code>buffer</code> 消息的总字节数 <code>includingNextVsMaxBytes</code>；当 <code>includingNextVsMaxBytes</code> 大于该 <code>buffer</code> 的最大字节数 <code>maxBytes</code> 时，将加入到 <code>buffer</code> 的 <code>message</code> 移除；当 <code>includingNextVsMaxBytes</code> 等于该 <code>buffer</code> 的最大字节数 <code>maxBytes</code> 时，则将该 <code>buffer</code> 标记为已满状态，即 <code>bufferFull = true</code>。</p>
+<pre class="prettyprint"><code class="language-java">long remainingNanos() {
+  if (buffer.isEmpty()) {
+    deadlineNanoTime = System.nanoTime() + timeoutNanos;
+  }
+  return Math.max(deadlineNanoTime - System.nanoTime(), 0);
+}
+
+boolean isReady() {
+  return bufferFull || remainingNanos() &lt;= 0;
+}
+</code></pre>
+<p>在 <code>remainingNanos</code> 方法中，当 <code>buffer</code> 为空，则重置一个 <code>deadlineNanoTime</code>，其值为当前系统时间加上 <code>timeoutNanos</code>，当系统时间超过这个时间或者 <code>buffer</code> 满了的时候，<code>isReady</code> 就会返回 <code>true</code>，即 <code>buffer</code> 成为准备就绪状态。</p>
+<pre class="prettyprint"><code class="language-java">List&lt;byte[]&gt; drain() {
+  if (buffer.isEmpty()) return Collections.emptyList();
+  ArrayList&lt;byte[]&gt; result = new ArrayList&lt;&gt;(buffer);
+  buffer.clear();
+  sizeInBytes = 0;
+  bufferFull = false;
+  deadlineNanoTime = 0;
+  return result;
+}
+</code></pre>
+<p><code>drain</code> 方法返回 <code>buffer</code> 中的所有数据，并将 <code>buffer</code> 清空。</p>
+<p><code>isReady</code> 和 <code>drain</code> 方法会在 <code>BoundedAsyncReporter</code> 的 <code>flush</code> 方法内被配合使用：</p>
+<pre class="prettyprint"><code class="language-java">void flush(BufferNextMessage bundler) {
+	// ...
+	if (!bundler.isReady() &amp;&amp; !closed.get()) return;
+	// ...
+	List&lt;byte[]&gt; nextMessage = bundler.drain();
+	// ...
+	sender.sendSpans(nextMessage).execute();
+}
+</code></pre>
+<p>因为 <code>flush</code> 会一直不断的被调用，而这里将先调用 <code>bundler.isReady()</code> 方法，当返回 <code>true</code> 之后才会取出所有堆积的消息，然后一起打包给 Zipkin 以提高效率。</p>
+<p>而在手动调用的 <code>flush</code> 方法内，可以发现：</p>
+<pre class="prettyprint"><code class="language-java">@Override public final void flush() {
+  flush(new BufferNextMessage(sender, messageMaxBytes, 0));
+}
+</code></pre>
+<p>这里构造 <code>BufferNextMessage</code> 时所传入的 <code>timeoutNanos</code> 为 0，所以 <code>BufferNextMessage</code> 的 <code>isReady</code> 方法永远会返回 <code>true</code>。这意味着每次我们手动调用 <code>flush</code> 方法，会立即将 <code>queue</code> 的数据用 <code>BufferNextMessage</code> 填满，并打包发送给 <code>Zipkin</code>，至于 <code>queue</code> 中剩余的数据，需要等到下次 <code>FlushThread</code> 循环执行 <code>flush</code> 方法时被发送。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/http-tracing.html">HTTPTracing</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../monitoring-tracing/zipkin/reporter.html#reporter" class="header">Reporter</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#reporter" class="header">Reporter</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#初始化逻辑" class="header">初始化逻辑</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#关闭逻辑" class="header">关闭逻辑</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#发送逻辑" class="header">发送逻辑</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#byteboundedqueue" class="header">ByteBoundedQueue</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/reporter.html#buffernextmessage" class="header">BufferNextMessage</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

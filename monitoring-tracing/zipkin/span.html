@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Intro · Infilos</title>
+<title>Span · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -140,9 +140,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../scala-lang/index.html">Scala Lang</a></li>
-  <li><a href="../../scala-lang/puzzles/index.html">Puzzles</a></li>
-  <li>Intro</li>
+  <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
+  <li><a href="../../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></li>
+  <li>Span</li>
 </ul>
 </div>
 </div>
@@ -150,11 +150,50 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#intro" name="intro" class="anchor"><span class="anchor-link"></span></a>Intro</h1>
-<h2><a href="#a" name="a" class="anchor"><span class="anchor-link"></span></a>A</h2>
-<h2><a href="#b" name="b" class="anchor"><span class="anchor-link"></span></a>B</h2>
+<h1><a href="#span" name="span" class="anchor"><span class="anchor-link"></span></a>Span</h1>
+<p>整个追踪树是由多个带有关联关系的 Span 构成，Span 也作为追踪信息的最小单元。</p>
+<h2><a href="#span" name="span" class="anchor"><span class="anchor-link"></span></a>Span</h2>
+<div align="center">
+<img src="http://7xiwca.com1.z0.glb.clouddn.com/20180802165544.png" style="display:block;width:90%;" alt="NAME" align=center />
+</div>
+<p>如上图，<code>SpanCustomier</code> 是主接口，定义了 OpenTracing 规范中的基本操作，包括名称、标签、标注。如果业务中需要自定义一些字段以便对 Span 进行查询，可以基于该接口进行扩展。</p>
+<p><code>Span</code> 是一个抽象类，建模了 Span 的所有操作，甚至包括 Span 的生命周期管理，暴露给用户的 Span 也均为该类型。其内部实现了一个枚举 <code>Kind</code> 用于表示一个 Span 的位置角色，包括：CLIENT、SERVER、PRODUCER、CONSUMER。</p>
+<p><code>ScopedSpan</code> 同样是一个抽象类，根据注释，”在单进程追踪过程中，可以被认为是一个简化 API 后的 Span“。</p>
+<p>对应着三种基本抽象，Brave 提供了两种实现 &ldquo;Noop-&rdquo; 和 &ldquo;Real-&rdquo;，&ldquo;Noop-&rdquo; 意味着不做任何操作，当用户没有进行正确的配置时、或者当前追踪不需要被采样时会返回该类 Span 实例；&ldquo;Real-&rdquo; 则是对各类抽象的实现，并且封装了 Span 的可变 API。</p>
+<p>此外，还提供了一个 <code>CurrentSpanCustomizer</code>，用于为外部提供一个不为 Null 的 Span 实例，以避免用户进行必要的非 Null 检查。</p>
+<p>在 <code>RealSpan</code> 中我们可以看到 Span 的具体操作实现，其实现主要依赖一下核心类：</p>
+<ul>
+  <li><code>Recorder</code>：用于在本地记录 Span。</li>
+  <li><code>Reporter</code>：用于将 Span 上报给 Zipkin。</li>
+  <li><code>MutableSpan</code>：Span 的(可变)包装类，提供各种 API 操作 Span。</li>
+  <li><code>MutableSpanMap</code>：以 TraceContext 为键，MutableSpan 为值的 Map 结构，用于在内存中保存所有活动的 Span。</li>
+</ul>
+<h2><a href="#start-finish" name="start-finish" class="anchor"><span class="anchor-link"></span></a>Start/Finish</h2>
+<pre class="prettyprint"><code class="language-java">@Override public Span start(long timestamp) {
+    recorder().start(context());
+    return this;
+}
+  
+@Override public void finish(long timestamp) {
+	recorder().finish(context(), timestamp);
+}
+</code></pre>
+<p>这两个方法内部分别会去调用 <code>Recorder</code> 的 <code>start</code> 和 <code>finish</code> 方法，而在 <code>Recorder</code> 内部，这两个方法实际会去调用用于保存所有本地 Span 的 <code>MutableSpanMap</code> 的对应方法，并调用 <code>Reporter</code> 来发送 <code>Span</code> 数据。</p>
+<p>需要注意的是，应尽量调用这两个方法的无参重载方法，交由系统来完成对时间戳、持续时长的计算，以避免计算错误。</p>
+<h2><a href="#其他操作" name="其他操作" class="anchor"><span class="anchor-link"></span></a>其他操作</h2>
+<ul>
+  <li><code>name()</code></li>
+  <li><code>kind()</code></li>
+  <li><code>annotate()</code></li>
+  <li><code>tag()</code></li>
+  <li><code>error()</code></li>
+  <li><code>remoteEndpoint()</code></li>
+  <li><code>abandon()</code></li>
+  <li><code>flush()</code></li>
+</ul>
+<p>所有这些方法都是基于对 <code>Recorder</code> 的操作，来实现对 Span 信息的创建、更新、发送。在 <a href="">Recorder</a> 部分我们将详细展开。</p>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../scala-concur/index.html">Scala Concurrency</a></p>
+<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/propagation.html">Propagation</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -163,10 +202,11 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../../scala-lang/puzzles/intro.html#intro" class="header">Intro</a>
+  <li><a href="../../monitoring-tracing/zipkin/span.html#span" class="header">Span</a>
   <ul>
-    <li><a href="../../scala-lang/puzzles/intro.html#a" class="header">A</a></li>
-    <li><a href="../../scala-lang/puzzles/intro.html#b" class="header">B</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/span.html#span" class="header">Span</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/span.html#start-finish" class="header">Start/Finish</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/span.html#其他操作" class="header">其他操作</a></li>
   </ul></li>
 </ul>
 </div>

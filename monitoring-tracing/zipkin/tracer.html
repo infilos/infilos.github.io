@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Integration · Infilos</title>
+<title>Tracer · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -60,6 +60,7 @@
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
   </ul></li>
 </ul>
 </div>
@@ -121,6 +122,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing Specification</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
   </ul></li>
 </ul>
 </div>
@@ -140,7 +142,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../../index.html">Infilos</a></li>
   <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
   <li><a href="../../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></li>
-  <li>Integration</li>
+  <li>Tracer</li>
 </ul>
 </div>
 </div>
@@ -148,7 +150,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#integration" name="integration" class="anchor"><span class="anchor-link"></span></a>Integration</h1>
+<h1><a href="#tracer" name="tracer" class="anchor"><span class="anchor-link"></span></a>Tracer</h1>
 <p>Tracer 便是所有追踪操作的入口类，我们可以通过该类来创建 Span。</p>
 <h2><a href="#tracer" name="tracer" class="anchor"><span class="anchor-link"></span></a>Tracer</h2>
 <p><code>Tracer</code> 内部的字段是在构造 <code>Tracing</code> 时填充的，因此字段类型与 <code>Tracing</code> 类似。围绕这些字段，<code>Tracer</code> 提供了各种方法来构建、组织追踪信息(Span)：</p>
@@ -290,6 +292,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li>DeclarativeSampler，基于业务标注的采用。</li>
   <li>ParameterizedSampler，基于有序规则的采样，比如一个用于提取 HTTP 方法的规则。</li>
 </ul>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/span.html">Span</a></p>
+</div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 <nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
@@ -297,7 +302,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../../monitoring-tracing/zipkin/tracer.html#integration" class="header">Integration</a>
+  <li><a href="../../monitoring-tracing/zipkin/tracer.html#tracer" class="header">Tracer</a>
   <ul>
     <li><a href="../../monitoring-tracing/zipkin/tracer.html#tracer" class="header">Tracer</a></li>
     <li><a href="../../monitoring-tracing/zipkin/tracer.html#traceid" class="header">Traceid</a></li>
