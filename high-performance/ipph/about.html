@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Zipkin · Infilos</title>
+<title>关于本书 · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -59,7 +59,7 @@
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
-    <li><a href="../../monitoring-tracing/zipkin/index.html" class="active page">Zipkin</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
@@ -125,7 +125,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
-    <li><a href="../../monitoring-tracing/zipkin/index.html" class="active page">Zipkin</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
@@ -148,8 +148,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
-  <li>Zipkin</li>
+  <li><a href="../../high-performance/index.html">High Performance</a></li>
+  <li><a href="../../high-performance/ipph/index.html">Parallel Programming</a></li>
+  <li>关于本书</li>
 </ul>
 </div>
 </div>
@@ -157,24 +158,40 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#zipkin" name="zipkin" class="anchor"><span class="anchor-link"></span></a>Zipkin</h1>
-<p>Introduction about Zipkin Internals.</p>
-<div class="toc ">
+<h1><a href="#关于本书" name="关于本书" class="anchor"><span class="anchor-link"></span></a>关于本书</h1>
 <ul>
-  <li><a href="../../monitoring-tracing/zipkin/overview.html" class="page">Overview</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/integration.html" class="page">Integration</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/tracing.html" class="page">Tracing</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/tracer.html" class="page">Tracer</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/span.html" class="page">Span</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/propagation.html" class="page">Propagation</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/recorder.html" class="page">Recorder</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/reporter.html" class="page">Reporter</a></li>
-  <li><a href="../../monitoring-tracing/zipkin/http-tracing.html" class="page">HTTPTracing</a></li>
+  <li><a href="https://mirrors.edge.kernel.org/pub/linux/kernel/people/paulmck/perfbook/perfbook.html">Is Parallel Programming Hard, And If So, What Can You Do About It?</a></li>
+  <li>中文版：<a href="https://book.douban.com/subject/27078711/">深入理解并行编程</a></li>
+  <li>作者：Paul E. McKenney</li>
+  <li>译者：谢宝友、鲁阳</li>
+  <li>中文版基于 2015.x，对照英文版本 2017.11.22a。</li>
 </ul>
-</div>
-<div class="nav-next">
-<p><strong>Next:</strong> <a href="../../monitoring-tracing/zipkin/overview.html">Overview</a></p>
-</div>
+<p>本书专注于基于 <strong>基于共享内存的并行编程</strong> ，重点放在软件栈底层的软件，比如操作系统内核、并行的数据库管理系统、底层系统库等。</p>
+<p>本书包含一些广泛应用且使用频繁的设计技巧，而非一些适用范围有限的最佳算法。</p>
+<p>内容简介：</p>
+<ul>
+  <li>CH01：关于本书。</li>
+  <li>CH02：并行编程概览。</li>
+  <li>CH03：介绍共享内存并行硬件。因为，在不了解底层硬件的情况下很难编写出正确的并行代码。</li>
+  <li>CH04：为常用的、基于共享内存的并行编程原语提供了一个简要的概览。</li>
+  <li>CH05：深入介绍了并行领域中可能最简单的一个问题——计数。</li>
+  <li>CH06：介绍了一些设计层的方法，用于解决 CH05 中遇到的问题。</li>
+  <li>CH07：锁。</li>
+  <li>CH08：数据所有权。</li>
+  <li>CH09：延期处理机制——引用计数、危险指针、顺序锁、RCU。</li>
+  <li>CH10：将前面介绍的技术应用到哈希表。</li>
+  <li>CH11：各种形式的并行代码校验手段。</li>
+  <li>CH12：形式验证。</li>
+  <li>CH13：通过示例的形式介绍了一系列中等规模的并行编程问题。</li>
+  <li>CH14：高级同步方法，如无锁同步、并行实时计算。</li>
+  <li>CH15：关于内存序的高级主题。</li>
+  <li>CH16：一些实践建议。</li>
+  <li>CH17：并行编程的未来方向，包括共享内存并行系统设计、软件和硬件事务内存、函数式并行编程。</li>
+  <li>附录-C：着重介绍了内存屏障的原理与实践。</li>
+</ul>
+<blockquote>
+  <p>本文作者 Paul 是 Linux 内核大神，40 年开发经验。 全书干货居多，作者的介绍非常细致，很多高级主题让我这个新手感到震撼，值得反复阅读。 这里为了学习理解、加深记忆，标注、摘抄、整理了中文版、英文版中的内容，仅供个人学习、交流、查阅。 写书、译书不易，感谢作者、译者的辛勤汗水，请支持正版。</p>
+</blockquote>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 </div>

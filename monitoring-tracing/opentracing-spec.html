@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>OpenTracing Specification · Infilos</title>
+<title>OpenTracing · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -57,10 +57,14 @@
   <li><a href="../scala-concur/index.html" class="page">Scala Concurrency</a></li>
   <li><a href="../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
   <ul>
-    <li><a href="../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
-    <li><a href="../monitoring-tracing/opentracing-spec.html" class="active page">OpenTracing Specification</a></li>
-    <li><a href="../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
-    <li><a href="../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
+    <li><a href="../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../monitoring-tracing/opentracing-spec.html" class="active page">OpenTracing</a></li>
+    <li><a href="../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+  <li><a href="../high-performance/index.html" class="page">High Performance</a>
+  <ul>
+    <li><a href="../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
   </ul></li>
 </ul>
 </div>
@@ -119,10 +123,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../scala-concur/index.html" class="page">Scala Concurrency</a></li>
   <li><a href="../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
   <ul>
-    <li><a href="../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper Essentials</a></li>
-    <li><a href="../monitoring-tracing/opentracing-spec.html" class="active page">OpenTracing Specification</a></li>
-    <li><a href="../monitoring-tracing/zipkin/index.html" class="page">Zipkin Internals</a></li>
-    <li><a href="../monitoring-tracing/pinpoint.html" class="page">Pinpoint Internals</a></li>
+    <li><a href="../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../monitoring-tracing/opentracing-spec.html" class="active page">OpenTracing</a></li>
+    <li><a href="../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+  <li><a href="../high-performance/index.html" class="page">High Performance</a>
+  <ul>
+    <li><a href="../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
   </ul></li>
 </ul>
 </div>
@@ -141,7 +149,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li><a href="../index.html">Infilos</a></li>
   <li><a href="../monitoring-tracing/index.html">Monitoring &amp; Tracing</a></li>
-  <li>OpenTracing Specification</li>
+  <li>OpenTracing</li>
 </ul>
 </div>
 </div>
@@ -149,7 +157,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#opentracing-specification" name="opentracing-specification" class="anchor"><span class="anchor-link"></span></a>OpenTracing Specification</h1>
+<h1><a href="#opentracing" name="opentracing" class="anchor"><span class="anchor-link"></span></a>OpenTracing</h1>
 <h2><a href="#数据模型" name="数据模型" class="anchor"><span class="anchor-link"></span></a>数据模型</h2>
 <p>OpenTracing 中的 <strong>Trace</strong> 由其 <strong>Span</strong> 隐式定义。**Trace** 可以被认为是由一组 <strong>Span</strong> 定义的有向无环图(DAG)，**Span** 之间的关系被称为 <strong>Reference</strong>。</p>
 <p>以下是一个由 8 个 <strong>Span</strong> 构成的 <strong>Trace</strong> 的结构：</p>
@@ -322,7 +330,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="http://opentracing.io">opentracing.io</a></li>
 </ul>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../monitoring-tracing/zipkin/index.html">Zipkin Internals</a></p>
+<p><strong>Next:</strong> <a href="../monitoring-tracing/zipkin/index.html">Zipkin</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -331,7 +339,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../monitoring-tracing/opentracing-spec.html#opentracing-specification" class="header">OpenTracing Specification</a>
+  <li><a href="../monitoring-tracing/opentracing-spec.html#opentracing" class="header">OpenTracing</a>
   <ul>
     <li><a href="../monitoring-tracing/opentracing-spec.html#数据模型" class="header">数据模型</a></li>
     <li><a href="../monitoring-tracing/opentracing-spec.html#span-间的-reference" class="header">Span 间的 Reference</a></li>
