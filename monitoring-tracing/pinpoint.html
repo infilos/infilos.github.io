@@ -162,7 +162,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <h3><a href="#google-dapper-中的实现" name="google-dapper-中的实现" class="anchor"><span class="anchor-link"></span></a>Google Dapper 中的实现</h3>
 <p>分布式追踪系统的目的在于，当一个消息由 Node-1 发向 Node-2 时识别分布式系统中 Node-1 与 Node-2 之间的关系。</p>
 <div  align="center">
-<img src="http://7xiwca.com1.z0.glb.clouddn.com/20180807114017.png" style="display:block;width:40%;" alt="NAME" align=center />
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180920230137.png" style="display:block;width:40%;" alt="NAME" align=center />
 </div>
 <p>但问题在于没有办法来识别消息之间的关系。比如，我们无法发现由 Node-1 发出的 N 条消息，与被 Node-2 收到的 N&rsquo; 条消息之间的关系。换句话说，当第 X 条消息从 Node-1 发出时，在 Node-2 中收到的 N&rsquo; 条消息中，我们无法识别具体哪条才是第 X 条消息。在一些尝试中试图在 TCP 或操作系统层来追踪消息。然而，这种方式的实现复杂性极高而性能却很低，因为需要为每种协议提供独立的实现。另外，也很难精确地追踪消息。</p>
 <p>然而，Google 的 Dapper 为该难题提供了一种简单的解决方案。即，在发送消息时为其添加应用层标签，从而为消息建立一种链接。比如，在 HTTP 请求中在 HTTP 首部为消息添加标签信息，然后使用这些标签来追踪消息。</p>
@@ -178,7 +178,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 </ul>
 <h3><a href="#traceid-工作原理" name="traceid-工作原理" class="anchor"><span class="anchor-link"></span></a>Traceid 工作原理</h3>
 <div  align="center">
-<img src="http://7xiwca.com1.z0.glb.clouddn.com/20180807183532.png" style="display:block;width:80%;" alt="NAME" align=center />
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180920230201.png" style="display:block;width:80%;" alt="NAME" align=center />
 </div>
 <p>一个 Txid 表示三个不同的 RPC 之间互相关联，作为一个完整的事务。然而，一个 Txid 本身并不能明显的表示 RPC 之间的关系。为了识别 RPC 之间个关系，需要使用 Spanid 和 Parentid。假设这些节点是 Tomcat 服务。你可以认为一个 Spanid 是一个处理 HTTP 请求的线程。一个 Parentid 则表示发起 RPC 调用的 Span 的 Spanid。</p>
 <p>Pinpoint 可以通过 Txid 发现 Span 之间的关联，并能通过 Spanid 和 Parentid 将 Span 进行排序以组成一个层级树结构。</p>
@@ -249,7 +249,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <h3><a href="#原理" name="原理" class="anchor"><span class="anchor-link"></span></a>原理</h3>
 <p>因为字节码增强技术应用于 Java 字节码层面，它往往会增加开发的风险并降低生产力。另外，开发人员也更易出错。在 Pinpoint 中，我们通过拦截器这种抽象来提供生产力和可访问性。Pinpoint 会在类加载的时候增强代码，以注入必要的代码来追踪分布式事务和性能信息。因为追踪代码被直接注入到了应用代码，因此对性能有所提升。</p>
 <div  align="center">
-<img src="http://7xiwca.com1.z0.glb.clouddn.com/20180808104857.png" style="display:block;width:70%;" alt="NAME" align=center />
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180920230232.png" style="display:block;width:70%;" alt="NAME" align=center />
 </div>
 <p>在 Pinpoint 中，对 API 的拦截部分和对数据的记录部分是分离的。拦截器会被注入到我们想要追踪的方法内，而调用 <code>before()</code> 和 <code>after()</code> 则会完成对数据的记录。尽管是基于字节码增强，Pinpoint Agent 也只能从必要的方法内记录数据，从而使得要被分析的数据大小紧凑。</p>
 <h2><a href="#与-zipkin-对比" name="与-zipkin-对比" class="anchor"><span class="anchor-link"></span></a>与 Zipkin 对比</h2>

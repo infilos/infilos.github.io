@@ -162,7 +162,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <p>整个追踪树是由多个带有关联关系的 Span 构成，Span 也作为追踪信息的最小单元。</p>
 <h2><a href="#span" name="span" class="anchor"><span class="anchor-link"></span></a>Span</h2>
 <div align="center">
-<img src="http://7xiwca.com1.z0.glb.clouddn.com/20180802165544.png" style="display:block;width:90%;" alt="NAME" align=center />
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180920230023.png" style="display:block;width:90%;" alt="NAME" align=center />
 </div>
 <p>如上图，<code>SpanCustomier</code> 是主接口，定义了 OpenTracing 规范中的基本操作，包括名称、标签、标注。如果业务中需要自定义一些字段以便对 Span 进行查询，可以基于该接口进行扩展。</p>
 <p><code>Span</code> 是一个抽象类，建模了 Span 的所有操作，甚至包括 Span 的生命周期管理，暴露给用户的 Span 也均为该类型。其内部实现了一个枚举 <code>Kind</code> 用于表示一个 Span 的位置角色，包括：CLIENT、SERVER、PRODUCER、CONSUMER。</p>
