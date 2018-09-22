@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>Parallel Programming · Infilos</title>
+<title>CH08-数据所有权 · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -64,7 +64,7 @@
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
   <ul>
-    <li><a href="../../high-performance/ipph/index.html" class="active page">Parallel Programming</a></li>
+    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
   </ul></li>
 </ul>
 </div>
@@ -130,7 +130,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
   <ul>
-    <li><a href="../../high-performance/ipph/index.html" class="active page">Parallel Programming</a></li>
+    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
   </ul></li>
 </ul>
 </div>
@@ -149,7 +149,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
   <li><a href="../../high-performance/index.html">High Performance</a></li>
-  <li>Parallel Programming</li>
+  <li><a href="../../high-performance/ipph/index.html">Parallel Programming</a></li>
+  <li>CH08-数据所有权</li>
 </ul>
 </div>
 </div>
@@ -157,25 +158,53 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#parallel-programming" name="parallel-programming" class="anchor"><span class="anchor-link"></span></a>Parallel Programming</h1>
-<p>基于 <strong>共享内存</strong> 的并行编程技术。</p>
-<div class="toc ">
-<ul>
-  <li><a href="../../high-performance/ipph/ch01-about.html" class="page">CH01-关于</a></li>
-  <li><a href="../../high-performance/ipph/ch02-intro.html" class="page">CH02-简介</a></li>
-  <li><a href="../../high-performance/ipph/ch03-hardware.html" class="page">CH03-硬件特性</a></li>
-  <li><a href="../../high-performance/ipph/ch04-tools.html" class="page">CH04-并行工具</a></li>
-  <li><a href="../../high-performance/ipph/ch05-counting.html" class="page">CH05-计数</a></li>
-  <li><a href="../../high-performance/ipph/ch06-partition.html" class="page">CH06-分割同步设计</a></li>
-  <li><a href="../../high-performance/ipph/ch07-lock.html" class="page">CH07-锁</a></li>
-  <li><a href="../../high-performance/ipph/ch08-ownership.html" class="page">CH08-数据所有权</a></li>
-</ul>
-</div>
-<div class="nav-next">
-<p><strong>Next:</strong> <a href="../../high-performance/ipph/ch01-about.html">CH01-关于</a></p>
-</div>
+<h1><a href="#ch08-数据所有权" name="ch08-数据所有权" class="anchor"><span class="anchor-link"></span></a>CH08-数据所有权</h1>
+<p>避免锁带来的同步开销的最简单方式之一，就是在线程之间(或者对于内核来说，CPU 之间)包装数据，以便让数据仅被一个线程访问或修改。这种方式非常重要，事实上，它是一种应用模式，甚至新手凭借本能也会如此使用。</p>
+<h2><a href="#多进程" name="多进程" class="anchor"><span class="anchor-link"></span></a>多进程</h2>
+<p>在前面基于 Shell 的并行编程示例中，两个进程之间不共享内存。这种方法几乎完全消除了同步开销。这种极度简单和最佳性能的组合显然是相当有吸引力的。</p>
+<h2><a href="#部分数据所有权和-pthread-线程库" name="部分数据所有权和-pthread-线程库" class="anchor"><span class="anchor-link"></span></a>部分数据所有权和 pthread 线程库</h2>
+<p>在第五章“计数”中大量使用了数据所有权技术，但是做了一些改变。不允许线程修改其他线程拥有的数据，但是允许线程读取这些数据。总之，使用共享内存允许更细粒度的所有权和访问权限概念。</p>
+<p>纯数据所有权也是常见且有用的。比如前面讨论的每线程内存分配器缓存，在该算法中，每个线程的缓存完全归该线程所有。</p>
+<h2><a href="#函数输送" name="函数输送" class="anchor"><span class="anchor-link"></span></a>函数输送</h2>
+<p>上面讨论的是一种弱形式的数据所有权，线程需要更改其他线程的数据。这可以被认为是将数据带给他需要的函数。另一种方式是将函数发送给数据。</p>
+<h2><a href="#指派线程" name="指派线程" class="anchor"><span class="anchor-link"></span></a>指派线程</h2>
+<p>前面的小节描述了允许每个线程保留自己的数据副本或部分数据副本的方式。相比之下，本节将描述一种分解功能的方式，其中特定的指定线程拥有完成其他工作所需的数据的权限。之前讨论的最终一致性计数器实现就提供了一个例子。eventual() 函数中运行了一个指定线程，该线程周期性地将每线程计数拉入全局计数器，最终将全局计数器收敛于实际值。</p>
+<h2><a href="#私有化" name="私有化" class="anchor"><span class="anchor-link"></span></a>私有化</h2>
+<p>对于共享内存的并行程序，一种提升性能的和可扩展性的方式是将共享数据转换成由特定线程拥有的私有数据。</p>
+<p>比如使用私有化方式来解决哲学家就餐问题，这种方式具有比标准教科书解法更好的性能和扩展性。原来的问题是 5 个哲学家坐在桌子旁边，每个相邻的哲学家之间有一把叉子，最多允许两个哲学家同时就餐。我们可以通过提供 5 把额外的叉子来简单地私有化这个问题，所有每个哲学家都有自己的私人叉子。这允许所有 5 个哲学家同时就餐，也大大减少了一些传播疾病的机会。</p>
+<p>在其他情况下，私有化会带来开销。总之，在并行程序员的工具箱中，私有化是一个强大的工具，但必须小心使用。就像其他同步原语一样，他可能会带来复杂性，同时降低性能和扩展性。</p>
+<h2><a href="#数据所有权的其他用途" name="数据所有权的其他用途" class="anchor"><span class="anchor-link"></span></a>数据所有权的其他用途</h2>
+<p>当数据可以被分割时，数据所有权最为有效，此时很少或没有需要跨线程访问或更新的地方。幸运的是，这种情况很常见，并且在各种并行编程环境中广泛存在。</p>
+<ol>
+  <li>所有消息传递环境，例如 MPI。</li>
+  <li>MapReduce。</li>
+  <li>客户端——服务器系统，包括 RPC、Web 服务好几乎任何带有后端数据库服务的系统。</li>
+  <li>无共享式数据库系统。</li>
+  <li>具有单独的每进程地址空间的 fork-join 系统。</li>
+  <li>基于进程的并行性，比如 Erlang 语言。</li>
+  <li>私有变量，例如 C 语言在线程环境中的堆栈自动变量。</li>
+</ol>
+<p>数据所有权可能是最不起眼的同步机制。当使用得当时，它能提供无与伦比的简单性、性能、扩展性。也许他的简单性使他没有得到应有的尊重。</p>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../high-performance/ipph/ch08-ownership.html#ch08-数据所有权" class="header">CH08-数据所有权</a>
+  <ul>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#多进程" class="header">多进程</a></li>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#部分数据所有权和-pthread-线程库" class="header">部分数据所有权和 pthread 线程库</a></li>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#函数输送" class="header">函数输送</a></li>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#指派线程" class="header">指派线程</a></li>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#私有化" class="header">私有化</a></li>
+    <li><a href="../../high-performance/ipph/ch08-ownership.html#数据所有权的其他用途" class="header">数据所有权的其他用途</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
 </div>
 </div>
 
