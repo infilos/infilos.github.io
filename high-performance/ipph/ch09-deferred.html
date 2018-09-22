@@ -817,6 +817,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <p>对于写者，我们已经看到了一种具有高性能和扩展性的情况，即前面提到的计数算法。这些计数算法通过部分分割数据结构，使得可以在本地进行更新，而较昂贵的读取则必须在整个数据结构上求和。Silas BoydWickhizer 把这种概念推广到 OpLog 上，Linux 内核路径名查找、VM 反向映射和 stat 系统调用都使用了这个工具。</p>
 <p>另一种方法，称为 Disruptor，是为处理大量流数据输入的引用程序设计的。该方法是依靠单个生产者和单个消费者的 FIFO 队列，最小化对同步的需要。对于 Java 应用程序，Disruptor 还具有减少对垃圾处理器的使用这个优点。</p>
 <p>当然，只要是可行的情况，完全分割或“分片”系统总是能提供优秀的性能和扩展性。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../high-performance/ipph/ch10-data-structure.html">CH10-数据结构</a></p>
+</div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 <nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
