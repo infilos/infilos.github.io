@@ -295,7 +295,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <p>如果需要对哈希表中的所有元素进行统计扫描。例如，薛定谔可能希望计算所有动物的平均长度——重量比率。更进一步假设，薛定谔愿意忽略在统计扫描进行时，那些正在从哈希表中添加或移除的动物引起的轻微错误。那么如何来控制并发性？</p>
 <p>一种方法是：将统计扫描置于 RCU 读端临界区之内。这允许更新并发的进行，而不影响扫描进程。特别是，扫描过程并不阻塞更新操作，反之亦然。这允许对包含大量数据元素的哈希表进行扫描，这样的扫描将被优雅的支持，即使面对高频率的更新时也是如此。</p>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../high-performance/ipph/ch16-easy-use.html">CH16-易于使用</a></p>
+<p><strong>Next:</strong> <a href="../../high-performance/ipph/ch14-advance-sync.html">CH14-高级同步</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
