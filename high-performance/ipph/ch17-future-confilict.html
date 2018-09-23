@@ -575,6 +575,9 @@ https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922204607.png" style="dis
 <p>另一个可能反对的声音是，自旋锁包含任意长度的循环，任何有限次数的展开将不能捕获自旋锁的完整行为。事实证明这个反对声音可以被很容易的说服。与模仿完整的自旋锁不同，模仿试图获得一个锁的 trylock，但是在它不能立即获得的时候中止它。必须小心设置断言，在自旋锁由于不能立即获得而中止的情况下，避免触发锁。由于逻辑表达式是独立于时间的，于是所有可能的行为将通过这种方式被捕获。</p>
 <p>最后一种反对的声音是，这种技术不太可能用于处理大尺寸的软件，如构成 Linux 内核的数百网行代码。这种情况是确实存在的，但事实是，对每一个小的多的并行原语进行详尽验证，是非常有价值的。实际上研究者已经带头将这种方法应用到非实验性质的真实代码中，包括 Linux 内核中的 RCU 实现(尽管 RCU 是一个不太重要的属性)。</p>
 <p>这种技术仍然被大范围的应用，但它是形式验证领域更有意思的革新之一，并且它比用函数式形式编写所有程序的传统建议更易被接受。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../high-performance/ipph/c-mem-barrier.html">C-内存屏障</a></p>
+</div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 <nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
