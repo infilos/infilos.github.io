@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH01-概览 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../java-concur/index.html" class="page">Java Concurrency</a>
+  <ul>
+    <li><a href="../../java-concur/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
+  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <ul>
+    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
+    <li><a href="../../high-performance/seven-model/index.html" class="page">Seven Models</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../java-concur/index.html" class="page">Java Concurrency</a>
+  <ul>
+    <li><a href="../../java-concur/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
+  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <ul>
+    <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <ul>
+    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
+    <li><a href="../../high-performance/seven-model/index.html" class="page">Seven Models</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../high-performance/index.html">High Performance</a></li>
+  <li><a href="../../high-performance/seven-model/index.html">Seven Models</a></li>
+  <li>CH01-概览</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch01-概览" name="ch01-概览" class="anchor"><span class="anchor-link"></span></a>CH01-概览</h1>
+<p>基于摩尔定律的“免费午餐”时代已结束，为了让代码运行的更快，现在需要以软件的形式利用多核优势，发掘并行编程的潜力。</p>
+<h2><a href="#并发-vs-并行" name="并发-vs-并行" class="anchor"><span class="anchor-link"></span></a>并发 vs. 并行</h2>
+<p>并发程序含有多个逻辑上的独立执行块，它们可以独立的并行执行，也可以串行执行。</p>
+<p>并行程序解决问题的速度往往比串行程序快的多，因为它可以同时执行整个任务的多个部分。并行程序可能有多个独立执行块，也可能仅有一个。</p>
+<p>并发是问题域中的概念——程序需要被设计成能够处理多个同时(或者几乎同时)发生的事件；而并行则是方法域中的概念——通过将问题中的多个部分并行执行来加速解决问题。</p>
+<p>来自 Rob Pike 的经典描述：</p>
+<ul>
+  <li>并发是同一时间应对(dealing with)多件事情的能力。</li>
+  <li>并行是同一时间动手做(doing)多件事情的能力。</li>
+</ul>
+<p>并发与并行经常被混淆的原因之一是，传统的“线程与锁”模型并没有显式的支持并行。如果要用线程与锁模型为多核进行开发，唯一的选择就是写一个并发的程序，然后并行的运行在多核上。</p>
+<p>并发程序的执行通常是不确定的，它会随着事件时序的改变而给出不同的结果。对于真正的并发程序，不确定性是与生俱来且伴随始终的属性。与之相反，并行程序可能是确定的——比如将数组中的每个数都加倍，一种做法是将数组分为两个部分然后分别交给两个核处理，这种做法的结果是确定的。</p>
+<h2><a href="#并行架构" name="并行架构" class="anchor"><span class="anchor-link"></span></a>并行架构</h2>
+<p>人们通常认为并行等同于多核，但现代计算机在不同层次上使用了并行技术。比如在由多个晶体管组成的单个核内，可以在位级和指令级两个层次上并行使用这些晶体管资源。</p>
+<h3><a href="#位级并行" name="位级并行" class="anchor"><span class="anchor-link"></span></a>位级并行</h3>
+<p>因为并行，32 位计算机要比 8 位计算机的运算速度快。对于两个 32 位数的加法运算，8 位计算机必须进行多次 8 位运算，而 32 位计算机可以一步完成。计算机经历了 8、16、32 位时代，目前处于 64 位时代，由于位升级带来的性能提升存在瓶颈，因此我们短期内无法进入 128 位时代。</p>
+<h3><a href="#指令级并行" name="指令级并行" class="anchor"><span class="anchor-link"></span></a>指令级并行</h3>
+<p>现代 CPU 的并行度很高，其中使用的技术包括流水线、乱序执行和分支预测等。</p>
+<p>开发者可以不用关心 CPU 的内部并行细节，因为尽管 CPU 内部的并行度很高，但是经过精心设计，从外部看上去所有处理器都像是串行的。</p>
+<p>但这种看上去像是串行的设计也逐渐变得不再适用。CPU 的设计者们为单核提升速度变得越来越困难。进入多核时代后我们必须要面对的情况是：无论表面上还是实质上，指令都不再是串行执行了。</p>
+<h3><a href="#数据级" name="数据级" class="anchor"><span class="anchor-link"></span></a>数据级</h3>
+<p>数据级并行(也称单指令多数据，SIMD)架构，可以并行的在大量数据上施加同一操作。这并不适合解决所有问题，但在有些场景可以大展身手。</p>
+<p>比如图像处理，为了增加图片亮度就需要增加每一个像素的亮度，现代 GPU 也因图像处理的特点演化成了极其强大的数据并行处理器。</p>
+<h3><a href="#任务级" name="任务级" class="anchor"><span class="anchor-link"></span></a>任务级</h3>
+<p>这也是大家所认为的并行形式——多处理器。从开发者的角度看，多处理器架构最明显的分类特征是其内存模型(共享内存模型或分布式内存模型)。</p>
+<ul>
+  <li>对于共享内存模型，每个处理器都能访问整个内存，处理器之间的通信也通过内存完成。</li>
+  <li>对于分布式内存模型，每个处理器都拥有自己的内存，处理器之间的通信主要通过网络完成。</li>
+</ul>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180925002419.png" style="display:block;width:60%;" alt="NAME" align=center />
+</div>
+<p>通过内存通信比通过网络通信更加简单快速，因此使用共享内存模型编写也更容易。但是当处理器个数不断增加，共享内存模型就会遇到瓶颈——这时不得不转向分布式内存模型。如果要开发一个容错系统，就要使用多台计算机以规避硬件故障对系统的影响，此时也必须借助分布式内存模型。</p>
+<h2><a href="#并发-不只是多核" name="并发-不只是多核" class="anchor"><span class="anchor-link"></span></a>并发，不只是多核</h2>
+<p>并发的目的不仅仅在于让程序以并行方式运行以发挥多核优势。如果能够正确的使用并发，程序还能获得以下优点：及时响应、高效、容错、简单。</p>
+<h3><a href="#并发的真实世界" name="并发的真实世界" class="anchor"><span class="anchor-link"></span></a>并发的真实世界</h3>
+<p>世界是并发的，为了与其有效交互，软件也应该是并发的。并发是系统及时响应的关键。比如，文件下载可以在后台运行，用户就不必等待鼠标上的沙漏了。再比如，Web 服务器可以并发的处理多个连接请求，一个慢请求不会影响服务器对其他请求的响应。</p>
+<h3><a href="#分布式世界" name="分布式世界" class="anchor"><span class="anchor-link"></span></a>分布式世界</h3>
+<p>我们有时候需要解决地理分布问题。软件在非同步运行的多台计算机上分布式的运行，其本质也是并发。</p>
+<p>此外，分布式软件还具有容错性。其中一台或一个区域内的几台机器宕机后，剩余机器仍然能够提供服务。</p>
+<h3><a href="#不可预测的世界" name="不可预测的世界" class="anchor"><span class="anchor-link"></span></a>不可预测的世界</h3>
+<p>任何软件都无法避免 BUG 的存在，即便是没有 BUG，也无法完全避免硬件故障。为了增强软件的容错性，并发代码的关键是独立性和故障检测。</p>
+<ul>
+  <li>独立性：一个故障不会影响到故障任务以外的其他任务。</li>
+  <li>故障检测：当一个任务失败时，需要通知负责处理故障的其他任务来解决。</li>
+</ul>
+<p>而串行程序的容错性远不如并发程序。</p>
+<h3><a href="#复杂的世界" name="复杂的世界" class="anchor"><span class="anchor-link"></span></a>复杂的世界</h3>
+<p>在选对编程语言和工具的情况下，一个并发的解决方案要比串行方案简单清晰。</p>
+<p>用串行方案解决一个现实世界的并发问题往往需要付出额外的代价，而且最终方案会晦涩难懂。如果解决方案有着与现实问题类似的并发结构，事情就会变得简单很多。</p>
+<h2><a href="#七种模型" name="七种模型" class="anchor"><span class="anchor-link"></span></a>七种模型</h2>
+<ul>
+  <li>线程与锁：存在很多总所周知的不足，但它是其他模型的基础，也是很多并发软件的首选。</li>
+  <li>函数式编程：函数式编程逐渐变得重要的原因之一，是其对并发和并行编程提供了良好的支持。函数式编程消除了可变状态，所以从根本上就是线程安全的，而且易于并行执行。</li>
+  <li>分离标识与状态：Clojure 是一种指令式与函数式混搭的语言，在两种编码方式上取得了微秒的平衡来发挥两者的优势。</li>
+  <li>Actor：是一种适用性很广的并发编程模型，适用于共享内存模型和分布式内存模型，也适合解决地理分布问题，能提供强大的容错性。</li>
+  <li>通讯顺序进程(CSP)：CSP 与 Actor 模型在表面上很相似，两者都基于消息传递。但是 CSP 模型侧重于传递信息的通道，而 Actor 模型侧重于通道两端的实体，因此基于 CSP 模型的代码会有明显不同的风格。</li>
+  <li>数据级并行：GPU 利用了数据级并行，不仅可以快速的处理图像，还可以用于更加广阔的领域。</li>
+  <li>Lambda 架构：Lambda 架构综合了 MapReduce 和流式处理的特点，是一种可以处理多种大数据问题的架构。</li>
+</ul>
+<p>后续将针对每种模型详细讨论以下问题：</p>
+<ol>
+  <li>该模型适用于解决并发问题？还是并行问题？还是两者都适用？</li>
+  <li>该模型适用于哪种并行架构？</li>
+  <li>该模型是否有利于写出高容错的代码，或是能够解决分布式问题的代码？</li>
+</ol>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../high-performance/seven-model/ch02-thread-and-lock.html">CH02-线程与锁</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../high-performance/seven-model/ch01-overview.html#ch01-概览" class="header">CH01-概览</a>
+  <ul>
+    <li><a href="../../high-performance/seven-model/ch01-overview.html#并发-vs-并行" class="header">并发 vs. 并行</a></li>
+    <li><a href="../../high-performance/seven-model/ch01-overview.html#并行架构" class="header">并行架构</a></li>
+    <li><a href="../../high-performance/seven-model/ch01-overview.html#并发-不只是多核" class="header">并发，不只是多核</a></li>
+    <li><a href="../../high-performance/seven-model/ch01-overview.html#七种模型" class="header">七种模型</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>
