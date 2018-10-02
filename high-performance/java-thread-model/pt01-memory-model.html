@@ -167,7 +167,6 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <p>The Java ® Language Specification SE 8 - Chapter 17 Threads and Locks</p>
   <p><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/">Java 内存模型</a>定义了线程之间如何通过内存进行交互，是深入学习 Java 并发编程的必要前提。</p>
 </blockquote>
-<h1><a href="#线程与锁" name="线程与锁" class="anchor"><span class="anchor-link"></span></a>线程与锁</h1>
 <p>Java 虚拟机可以支持多线程同时执行。这些线程可以独立的对驻留在内存中的值和对象执行操作代码。对这些线程的支持，可以是多硬件处理器，也可以是单硬件处理器的时间片机制，或者是多硬件处理器的时间片机制。</p>
 <p>线程由 Thread 类表示。对用户来说，创建线程的唯一方式就是创建该类的对象，每个线程都和一个这样的对象关联。在 Thread 类的对象上调用 start 方法将会启动对应的线程。</p>
 <p>在进行不正确的同步操作时，可能会引起线程行为的混淆与反常。**本章描述的是多线程的语义，其中包含以下规则：若主存(内存)是由多个线程更新的，那么对主存的读操作可以看到哪些值。** 因为这些规范与针对不同硬件架构的“内存模型”类似，因此也被称为“Java 编程语言内存模型”。当不会产生任何混淆时，我们将直接称这些规则为“内存模型”。</p>
@@ -770,7 +769,13 @@ if(myS.equals(&quot;/tmp&quot;)) System.out.println(myS);
 <ul>
   <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#pt01-内存模型规范" class="header">PT01-内存模型规范</a>
   <ul>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#线程与锁" class="header">线程与锁</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#同步" class="header">同步</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#等待集合通知" class="header">等待集合通知</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#睡眠与让步" class="header">睡眠与让步</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#内存模型" class="header">内存模型</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#final-域的语义" class="header">final 域的语义</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#字撕裂" class="header">字撕裂</a></li>
+    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#double-和-long-的非原子化处理" class="header">double 和 long 的非原子化处理</a></li>
   </ul></li>
 </ul>
 </div>
