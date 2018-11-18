@@ -64,9 +64,10 @@
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
   <ul>
-    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
-    <li><a href="../../high-performance/seven-model/index.html" class="page">Seven Models</a></li>
-    <li><a href="../../high-performance/java-thread-model/index.html" class="page">Java Thread Model</a></li>
+    <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../high-performance/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../high-performance/jc-practice/index.html" class="page">Java 并发实践</a></li>
   </ul></li>
 </ul>
 </div>
@@ -132,9 +133,10 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   </ul></li>
   <li><a href="../../high-performance/index.html" class="page">High Performance</a>
   <ul>
-    <li><a href="../../high-performance/ipph/index.html" class="page">Parallel Programming</a></li>
-    <li><a href="../../high-performance/seven-model/index.html" class="page">Seven Models</a></li>
-    <li><a href="../../high-performance/java-thread-model/index.html" class="page">Java Thread Model</a></li>
+    <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../high-performance/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../high-performance/jc-practice/index.html" class="page">Java 并发实践</a></li>
   </ul></li>
 </ul>
 </div>
@@ -153,7 +155,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
   <li><a href="../../high-performance/index.html">High Performance</a></li>
-  <li><a href="../../high-performance/java-thread-model/index.html">Java Thread Model</a></li>
+  <li><a href="../../high-performance/java-thread-model/index.html">Java 并发模型</a></li>
   <li>PT01-内存模型规范</li>
 </ul>
 </div>
@@ -760,6 +762,9 @@ if(myS.equals(&quot;/tmp&quot;)) System.out.println(myS);
 <p>对引用的读操作和写操作总是原子性的，无论它们被实现为 32 位还是 64 位的值。</p>
 <p>某些实现会发现将单个对 64 位的 long 或 double 值的写动作分成两个毗邻的 32 位值的写动作会更方便。由于效率的原因，这种行为是实现相关的，Java 虚拟机的实现可以自由选择对 long 或 double 值的写操作是原子性的还是分成两部分。</p>
 <p>我们鼓励 Java 虚拟机的实现应该避免将 64 位值分开，并鼓励开发者将共享的 64 位值声明为 volatile 的，或者正确的同步使用它们的程序以避免可能出现的复杂性。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../high-performance/jc-practice/index.html">Java 并发实践</a></p>
+</div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 <nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
