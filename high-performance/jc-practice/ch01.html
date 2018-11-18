@@ -250,6 +250,9 @@ public class Sequence {
 <p>Swing 和 AWT。GUI 程序的一个固有属性就是异步性。用户可以在任何时刻选择执行一个菜单项或按下一个按钮，应用程序会及时响应，即使应用程序当时正在执行其他的任务。Swing 和 AWT 很好的解决了这个问题，他们创建了一个单独的线程来处理用户触发的事件，并对呈现给用户的图形界面进行了更新。</p>
 <p>Swing 的一些组件并不是线程安全的，例如 JTable。相反，Swing 程序通过将所有对 GUI 组件的访问局限在事件线程以实现线程安全性。如果某个程序希望在事件线程之外控制 GUI，那么必须将控制 GUI 的代码放在事件线程中运行。</p>
 <p>当用户触发某个 UI 动作时，在事件线程中就会有一个事件处理器被调用以执行用户请求的操作。如果事件处理器需要访问由其他线程同时访问的应用程序状态，那么这个事件处理器，以及访问这个状态的所有其他代码，都必须采用一种线程安全的方式来访问该状态。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../high-performance/jc-practice/ch02.html">CH02-线程安全性</a></p>
+</div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
 <nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
