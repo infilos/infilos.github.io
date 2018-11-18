@@ -55,14 +55,14 @@
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -124,14 +124,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -154,7 +154,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../high-performance/index.html">High Performance</a></li>
+  <li><a href="../../high-performance/index.html">高性能编程</a></li>
   <li><a href="../../high-performance/jc-practice/index.html">Java 并发实践</a></li>
   <li>CH03-对象共享</li>
 </ul>
@@ -165,6 +165,41 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#ch03-对象共享" name="ch03-对象共享" class="anchor"><span class="anchor-link"></span></a>CH03-对象共享</h1>
+<div class="toc ">
+<ul>
+  <li><a href="../../high-performance/jc-practice/ch03.html#3-1-可见性" class="header">3.1 可见性</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-1-1-失效数据" class="header">3.1.1 失效数据</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-1-2-非原子的-64-位操作" class="header">3.1.2 非原子的 64 位操作</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-1-3-加锁与可见性" class="header">3.1.3 加锁与可见性</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-1-4-volatile-变量" class="header">3.1.4 Volatile 变量</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch03.html#3-2-发布与逸出" class="header">3.2 发布与逸出</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch03.html#安全的对象构造过程" class="header">安全的对象构造过程</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch03.html#3-3-线程封闭" class="header">3.3 线程封闭</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-3-1-ad-hoc-线程封闭" class="header">3.3.1 Ad-hoc 线程封闭</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-3-2-栈封闭" class="header">3.3.2 栈封闭</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-3-3-threadlocal" class="header">3.3.3 ThreadLocal</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch03.html#3-4-不变性" class="header">3.4 不变性</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-4-1-final" class="header">3.4.1 Final</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-4-2-示例-使用-volatile-类型来发布不可变对象" class="header">3.4.2 示例：使用 volatile 类型来发布不可变对象</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch03.html#3-5-安全发布" class="header">3.5 安全发布</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-1-不正确的发布-正确的对象被发布" class="header">3.5.1 不正确的发布：正确的对象被发布</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-2-不可变对象与初始化安全性" class="header">3.5.2 不可变对象与初始化安全性</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-3-安全发布的常用模式" class="header">3.5.3 安全发布的常用模式</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-4-事实不可变对象" class="header">3.5.4 事实不可变对象</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-5-可变对象" class="header">3.5.5 可变对象</a></li>
+    <li><a href="../../high-performance/jc-practice/ch03.html#3-5-6-安全地共享对象" class="header">3.5.6 安全地共享对象</a></li>
+  </ul></li>
+</ul>
+</div>
 <p>第二章的开头曾指出，要编写正确的并发程序，关键问题在于：“在访问共享的可变状态时需要正确的管理”。第二章介绍了如何通过同步来避免多个线程在同一时刻访问相同的数据，而本章将介绍“如何共享和发布对象”，从而使它们能够安全的同时被多个线程访问。这两章合在一起，就形成了构建线程安全类以及通过 JUC 类库来构建并发应用程序的重要基础。</p>
 <p>我们已经知道了同步代码块和同步方法可以确保以原子的方式执行操作，但一种常见的误解是，认为关键字 synchronized 只能用于实现原子性或者确定“临界区”。同步还有一个重要的方面：“内存可见性”。“我们不仅希望防止某个线程正在使用对象状态而另一个线程在同时修改状态，而且希望确保当一个线程修改了对象状态之后，其他线程能够看到发生的状态变化”。如果没有同步，那么这种情况就无法实现。你可以通过显式的同步或者类库中内置的同步来保证对象被安全的发布。</p>
 <h2><a href="#3-1-可见性" name="3-1-可见性" class="anchor"><span class="anchor-link"></span></a>3.1 可见性</h2>

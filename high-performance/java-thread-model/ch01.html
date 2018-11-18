@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>PT01-内存模型规范 · Infilos</title>
+<title>CH01-JMM 规范 · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -55,14 +55,14 @@
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -124,14 +124,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -154,9 +154,9 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../high-performance/index.html">High Performance</a></li>
+  <li><a href="../../high-performance/index.html">高性能编程</a></li>
   <li><a href="../../high-performance/java-thread-model/index.html">Java 并发模型</a></li>
-  <li>PT01-内存模型规范</li>
+  <li>CH01-JMM 规范</li>
 </ul>
 </div>
 </div>
@@ -164,7 +164,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#pt01-内存模型规范" name="pt01-内存模型规范" class="anchor"><span class="anchor-link"></span></a>PT01-内存模型规范</h1>
+<h1><a href="#ch01-jmm-规范" name="ch01-jmm-规范" class="anchor"><span class="anchor-link"></span></a>CH01-JMM 规范</h1>
 <blockquote>
   <p>The Java ® Language Specification SE 8 - Chapter 17 Threads and Locks</p>
   <p><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/">Java 内存模型</a>定义了线程之间如何通过内存进行交互，是深入学习 Java 并发编程的必要前提。</p>
@@ -763,7 +763,7 @@ if(myS.equals(&quot;/tmp&quot;)) System.out.println(myS);
 <p>某些实现会发现将单个对 64 位的 long 或 double 值的写动作分成两个毗邻的 32 位值的写动作会更方便。由于效率的原因，这种行为是实现相关的，Java 虚拟机的实现可以自由选择对 long 或 double 值的写操作是原子性的还是分成两部分。</p>
 <p>我们鼓励 Java 虚拟机的实现应该避免将 64 位值分开，并鼓励开发者将共享的 64 位值声明为 volatile 的，或者正确的同步使用它们的程序以避免可能出现的复杂性。</p>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../high-performance/jc-practice/index.html">Java 并发实践</a></p>
+<p><strong>Next:</strong> <a href="../../high-performance/java-thread-model/ch02.html">CH02-JMM 释义</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -772,15 +772,15 @@ if(myS.equals(&quot;/tmp&quot;)) System.out.println(myS);
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#pt01-内存模型规范" class="header">PT01-内存模型规范</a>
+  <li><a href="../../high-performance/java-thread-model/ch01.html#ch01-jmm-规范" class="header">CH01-JMM 规范</a>
   <ul>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#同步" class="header">同步</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#等待集合通知" class="header">等待集合通知</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#睡眠与让步" class="header">睡眠与让步</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#内存模型" class="header">内存模型</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#final-域的语义" class="header">final 域的语义</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#字撕裂" class="header">字撕裂</a></li>
-    <li><a href="../../high-performance/java-thread-model/pt01-memory-model.html#double-和-long-的非原子化处理" class="header">double 和 long 的非原子化处理</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#同步" class="header">同步</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#等待集合通知" class="header">等待集合通知</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#睡眠与让步" class="header">睡眠与让步</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#内存模型" class="header">内存模型</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#final-域的语义" class="header">final 域的语义</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#字撕裂" class="header">字撕裂</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch01.html#double-和-long-的非原子化处理" class="header">double 和 long 的非原子化处理</a></li>
   </ul></li>
 </ul>
 </div>

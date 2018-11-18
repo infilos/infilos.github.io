@@ -55,14 +55,14 @@
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -124,14 +124,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
     <li><a href="../../scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
   </ul></li>
   <li><a href="../../scala-concur/index.html" class="page">Scala Concurrency</a></li>
-  <li><a href="../../monitoring-tracing/index.html" class="page">Monitoring &amp; Tracing</a>
+  <li><a href="../../monitoring-tracing/index.html" class="page">监控与追踪</a>
   <ul>
     <li><a href="../../monitoring-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
     <li><a href="../../monitoring-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
     <li><a href="../../monitoring-tracing/zipkin/index.html" class="page">Zipkin</a></li>
     <li><a href="../../monitoring-tracing/pinpoint.html" class="page">Pinpoint</a></li>
   </ul></li>
-  <li><a href="../../high-performance/index.html" class="page">High Performance</a>
+  <li><a href="../../high-performance/index.html" class="page">高性能编程</a>
   <ul>
     <li><a href="../../high-performance/ipph/index.html" class="page">深入并行编程</a></li>
     <li><a href="../../high-performance/seven-model/index.html" class="page">并发编程模型</a></li>
@@ -154,7 +154,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="nav-breadcrumbs">
 <ul>
   <li><a href="../../index.html">Infilos</a></li>
-  <li><a href="../../high-performance/index.html">High Performance</a></li>
+  <li><a href="../../high-performance/index.html">高性能编程</a></li>
   <li><a href="../../high-performance/jc-practice/index.html">Java 并发实践</a></li>
   <li>CH02-线程安全性</li>
 </ul>
@@ -165,6 +165,27 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
 <h1><a href="#ch02-线程安全性" name="ch02-线程安全性" class="anchor"><span class="anchor-link"></span></a>CH02-线程安全性</h1>
+<div class="toc ">
+<ul>
+  <li><a href="../../high-performance/jc-practice/ch02.html#2-1-什么是线程安全性" class="header">2.1 什么是线程安全性</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch02.html#示例-一个线程安全的-servlet" class="header">示例：一个线程安全的 Servlet</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch02.html#2-2-原子性" class="header">2.2 原子性</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch02.html#2-2-1-竟态条件" class="header">2.2.1 竟态条件</a></li>
+    <li><a href="../../high-performance/jc-practice/ch02.html#2-2-2-示例-延迟初始化中的竟态条件" class="header">2.2.2 示例：延迟初始化中的竟态条件</a></li>
+    <li><a href="../../high-performance/jc-practice/ch02.html#2-2-3-复合操作" class="header">2.2.3 复合操作</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch02.html#2-3-加锁机制" class="header">2.3 加锁机制</a>
+  <ul>
+    <li><a href="../../high-performance/jc-practice/ch02.html#2-3-1-内置锁" class="header">2.3.1 内置锁</a></li>
+    <li><a href="../../high-performance/jc-practice/ch02.html#2-3-2-重入" class="header">2.3.2 重入</a></li>
+  </ul></li>
+  <li><a href="../../high-performance/jc-practice/ch02.html#2-4-用锁来保护状态" class="header">2.4 用锁来保护状态</a></li>
+  <li><a href="../../high-performance/jc-practice/ch02.html#活跃性与性能" class="header">活跃性与性能</a></li>
+</ul>
+</div>
 <p>你或许会感到奇怪，线程或锁在并发编程中的作用，类似于铆钉和工字梁在土木工程中的作用。要建造一座坚固的桥梁，必须正确的使用大量的铆钉和工字梁。同理，在构件稳健的并发程序时，必须正确的使用线程和锁。但这些终归是一些机制。要编写线程安全的代码，“其核心在于对状态访问操作进行管理，特别是对共享的可变状态的访问”。</p>
 <p>从非正式的意义上来说，对象的状态是存储在状态变量中的数据。对象的状态可能包括其他依赖对象的域。例如，HashMap 的状态不仅存储在 HashMap 对象本身，还存储在 Map.Entry 对象中。对象的状态中包含了任何可能影响其外部可见行为的数据。</p>
 <p>“共享”意味着变量可以被多个线程同时访问，而“可变”则意味着变量的值在其声明周期内可以发生变化。我们将像讨论代码一样来讨论线程安全性，但更侧重于如何防止在数据上发生不受控的并发访问。</p>
