@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>JSR-133 Cook · Infilos</title>
+<title>CH03-多处理器 · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -156,7 +156,8 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../../../index.html">Infilos</a></li>
   <li><a href="../../../high-performance/index.html">高性能编程</a></li>
   <li><a href="../../../high-performance/java-thread-model/index.html">Java 并发模型</a></li>
-  <li>JSR-133 Cook</li>
+  <li><a href="../../../high-performance/java-thread-model/ch05/index.html">CH-05-JSR-133 Cook</a></li>
+  <li>CH03-多处理器</li>
 </ul>
 </div>
 </div>
@@ -164,42 +165,14 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#jsr-133-cook" name="jsr-133-cook" class="anchor"><span class="anchor-link"></span></a>JSR-133 Cook</h1>
-<p>从最初的探索至今已经有十年了。在此期间，很多关于处理器和语言的内存模型的规范和问题变得更清楚，更容易理解，但还有一些没有研究清楚。本指南一直在修订、完善来保证它的准确性，然而本指南部分内容展开的细节还不是很完整。想更全面的了解, 可以特别关注下 Peter Sewell 和 <a href="http://www.cl.cam.ac.uk/~pes20/weakmemory/index.html">Cambridge Relaxed Memory Concurrency Group</a> 的研究工作。</p>
-<p>这是一篇用于说明在 <a href="http://jcp.org/en/jsr/detail?id=133">JSR 133</a> 中制定的新 <a href="http://www.cs.umd.edu/%7Epugh/java/memoryModel/">Java 内存模型(JMM)</a> 的非官方指南。这篇指南提供了在最简单的背景下各种规则存在的原因，而不是这些规则在指令重排、多核处理器屏障指令和原子操作等方面对编译器和 JVM 所造成的影响。它还包括了一系列如何遵守 JSR 133 的指南。本指南是“非官方”的文档，因为它还包括特定处理器性能和规范的解释，我们不能保证所有的解释都是正确的。此外，处理器的规范和实现也可能会随时改变。</p>
-<h2><a href="#reference" name="reference" class="anchor"><span class="anchor-link"></span></a>Reference</h2>
-<ul>
-  <li><a href="http://gee.cs.oswego.edu/dl/jmm/cookbook.html">The JSR-133 Cookbook for Compiler Writers</a></li>
-  <li><a href="http://ifeve.com/jmm-cookbook/">Java 内存模型 Cookbook</a></li>
-</ul>
-<h2><a href="#content" name="content" class="anchor"><span class="anchor-link"></span></a>Content</h2>
-<div class="toc ">
-<ul>
-  <li><a href="../../../high-performance/java-thread-model/ch04/ch01.html" class="page">CH01-指令重排</a></li>
-  <li><a href="../../../high-performance/java-thread-model/ch04/ch02.html" class="page">CH02-内存屏障</a></li>
-  <li><a href="../../../high-performance/java-thread-model/ch04/ch03.html" class="page">CH03-多处理器</a></li>
-  <li><a href="../../../high-performance/java-thread-model/ch04/ch04.html" class="page">CH04-开发指南</a></li>
-</ul>
-</div>
+<h1><a href="#ch03-多处理器" name="ch03-多处理器" class="anchor"><span class="anchor-link"></span></a>CH03-多处理器</h1>
+<p>本文总结了在多处理器(MPs)中常用的的处理器列表。这不是一个完全详细的列表，但已经包括了我所知道的在当前或者将来Java 实现中所使用的多核处理器。</p>
+<p>略。</p>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../../high-performance/java-thread-model/ch04/ch01.html">CH01-指令重排</a></p>
+<p><strong>Next:</strong> <a href="../../../high-performance/java-thread-model/ch05/ch04.html">CH04-开发指南</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
-<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
-<div class="page-nav">
-<div class="nav-title">On this page:</div>
-<div class="nav-toc">
-<ul>
-  <li><a href="../../../high-performance/java-thread-model/ch04/index.html#jsr-133-cook" class="header">JSR-133 Cook</a>
-  <ul>
-    <li><a href="../../../high-performance/java-thread-model/ch04/index.html#reference" class="header">Reference</a></li>
-    <li><a href="../../../high-performance/java-thread-model/ch04/index.html#content" class="header">Content</a></li>
-  </ul></li>
-</ul>
-</div>
-</div>
-</nav>
 </div>
 </div>
 

@@ -2,7 +2,7 @@
 <html class="no-js" lang="en">
 
 <head>
-<title>CH02-JSR-133 FAQ · Infilos</title>
+<title>CH03-JMM 原理 · Infilos</title>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="description" content='Infilos'/>
@@ -156,7 +156,7 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
   <li><a href="../../index.html">Infilos</a></li>
   <li><a href="../../high-performance/index.html">高性能编程</a></li>
   <li><a href="../../high-performance/java-thread-model/index.html">Java 并发模型</a></li>
-  <li>CH02-JSR-133 FAQ</li>
+  <li>CH03-JMM 原理</li>
 </ul>
 </div>
 </div>
@@ -164,191 +164,824 @@ C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.
 
 <div class="page-content row">
 <div class="small-12 large-9 column" id="docs">
-<h1><a href="#ch02-jsr-133-faq" name="ch02-jsr-133-faq" class="anchor"><span class="anchor-link"></span></a>CH02-JSR-133 FAQ</h1>
-<h2><a href="#什么是内存模型" name="什么是内存模型" class="anchor"><span class="anchor-link"></span></a>什么是内存模型</h2>
-<p>在多核系统中，处理器一般拥有一层或多层缓存，这些缓存通过加速数据访问(因为数据距离处理器更近)和减少共享内存在总线上的通讯(因为通过本地缓存来满足许多内存操作)来提高 CPU 性能。缓存能够大大提升性能，但同时也带来了很多挑战。例如，当两个 CPU 同时检查相同的内存地址时会发生什么呢？在什么样的条件下它们能够看到相同的值？</p>
-<p>在处理器层面，内存模型定义了一个充要条件，“让当前的处理器可以看到其他处理器写入到内存的数据”，以及“其他处理器可以看到当前处理器写入到内存的数据”。有些处理器拥有很强的内存模型(strong memory model)，能够让所有处理器在任何时候从任何指定的内存地址上看到完全相同的值。而另外一些处理器则有较弱的内存模型(weaker memory model)，在这种处理器中，必须使用内存屏障(一种特殊的指令)来刷新本地处理器缓存并使本地处理器缓存无效，目的是为了让当前处理器能够看到其他处理器的写操作，或者让其他处理器看到当前处理器的写操作。这些内存屏障通常在 lock 和 unlock 操作的时候完成。内存屏障在高级语言中对开发者是不可见的。</p>
-<p>在强内存模型下，编写程序有时会很容易，因为减少了对内存屏障的依赖。但是即使在一些最强的内存模型下，内存屏障仍然是必须的。设置内存屏障往往与我们的直觉并不一致。近来处理器设计的趋势更偏向于弱的内存模型，因为弱内存模型削弱了缓存一致性，所以在多处理器平台和更大容量的内存下可以实现更好的可伸缩性。</p>
-<p>“一个线程的写操作对其他线程可见”，该问题是因为编译器对代码进行重排序导致的。例如，只要代码的移动不会改变程序的语义，当编译器认为向下移动一个写操作会更有效的时候，编译器就会对代码执行移动。如果编译器推迟执行一个操作，其他线程可以能在这个操作执行完成之前都不会看到该操作的结果，这反映了缓存的影响。</p>
-<p>此外，写入内存的操作能够被移动到程序中更靠前的位置。这种情况下，其他线程在程序中可能看到一个比实际发生更早的写操作。所有这些灵活性的设计都是为了通过给编译器、运行时或硬件提供灵活性以使其能够在最佳顺序的情况下来执行操作。在内存模型的限定下，我们能够获得更高的性能。</p>
-<p>考虑如下示例：</p>
-<pre class="prettyprint"><code class="language-java">ClassReordering {
-	int x = 0, y = 0;
-	
+<h1><a href="#ch03-jmm-原理" name="ch03-jmm-原理" class="anchor"><span class="anchor-link"></span></a>CH03-JMM 原理</h1>
+<h2><a href="#reference" name="reference" class="anchor"><span class="anchor-link"></span></a>Reference</h2>
+<ul>
+  <li><a href="https://book.douban.com/subject/26591326/">Java 并发编程艺术-CH03</a></li>
+</ul>
+<h2><a href="#3-1-java内存模型的基础" name="3-1-java内存模型的基础" class="anchor"><span class="anchor-link"></span></a>3.1 Java内存模型的基础</h2>
+<h3><a href="#3-1-1-并发编程模型的两个关键问题" name="3-1-1-并发编程模型的两个关键问题" class="anchor"><span class="anchor-link"></span></a>3.1.1 并发编程模型的两个关键问题</h3>
+<p>在并发编程中，需要处理两个关键问题：线程之间的通信与同步。(这里所说的线程是指并发执行的活动实体)。通信是指线程之间如何交换信息。在命命令式编程中，线程之间的通信机制有两种：共享内存与消息传递。</p>
+<p>在共享内存的并发模型里，线程之间共享程序的公共状态，通过读写内存中的公共状态进行隐式通信。在消息传递的并发模型里，线程之间没有公共状态，线程之间必须通过发送消息来显式进行通信。</p>
+<p>同步是指程序中用于控制不同线程间操作所发生的相对顺序的机制。在共享内存并发模型里，同步是显式进行的。程序员必须显式指定某个方法或某段代码需要在线程之间互斥执行。在消息传递的并发模型里，由于消息的发送操作一定是在消息的接收操作之前，因此同步是隐式进行的。</p>
+<p>Java 的并发实现采用的是共享内存模型，Java 线程之间的通信总是隐式进行，整个通信过程对程序员完全透明。如果编写多线程程序的 Java 程序员不理解隐式进行的线程之间通信的工作机制，很可能会遇到各种奇怪的内存可见性问题。</p>
+<h3><a href="#3-1-2-java-内存模型的抽象结构" name="3-1-2-java-内存模型的抽象结构" class="anchor"><span class="anchor-link"></span></a>3.1.2　Java 内存模型的抽象结构</h3>
+<p>在 Java 中，所有实例域、静态域和数组元素都存储在堆内存中，堆内存在线程之间共享(本文使用“共享变量”来代指实例域、静态域和数组元素)。局部变量、方法参数、异常处理器参数不会在线程之间共享(会被保存在对应执行线程的栈上)，因此不存在内存可见性问题，也不受内存模型的影响。</p>
+<p>Java 线程之间的通信由 Java 内存模型(JMM)控制，JMM 决定一个线程对共享变量的写入何时对另一个线程可见。从抽象的角度来看，JMM 定义了线程和主内存之间的抽象关系：线程之间的共享变量存储在主内存中，每个线程都自己的私有本地内存，本地内存中存储了该线程用以读/写共享变量的副本。本地内存是 JMM 的一个抽象概念，并不真实存在。它涵盖了缓存、写缓冲区、寄存器以及其他的硬件和编译器优化。 JMM 的抽象示意如图所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127153140.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从上图来看，如果线程 A 与线程 B 之间要通信的话，必须要经历下面 2 个步骤：</p>
+<ol>
+  <li>线程 A 将本地内存 A 中被更新过的共享变量刷新到主内存中。</li>
+  <li>线程 B 到主内存中去读取由线程 A 之前更新过的共享变量。</li>
+</ol>
+<p>下面通过示意图来说明这两个步骤。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127152650.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如上图所示，本地内存 A 和本地内存 B 持有主内存中共享变量 x 的副本。假设初始时，这 3 个内存中的 x 值都为 0。线程 A 在执行时，把更新后的 x 值(假设值为1)临时存放在自己的本地内存 A 中。当线程 A 和线程 B 需要通信时，线程 A 首先会把自己本地内存中修改后的 x 值刷新到主内存中，此时主内存中的 x 值变为了 1。随后，线程 B 到主内存中去读取线程 A 更新后的 x 值，此时线程 B 的本地内存的 x 值也变为了 1。</p>
+<p>从整体来看，这两个步骤实质上是线程 A 在向线程 B 发送消息，而且这个通信过程必须要经过主内存。JMM 通过控制主内存与每个线程的本地内存之间的交互，来为 Java 程序员提供内存可见性保证。</p>
+<h3><a href="#3-1-3-从源代码到指令序列的重排序" name="3-1-3-从源代码到指令序列的重排序" class="anchor"><span class="anchor-link"></span></a>3.1.3　从源代码到指令序列的重排序</h3>
+<p>为了在执行程序时提高性能，编译器和处理器常常会对指令做重排序。重排序分 3 种类型：</p>
+<ol>
+  <li>编译器优化的重排序。编译器在不改变单线程程序语义的前提下，可以重新安排语句 的执行顺序。</li>
+  <li>指令级并行的重排序。现代处理器采用了指令级并行技术(Instruction-Level Parallelism，ILP)来将多条指令重叠执行。如果不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序。</li>
+  <li>内存系统的重排序。由于处理器使用缓存和读/写缓冲区，这使得加载和存储操作看上 去可能是在乱序执行。</li>
+</ol>
+<p>从 Java 源代码到最终实际执行的指令序列，会分别经历下面3种重排序：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122225248.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>上述第 1 步属于编译器重排序，2~3 步属于处理器重排序。这些重排序可能会导致多线程程序出现内存可见性问题。对于编译器，JMM 的编译器重排序规则会禁止特定类型的编译器重排序(并非所有的编译器重排序都要禁止)。对于处理器重排序，JMM 的处理器重排序规则会要求 Java 编译器在生成指令序列时，插入特定类型的内存屏障(Memory Barriers，Intel 称之为 Memory Fence)指令，通过内存屏障指令来禁止特定类型的处理器重排序。</p>
+<p>JMM 属于语言级的内存模型，它确保在不同的编译器和不同的处理器平台之上，通过禁止特定类型的编译器重排序和处理器重排序，为程序员提供一致的内存可见性保证。</p>
+<h3><a href="#3-1-4-并发编程模型的分类" name="3-1-4-并发编程模型的分类" class="anchor"><span class="anchor-link"></span></a>3.1.4　并发编程模型的分类</h3>
+<p>现代的处理器使用写缓冲区临时保存向内存写入的数据。写缓冲区可以保证指令流水线持续运行，它可以避免由于处理器停顿下来等待向内存写入数据而产生的延迟。同时，通过以批处理的方式刷新写缓冲区，以及合并写缓冲区中对同一内存地址的多次写，从而减少对内存总线的占用。虽然写缓冲区有这么多好处，但每个处理器上的写缓冲区，仅仅对它所属的处理器可见。这个特性会对内存操作的执行顺序产生重要的影响：处理器对内存的读/写操作的执行顺序，不一定与内存实际发生的读/写操作顺序一致！为了具体说明，请看下面的表。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122225504.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设处理器 A 和处理器 B 按程序的顺序并行执行内存访问，最终可能得到 x=y=0 的结果。具体的原因如图所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122225619.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>这里处理器 A 和处理器 B 可以同时把共享变量写入自己的写缓冲区(A1，B1)，然后从内存中读取另一个共享变量(A2，B2)，最后才把自己写缓存区中保存的脏数据刷新到内存中(A3， B3)。当以这种时序执行时，程序就可以得到 x=y=0 的结果。</p>
+<p>从内存操作实际发生的顺序来看，直到处理器 A 执行 A3 来刷新自己的写缓存区，写操作 A1 才算真正执行了。虽然处理器 A 执行内存操作的顺序为：A1→A2，但内存操作实际发生的顺序却是 A2→A1。此时，处理器 A 的内存操作顺序被重排序了(处理器 B 的情况和处理器 A 一样)。</p>
+<p>这里的关键是，由于写缓冲区仅对自己的处理器可见，它会导致处理器执行内存操作的顺序可能会与内存实际的操作执行顺序不一致。由于现代的处理器都会使用写缓冲区，因此 现代的处理器都会允许对写-读操作进行重排序。</p>
+<p>下表是常见处理器允许的重排序类型的列表。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122225919.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<blockquote>
+  <p>元格中的 “N” 表示处理器不允许两个操作重排序，“Y” 表示允许重排序。</p>
+</blockquote>
+<p>从上表我们可以看出：常见的处理器都允许 Store-Load 重排序；常见的处理器都不允许对存在数据依赖的操作应用重排序。sparc-TSO 和 X86 拥有相对较强的处理器内存模型，它们仅允许对写-读操作做重排序(因为它们都使用了写缓冲区)。</p>
+<p>为了保证内存可见性，Java 编译器在所生成指令序列的适当位置会插入内存屏障指令来禁止特定类型的处理器重排序。JMM 把内存屏障指令分为4类，如表所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122230038.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>StoreLoad Barriers 是一个“全能型”的屏障，它同时具有其他 3 个屏障的效果。现代的多处理器大多支持该屏障(其他类型的屏障不一定被所有处理器支持)。执行该屏障的开销会很昂贵，因为当前处理器通常要把写缓冲区中的数据全部刷新到内存中(Buffer Fully Flush)。</p>
+<h3><a href="#3-1-5-happens-before-简介" name="3-1-5-happens-before-简介" class="anchor"><span class="anchor-link"></span></a>3.1.5　happens-before 简介</h3>
+<p>从 JDK 5 开始，Java 使用新的 JSR-133 内存模型。JSR-133 使用 happens-before 的概念来阐述操作之间的内存可见性。在 JMM 中，如果一个操作执行的结果需要对另一个操作可见，那么这两个操作之间必须要存在 happens-before 关系。这里提到的两个操作既可以是在一个线程之内，也可以是在不同线程之间。</p>
+<p>与程序员密切相关的 happens-before 规则如下：</p>
+<ul>
+  <li>程序顺序规则：一个线程中的每个操作，happens-before 于该线程中的任意后续操作。</li>
+  <li>监视器锁规则：对一个锁的解锁，happens-before 于随后对这个锁的加锁。</li>
+  <li>volatile 变量规则：对一个 volatile 域的写，happens-before 于任意后续对这个 volatile 域的读。</li>
+  <li>传递性：如果 A happens-before B，且 B happens-before C，那么 A happens-before C。</li>
+</ul>
+<blockquote>
+  <p>注意：两个操作之间具有 happens-before 关系，并不意味着前一个操作必须要在后一个操作之前执行！happens-before 仅仅要求前一个操作（执行的结果）对后一个操作可见，且前一个操作按顺序排在第二个操作之前（the first is visible to and ordered before the second）。happens-before 的定义很微妙，后文会具体说明 happens-before 为什么要这么定义。</p>
+</blockquote>
+<p>happens-before 与 JMM 的关系如图所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181122230810.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如图所示，一个 happens-before 规则对应于一个或多个编译器和处理器重排序规则。对于 Java 程序员来说，happens-before 规则简单易懂，它避免 Java 程序员为了理解 JMM 提供的内存可见性保证而去学习复杂的重排序规则以及这些规则的具体实现方法。</p>
+<h2><a href="#3-2-重排序" name="3-2-重排序" class="anchor"><span class="anchor-link"></span></a>3.2　重排序</h2>
+<p>重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段。</p>
+<h3><a href="#3-2-1-数据依赖性" name="3-2-1-数据依赖性" class="anchor"><span class="anchor-link"></span></a>3.2.1　数据依赖性</h3>
+<p>如果两个操作访问同一个变量，且这两个操作中有一个为写操作，此时这两个操作之间就存在数据依赖性。数据依赖分为下列 3 种类型，如表 3-4 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126222907.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>上面 3 种情况，只要重排序两个操作的执行顺序，程序的执行结果就会被改变。</p>
+<p>前面提到过，编译器和处理器可能会对操作应用重排序。编译器和处理器在重排序时，会遵守数据依赖性，编译器和处理器不会改变存在数据依赖关系的两个操作的执行顺序。</p>
+<p>这里所说的数据依赖性仅针对单个处理器中执行的指令序列和单个线程中执行的操作，不同处理器之间和不同线程之间的数据依赖性不被编译器和处理器考虑。</p>
+<h3><a href="#3-2-2-as-if-serial-语义" name="3-2-2-as-if-serial-语义" class="anchor"><span class="anchor-link"></span></a>3.2.2 as-if-serial 语义</h3>
+<p>as-if-serial 语义是：不管怎么重排序(编译器和处理器为了提高并行度)，(单线程)程序的执行结果不能被改变。编译器、运行时和处理器都必须遵守 as-if-serial 语义。</p>
+<p>为了遵守 as-if-serial 语义，编译器和处理器不会对存在数据依赖关系的操作做重排序，因为这种重排序会改变执行结果。但是，如果操作之间不存在数据依赖关系，这些操作就可能被编译器和处理器重排序。为了具体说明，请看下面计算圆面积的代码示例。</p>
+<pre><code>double pi = 3.14; 			// A
+double r = 1.0; 			// B
+double area = pi * r * r;	// C
+</code></pre>
+<p>上面 3 个操作的数据依赖关系如图 3-6 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126223142.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如图 3-6 所示，A 和 C 之间存在数据依赖关系，同时 B 和 C 之间也存在数据依赖关系。因此在最终执行的指令序列中，C 不能被重排序到 A 和 B 的前面(C 排到 A 和 B 的前面，程序的结果将会被改变)。但 A 和 B 之间没有数据依赖关系，编译器和处理器可以重排序 A 和 B 之间的执行顺序。 图 3-7 是该程序的两种执行顺序。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126223251.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>as-if-serial 语义把单线程程序保护了起来，遵守 as-if-serial 语义的编译器、运行时和处理器共同为编写单线程程序的程序员创建了一个幻觉：单线程程序是按程序的顺序来执行的。as-if-serial 语义使单线程程序员无需担心重排序会干扰他们，也无需担心内存可见性问题。</p>
+<h3><a href="#3-2-3-程序顺序规则" name="3-2-3-程序顺序规则" class="anchor"><span class="anchor-link"></span></a>3.2.3 程序顺序规则</h3>
+<p>根据 happens-before 的程序顺序规则，上面计算圆的面积的示例代码存在 3 个 happens-before 关系：</p>
+<ul>
+  <li>A　happens-before B。</li>
+  <li>B　happens-before C。</li>
+  <li>A　happens-before C。</li>
+</ul>
+<p>这里的第 3 个 happens-before 关系，是根据 happens-before 的传递性推导出来的。</p>
+<p>这里 A happens-before B，但在实际执行时 B 却可以排在 A 之前执行(看上面的重排序后的执行顺序)。如果 A happens-before B，JMM 并不要求 A 一定要在 B 之前执行。JMM 仅仅要求前一个操作(执行的结果)对后一个操作可见，且前一个操作按顺序排在第二个操作之前。这里操作 A 的执行结果不需要对操作 B 可见；而且重排序操作 A 和操作 B 后的执行结果，与操作 A 和操作 B 按 happens-before 顺序执行的结果一致。在这种情况下，JMM 会认为这种重排序合法，因此 JMM 允许这种重排序。</p>
+<p>在计算机中，软件技术和硬件技术有一个共同的目标：在不改变程序执行结果的前提下，尽可能提高并行度。编译器和处理器遵从这一目标，从 happens-before 的定义我们可以看出，JMM 同样遵从这一目标。</p>
+<h3><a href="#3-2-4-重排序对多线程的影响" name="3-2-4-重排序对多线程的影响" class="anchor"><span class="anchor-link"></span></a>3.2.4　重排序对多线程的影响</h3>
+<p>现在让我们来看看，重排序是否会改变多线程程序的执行结果。请看下面的示例代码。</p>
+<pre class="prettyprint"><code class="language-java">class RecordExample {
+	int a = 0;
+	boolean flag = false;
 	public void writer() {
-		x = 1;
-		y = 2;
+		a = 1;					// 1
+		flag = true;			// 2
 	}
 	
 	public void reader() {
-		int r1 = y;
-		int r2 = x;
+		if(flag) {				// 3
+			int i = a * a;		// 4
+		}
 	}
 }
 </code></pre>
-<p>假设在两个并发线程中执行这段代码，读取变量 Y 将会得到 2。因为这个写入比写入到变量 X 的操作更晚一些，程序员可能认为读取变量 X 将一定会得到 1。但是，写入操作可能被重排序。如果发生了重排序，那么，就能发生对变量 Y 的写入操作，读取两个变量的操作紧随其后，而且写入到变量 X 的操作能够发生。程序的结果可能是 r1==2, r2==0。</p>
-<p><strong>Java 内存模型描述了在多线程中哪些行为是合法的，以及线程如果通过内存进行交互。它描述了“程序中的变量”与“从内存或寄存器获取或存储它们的底层细节”之间的关系。Java 内存模型通过使用各种硬件和编译器优化来正确实现以上能力。</strong></p>
-<p><strong>Java 包含了几个语言级别的关键字，包括：volatile、final、synchronized，目的是为了帮助开发者向编译器描述一个程序的并发需求。Java 内存模型定义了 volatile 和 synchronized 的行为，更重要的是，保证了通过的 Java 程序在所有测处理器架构下都能正确运行。</strong></p>
-<h2><a href="#其他语言有内存模型吗" name="其他语言有内存模型吗" class="anchor"><span class="anchor-link"></span></a>其他语言有内存模型吗</h2>
-<p>大部分其他的语言，如 C/C++，都没有被设计成直接支持多线程。这些语言对于发生在编译器和处理器平台架构的重排序行为的保护机制会严重依赖于程序中使用的线程库(如 pthreads)、编译器，以及代码所运行的硬件平台所提供的保障，尤其是 CPU 架构。</p>
-<h2><a href="#jsr-133-是什么" name="jsr-133-是什么" class="anchor"><span class="anchor-link"></span></a>JSR 133 是什么</h2>
-<p>从 1997 年以来，人们不断发现 Java 语言规范的第 17 章定义的 Java 内存模型中存在一些严重的缺陷。这些缺陷会导致一些使人迷惑的行为(如 final 字段会被观察到值的变化)和破坏编译器常见的优化功能。</p>
-<p>Java 内存模型是一个雄心勃勃的计划，它是编程语言规第一次尝试合并一个能够在各种处理器架构中为并发提供一致语义的内存模型。不过，定义一个既一致又直观的内存模型远比想象的要难。JSR 133 和 Java 语言定义了一个新的内存模型，它修复了早期内存模型中的缺陷。为了实现 JSR133，final 和 volatile 的语义需要被重新定义。</p>
-<p>完整的定义见<a href="http://www.cs.umd.edu/users/pugh/java/memoryModel/">文档</a>，但是正式的语义不是小心翼翼的，它是令人惊讶的清醒的，目的是让人们意识到一些看似简单的概念(如同步)其实有多复杂。幸运的是，你不需要懂得这些正式定义的细节——JSR 133 的目的是创建一组正式语义，这些语义提供了描述 volatile、synchronized、final 如何正确工作的直观框架。</p>
-<p>JSR 133 的目标包括：</p>
+<p>flag 变量是个标记，用来标识变量 a 是否已被写入。这里假设有两个线程 A 和 B，A 首先执行 writer 方法，随后 B 线程接着执行 reader 方法。线程 B 在执行操作 4 时，能否看到线程 A 在操作 1 对共享变量 a 的写入呢？答案是不一定。</p>
+<p>由于操作 1 和操作 2 没有数据依赖关系，编译器和处理器可以对这两个操作重排序；同样，操作 3 和操作 4 没有数据依赖关系(有控制依赖关系)，编译器和处理器也可以对这两个操作重排序。让我们先来看看，当操作 1 和操作 2 重排序时，可能会产生什么效果？请看下面的程序执行时序图，如图 38 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126223948.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如图 3-8 所示，操作 1 和操作 2 做了重排序。程序执行时，线程 A 首先写标记变量 flag，随后线程 B 读这个变量。由于条件判断为真，线程 B 将读取变量 a。此时，变量 a 还没有被线程 A 写入，在这里多线程程序的语义被重排序破坏了！</p>
+<p>下面再让我们看看，当操作 3 和操作 4 重排序时会产生什么效果(借助这个重排序，可以顺便说明控制依赖性)。下面是操作 3 和操作 4 重排序后，程序执行的时序图，如图 3-9 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126224124.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在程序中，操作 3 和操作 4 存在控制依赖关系。当代码中存在控制依赖性时，会影响指令序列执行的并行度。为此，编译器和处理器会采用猜测(Speculation)执行来克服控制相关性对并行度的影响。以处理器的猜测执行为例，执行线程 B 的处理器可以提前读取并计算 <code>a * a</code>，然后把计算结果临时保存到一个名为重排序缓冲(Reorder Buffer，ROB)的硬件缓存中。当操作 3 的条件判断为真时，就把该计算结果写入变量 i 中。</p>
+<p>从图 3-9 中我们可以看出，猜测执行实质上对操作 3 和 4 做了重排序。重排序在这里破坏了多线程程序的语义！</p>
+<p>在单线程程序中，对存在控制依赖的操作重排序，不会改变执行结果(这也是 as-if-serial 语义允许对存在控制依赖的操作做重排序的原因)；但在多线程程序中，对存在控制依赖的操作重排序，可能会改变程序的执行结果。</p>
+<h2><a href="#3-3-顺序一致性" name="3-3-顺序一致性" class="anchor"><span class="anchor-link"></span></a>3.3　顺序一致性</h2>
+<p>顺序一致性内存模型是一个理论参考模型，在设计的时候，处理器的内存模型和编程语言的内存模型都会以顺序一致性内存模型作为参照。</p>
+<h3><a href="#3-3-1-数据竞争与顺序一致性" name="3-3-1-数据竞争与顺序一致性" class="anchor"><span class="anchor-link"></span></a>3.3.1　数据竞争与顺序一致性</h3>
+<p>当程序未正确同步时，就可能会存在数据竞争。Java内存模型规范对数据竞争的定义下:</p>
 <ul>
-  <li>保留已经存在的安全保证(如类型安全)并强化其他的安全保证。例如，变量值不能凭空创建：线程观察到的每个变量的值必须是被其他线程合理创建的。</li>
-  <li>正确同步的程序的语义应该尽量简单和直观。</li>
-  <li>应该定义未完成或为正确同步的程序的语义，主要是为了把潜在的安全危害降到最低。</li>
-  <li>开发者应该能够自信的推断多线程如何与内存进行交互。</li>
-  <li>能够在现在许多流行的硬件架构中设计正确且高性能的 JVM 实现。</li>
-  <li>应该能够提供“安全初始化”保证。如果一个对象正确的进行了构建(指它的引用没有在构建时逸出)，那么所有能够看到该对象的引用的线程，在不进行同步的情况下，也将能够看到在构造方法中设置的 fianl 字段的值。</li>
-  <li>应该尽量不影响现有的代码。</li>
+  <li>在一个线程中写一个变量，在另一个线程读同一个变量，而且写和读没有通过同步来排序。</li>
 </ul>
-<h2><a href="#重排序意味着什么" name="重排序意味着什么" class="anchor"><span class="anchor-link"></span></a>重排序意味着什么</h2>
-<p>在很多情况下，访问一个程序变量(对象实例字段、类静态字段、数组元素)可能会使用不同的执行顺序，而不是程序语义所指定的顺序执行。编译器能够自由的以优化的名义去改变指令顺序。在特定环境下，处理器可能会次序颠倒的执行指令。数据可能在寄存器、缓冲区或主存中以不同的次序移动，而不是按照程序指定的顺序。</p>
-<p>例如，如果一个线程写入值到字段 a、然后写入值到字段 b，并且 b 的值不依赖于 a 的值，那么，处理器能够自由的调整它们的执行顺序，而且缓冲区能够在 a 之前刷新 b 的值到主内存。有许多潜在的重排序来源，例如编译器、JIT 及缓冲区。</p>
-<p>编译器、运行时和硬件被期望一起协力创建看似是按顺序执行的语义的假象，这意味着在单线程程序中，程序应该不能观察到重排序的影响。但是，重排序在没有正确同步的多线程程序中会产生作用，在这些多线程程序中，一个线程能够观察到其他线程的影响，也可能检测到其他线程将会以一种不同于程序语义所规定的执行顺序来访问变量。</p>
-<p>大部分情况下，一个线程不会关注到其他线程在做什么，但是当它需要关注的时候，就需要使用(正确的)同步了。</p>
-<h2><a href="#旧内存模型的缺陷有哪些-" name="旧内存模型的缺陷有哪些-" class="anchor"><span class="anchor-link"></span></a>旧内存模型的缺陷有哪些？</h2>
-<p>旧的内存模型中有几个严重的问题。这些问题很难理解，因此被广泛的违背。例如，旧的存储模型在许多情况下，不允许 JVM 发生各种重排序行为。旧的内存模型中让人产生困惑的因素造就了 JSR 133 的诞生。</p>
-<p>例如，一个被广泛认可的概念就是：如果使用 final 字段，那么就没有必要在多个线程间使用同步来保证其他线程能够看到这个字段的值。尽管这是一个合理的假设和明显的行为，也是我们所期待的结果。实际上，在旧的内存模型中，我们想让程序正确运行起来却是不行的。在旧的内存模型中，final 字段并没有同其他字段进行区别对待——这意味着同步是保证所有线程看到一个在构造方法中初始化为 final 字段的唯一方法。结果——如果没有正确进行同步，对一个线程来说，它可能看到一个(final)字段的默认值，然后在稍后的时间里，又能看到构造方法中设置的值。这意味着，一些不可变的对象，例如 String，能够改变它们的值——这是在是让人很郁闷。</p>
-<p>旧的内存模型允许 volatile 变量的写操作和非 volatile 变量的读写操作一起进行重排序，这和大多数的开发人员对于 volatile 变量的直观感受是不一致的，因此会造成迷惑。</p>
-<p>最后，我们将看到的是，开发者对于“程序没有被正确同步的情况下将会发生什么”的直观感受通常是错误的。JSR 133 的目的之一就是要引起这方面的注意。</p>
-<h2><a href="#没有正确同步的含义是什么" name="没有正确同步的含义是什么" class="anchor"><span class="anchor-link"></span></a>没有正确同步的含义是什么</h2>
-<p>没有正确同步的代码对于不同的人来说可能会有不同的理解。在 Java 内存模型这个语义环境下，我们谈到“没有正确同步”时指的是：</p>
+<p>当代码中包含数据竞争时，程序的执行往往产生违反直觉的结果。如果一个多线程程序能正确同步，这个程序将是一个没有数据竞争的程序。</p>
+<p>JMM 对正确同步的多线程程序的内存一致性做了如下保证：</p>
+<blockquote>
+  <p>如果程序是正确同步的，程序的执行将具有顺序一致性(Sequentially Consistent)——即程序的执行结果与该程序在顺序一致性内存模型中的执行结果相同。马上我们就会看到，这对于程序员来说是一个极强的保证。这里的同步是指广义上的同步，包括对常用同步原语(synchronized、volatile、final)的正确使用。</p>
+</blockquote>
+<h3><a href="#顺序一致性内存模型" name="顺序一致性内存模型" class="anchor"><span class="anchor-link"></span></a>顺序一致性内存模型</h3>
+<p>顺序一致性内存模型是一个被计算机科学家理想化了的理论参考模型，它为程序员提供了极强的内存可见性保证。顺序一致性内存模型有两大特性：</p>
 <ul>
-  <li>一个线程中存在对一个变量的写操作。</li>
-  <li>另外一个线程存在对该变量的读操作。</li>
-  <li>而且写操作和读操作之间没有通过同步来保证顺序。</li>
+  <li>一个线程中的所有操作必须按照程序的顺序来执行。</li>
+  <li>(不管程序是否同步)所有线程都只能看到一个单一的操作执行顺序。在顺序一致性内 存模型中，每个操作都必须原子执行且立刻对所有线程可见。</li>
 </ul>
-<p>当违反这些规则时，我们就说在这个变量上有一个“数据竞争”。一个拥有数据竞争的程序就是一个没有正确同步的程序。</p>
-<h2><a href="#同步会做些什么" name="同步会做些什么" class="anchor"><span class="anchor-link"></span></a>同步会做些什么</h2>
-<p>同步有几个方面的作用。最广为人知的就是“互斥”——一次只有一个线程能够获得一个监视器，因此，在一个监视器上同步意味着一旦一个线程进入到该监视器保护的同步块中，其他的线程都不能进入到同一个监视器保护的块中间，除非第一个线程退出了同步块。</p>
-<p>但是同步的含义比互斥更广。同步保证了一个线程在同步块之前或之中的一个内存写入操作以可预知的方式对其他拥有相同监视器的线程可见。当我们退出了同步块，我们就释放了这个监视器，该监视器拥有刷新缓冲区到主内存的效果，因此该线程的写入操作能够为其他线程所见。在我们进入一个同步块之前，我们需要获取监视器，监视器拥有使本地处理器缓存失效的功能，因此变量会从主存重新加载，于是其他线程对共享变量的修改对当前线程来说就变得可见了。</p>
-<p>基于缓存来讨论同步，可能听起来这些观点仅仅会影响到多处理器的系统。但是，重排序效果能够在单一处理器上很容易的观察到。对于编译器来说，在获取之前或者释放之后移动你的代码是不可能的。当我们谈到在缓冲区上面进行的获取和释放操作时，我们使用了简述的方式来描述大量可能的影响。</p>
-<p>新的内存模型语义在内存操作(读写字段、加解锁)以及其他线程的操作(start/join)中创建了一个部分(partial，相对于整个程序的语义顺序)排序，在这些操作中，一些操作被称为 happens before 其他操作。当一个操作在另一个操作之前发生，第一个操作保证能够被排到前面并且对第二个操作可见。这些排序的规则如下：</p>
+<p>顺序一致性内存模型为程序员提供的视图如图 3-10 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126224720.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在概念上，顺序一致性模型有一个单一的全局内存，该内存通过一个左右摆动的开关可以连接到任意一个线程，同时每一个线程必须按照程序的顺序来执行内存读/写操作。从上 面的示意图可以看出，在任意时间点最多只能有一个线程可以连接到内存。当多个线程并发执行时，图中的开关装置能把所有线程的所有内存读/写操作串行化(即在顺序一致性模型中，所有操作之间具有全序关系)。</p>
+<p>为了更好进行理解，下面通过两个示意图来对顺序一致性模型的特性做进一步的说明。</p>
+<p>假设有两个线程 A 和 B 并发执行。其中A线程有 3 个操作，它们在程序中的顺序是： A1→A2→A3。B线程也有3个操作，它们在程序中的顺序是：B1→B2→B3。</p>
+<p>假设这两个线程使用监视器锁来正确同步：A 线程的 3 个操作执行后释放监视器锁，随后 B 线程获取同一个监视器锁。那么程序在顺序一致性模型中的执行效果将如图 3-11 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126224924.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>现在我们再假设这两个线程没有做同步，下面是这个未同步程序在顺序一致性模型中的执行示意图，如图 3-12 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126224955.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>未同步程序在顺序一致性模型中虽然整体执行顺序是无序的，但所有线程都只能看到一个一致的整体执行顺序。以上图为例，线程 A 和 B 看到的执行顺序都是： B1→A1→A2→B2→A3→B3。之所以能得到这个保证是因为顺序一致性内存模型中的每个操 作必须立即对任意线程可见。</p>
+<p>但是，在 JMM 中就没有这个保证。未同步程序在 JMM 中不但整体的执行顺序是无序的，而且所有线程看到的操作执行顺序也可能不一致。比如，在当前线程把写过的数据缓存在本地内存中，在没有刷新到主内存之前，这个写操作仅对当前线程可见；从其他线程的角度来观察，会认为这个写操作根本没有被当前线程执行。只有当前线程把本地内存中写过的数据刷新到主内存之后，这个写操作才能对其他线程可见。在这种情况下，当前线程和其他线程看到的操作执行顺序将不一致。</p>
+<h3><a href="#3-3-3-同步程序的顺序一致性效果" name="3-3-3-同步程序的顺序一致性效果" class="anchor"><span class="anchor-link"></span></a>3.3.3　同步程序的顺序一致性效果</h3>
+<p>下面，对前面的示例程序 ReorderExample 用锁来同步，看看正确同步的程序如何具有顺序一致性。</p>
+<pre class="prettyprint"><code class="language-java">class SynchronizedExample {
+	int a = 0;
+	boolean flag = false;
+	public synchronized void writer() {
+		a = 1;
+		flag = true;
+	}
+	
+	public synchronized void reader() {
+		if(flag) {
+			int i = a;
+			...
+		}
+	}
+}
+</code></pre>
+<p>在上面示例代码中，假设 A 线程执行 writer 方法后，B 线程执行 reader 方法。这是一个正确同步的多线程程序。根据 JMM 规范，该程序的执行结果将与该程序在顺序一致性模型中的执行结果相同。下面是该程序在两个内存模型中的执行时序对比图，如图 3-13 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126225304.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>顺序一致性模型中，所有操作完全按程序的顺序串行执行。而在 JMM 中，临界区内的代码可以重排序(但 JMM 不允许临界区内的代码“逸出”到临界区之外，那样会破坏监视器的语义)。JMM 会在退出临界区和进入临界区这两个关键时间点做一些特别处理，使得线程在这两个时间点具有与顺序一致性模型相同的内存视图。虽然线程 A 在临界区内做了重排序，但由于监视器互斥执行的特性，这里的线程 B 根本无法“观察”到线程A在临界区内的重排序。这种重排序既提高了执行效率，又没有改变程序的执行结果。</p>
+<p>从这里我们可以看到，JMM 在具体实现上的基本方针为：在不改变(正确同步的)程序执 行结果的前提下，尽可能地为编译器和处理器的优化打开方便之门。</p>
+<h3><a href="#3-3-4-未同步程序的执行特性" name="3-3-4-未同步程序的执行特性" class="anchor"><span class="anchor-link"></span></a>3.3.4　未同步程序的执行特性</h3>
+<p>对于未同步或未正确同步的多线程程序，JMM 只提供最小安全性：线程执行时读取到的 值，要么是之前某个线程写入的值，要么是默认值(0，Null，False)，JMM 保证线程读操作读取到的值不会无中生有的冒出来。为了实现最小安全性，JVM 在堆上分配对象时，首先会对内存空间进行清零，然后才会在上面分配对象(JVM 内部会同步这两个操作)。因此，在已清零的内存空间(Pre-zeroed Memory)分配对象时，域的默认初始化已经完成了。</p>
+<p>JMM 不保证未同步程序的执行结果与该程序在顺序一致性模型中的执行结果一致。因为如果想要保证执行结果一致，JMM 需要禁止大量的处理器和编译器的优化，这对程序的执行 性能会产生很大的影响。而且未同步程序在顺序一致性模型中执行时，整体是无序的，其执行结果往往无法预知。而且，保证未同步程序在这两个模型中的执行结果一致没什么意义。</p>
+<p>未同步程序在 JMM 中的执行时，整体上是无序的，其执行结果无法预知。未同步程序在两个模型中的执行特性有如下几个差异:</p>
+<ol>
+  <li>顺序一致性模型保证单线程内的操作会按程序的顺序执行，而 JMM 不保证单线程内的操作会按程序的顺序执行(比如上面正确同步的多线程程序在临界区内的重排序)。</li>
+  <li>顺序一致性模型保证所有线程只能看到一致的操作执行顺序，而 JMM 不保证所有线程能看到一致的操作执行顺序。</li>
+  <li>字撕裂。JMM 不保证对 64 位的 long/double 型变量的写操作具有原子性，而顺序一致性模型保证对所有的内存读/写操作都具有原子性。</li>
+</ol>
+<p>第 3 个差异与处理器总线的工作机制密切相关。在计算机中，数据通过总线在处理器和内存之间传递。每次处理器和内存之间的数据传递都是通过一系列步骤来完成的，这一系列步骤称之为总线事务(Bus Transaction)。总线事务包括读事务和写事务。读事务从内存传送数据到处理器，写事务从处理器传送数据到内存，每个事务会读/写内存中一个或多个物理上连续的字。这里的关键是，总线会同步试图并发使用总线事务。在一个处理器执行总线事务期间，总线会禁止其他的处理器和 I/O 设备执行内存的读/写。下面，让我们通过一个示意图来说明总线的工作机制，如图3-14所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126225744.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>由图可知，假设处理器 A，B 和 C 同时向总线发起总线事务，这时总线仲裁会对竞争做出裁决，这里假设总线在仲裁后判定处理器 A 在竞争中获胜(总线仲裁会确保所有处理器都能公平的访问内存)。此时处理器 A 继续它的总线事务，而其他两个处理器则要等待 处理器 A 的总线事务完成后才能再次执行内存访问。假设在处理器 A 执行总线事务期间(无论读写)，处理器 D 向总线发起了总线事务，此时处理器 D 的请求会被总线禁止。</p>
+<p>总线的这些工作机制可以把所有处理器对内存的访问以串行化的方式来执行。在任意时间点，最多只能有一个处理器可以访问内存。这个特性确保了单个总线事务之中的内存读/写 操作具有原子性。</p>
+<p>在一些 32 位的处理器上，如果要求对 64 位数据的写操作具有原子性，会有比较大的开销。为了照顾这种处理器，Java语 言规范鼓励但不强求 JVM 对 64 位的 long/double 型变量的写操作具有原子性。当 JVM 在这种处理器上运行时，可能会把一个 64 位 long/double 型变量的写操作拆分为两个 32 位的写操作来执行。这两个 32 位的写操作可能会被分配到不同的总线事务中执行，此时对这个 64 位变量的写操作将不具有原子性。</p>
+<p>当单个内存操作不具有原子性时，可能会产生意想不到后果。请看示意图，如图 3-15 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230058.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如上图所示，假设处理器 A 写一个 long 型变量，同时处理器 B 要读这个 long 型变量。处理器 A 中 64 位的写操作被拆分为两个 32 位的写操作，且这两个 32 位的写操作被分配到不同的写事务中执行。同时，处理器 B 中 64 位的读操作被分配到单个的读事务中执行。当处理器 A 和 B 按上图的时序来执行时，处理器 B 将看到仅仅被处理器 A “写了一半”的无效值。</p>
+<p>注意，在 JSR-133 之前的旧内存模型中，一个 64 位 long/double 型变量的读/写操作可以被拆分为两个 32 位的读/写操作来执行。从 JSR-133 内存模型开始(JDK5)，仅仅只允许把一个 64 位l ong/double 型变量的写操作拆分为两个 32 位的写操作来执行，任意的读操作在 JSR133 中都必须具有原子性(即任意读操作必须要在单个读事务中执行)。</p>
+<h2><a href="#3-4-volatile-的内存语义" name="3-4-volatile-的内存语义" class="anchor"><span class="anchor-link"></span></a>3.4　volatile 的内存语义</h2>
+<p>当声明共享变量为 volatile 后，对这个变量的读/写将会很特别。为了揭开 volatile 的神秘面纱，下面将介绍 volatile 的内存语义及其实现。</p>
+<h3><a href="#3-4-1-volatile-的特性" name="3-4-1-volatile-的特性" class="anchor"><span class="anchor-link"></span></a>3.4.1　volatile 的特性</h3>
+<p>理解 volatile 特性的一个好方法是把对 volatile 变量的单个读/写，看成是使用同一个锁对这些单个读/写操作做了同步。下面通过具体的示例来说明，示例代码如下。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230242.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设有多个线程分别调用上面程序的 3 个方法，这个程序在语义上和下面程序等价。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230346.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如上面示例程序所示，一个 volatile 变量的单个读/写操作，与一个普通变量的读/写操作都是使用同一个锁来同步，它们之间的执行效果相同。</p>
+<p>锁的 happens-before 规则保证释放锁和获取锁的两个线程之间的内存可见性，这意味着对一个 volatile 变量的读，总是能看到(任意线程)对这个 volatile 变量最后的写入值。</p>
+<p>锁的语义决定了临界区代码的执行具有原子性。这意味着，即使是 64 位的 long 型和double 型变量，只要它是 volatile 变量，对该变量的读/写就具有原子性。如果是多个 volatile 操作或类似于 volatile++ 这种复合操作，这些操作整体上不具有原子性。</p>
+<p>简而言之，volatile 变量自身具有下列特性：</p>
 <ul>
-  <li>线程中的每个操作 happenns before 该线程中在程序顺序上后续的每个操作。</li>
-  <li>解锁一个监视器的操作 happens before 随后对相同监视器进行的解锁操作。</li>
-  <li>对 volatile 字段的写操作 happens before 后续对相同 volatile 字段的读取操作。</li>
-  <li>在线程上调用 start 方法 happens before 这个线程启动后的任何操作。</li>
-  <li>一个线程中的所有操作都 happens before 从这个线程的 join 方法成功返回的任何其他线程。(即其他线程等待一个线程的 join 方法完成，那么，这个线程中的所有操作 happens before 其他线程中的所有操作)</li>
+  <li>可见性。对一个 volatile 变量的读，总是能看到任意线程对这个 volatile 变量最后的写入值。</li>
+  <li>原子性。对任意单个 volatile 变量的读/写具有原子性，但类似于 volatile++ 这种复合操作不具有原子性。</li>
 </ul>
-<p>这意味着：对于任何内存操作，该内存操作在退出一个同步块之前对一个线程是可见的，对任何线程在它进入一个被相同的监视器保护的同步块之后都是可见的，因为所有内存操作 happens before 释放监视器、(当前线程)释放监视器 happens before (其他线程)获取监视器。</p>
-<p>其他类似如下模式的实现，被一些人用来强迫实现一个内存屏障，不会生效：</p>
-<pre><code>synchronized (new Object()) {}
-</code></pre>
-<p>这段代码其实不会执行任何操作，编译器会将其完全移除，因为编译器知道没有其他线程会使用相同监视器进行同步。要看到其他线程的结果，你必须为一个线程建立 happens before 关系。</p><div class="callout note "><div class="callout-title">Note</div>
-<p>对两个线程来说，为了正确建立 happens before 关系而在相同监视器上面进行同步是非常重要的。以下观点是错误的：当线程 A 在对象 X 上面同步的时候，所有东西对线程 A 可见，线程 B 在对象 Y 上面进行同步的时候，所有东西对线程 B 也是可见的。释放监视器和获取监视器必须匹配(即要在相同监视器上面完成这两个操作)，否则，代码就会存在数据竞争。</p></div>
-<h2><a href="#final-字段是如何改变其值的" name="final-字段是如何改变其值的" class="anchor"><span class="anchor-link"></span></a>final 字段是如何改变其值的</h2>
-<p>我们可以通过分析 String 类的实现细节来展示一个 final 变量是如何可以改变的。</p>
-<p>String 对象包含 3 个字段：一个 character 数组、一个数据的 offset、一个 length。实现 String 类的基本原理是：它不仅仅拥有 character 数组，而且为了避免多余的对象分配和拷贝，多个 String 和 StringBuffer 对象都会共享相同的 character 数组。因此，String.substring 方法能够通过改变 length 和 offset，通过共享原始的 character 数组来创建一个新的 String 对象。对于一个 String 来说，这些字段都是 final 型的字段。</p>
-<pre><code>String s1 = &quot;/usr/tmp&quot;;
-String s2 = s1.substring(4);
-</code></pre>
-<p>s2 的 offset 值为 4，length 的值为 4。但是，在旧的内存模型下，对于其他线程来说，有机会看到 offset 拥有默认的值 0，而且，在稍后一点时间会看到正确的值 4，好像字符串的值从 “/usr” 变成了 “/tmp” 一样。</p>
-<p>旧的 Java 内存模型允许这些行为，部分 JVM 已经展现出这样的行为了。而在新的 Java 内存模型中，这是非法的。</p>
-<h2><a href="#在新的-jmm-下-final-是如何工作的" name="在新的-jmm-下-final-是如何工作的" class="anchor"><span class="anchor-link"></span></a>在新的 JMM 下 final 是如何工作的</h2>
-<p>一个对象的 final 字段值是在对象的构造方法中设置的。假设对象被正确的构造了，一旦对象被构造，在构造方法里面设置 final 字段的值在没有同步的情况下会对所有其他线程可见。另外，引用这些 final 字段的对象或数组都会看到其最新值。</p>
-<p>对于一个对象来说，被正确构造又是什么意思？简单来说，它意味着这个正在构造的对象的引用在构造期间没有被允许逸出(参见<a href="https://www.ibm.com/developerworks/java/library/j-jtp0618/index.html">安全构造技术</a>)。换句话说，不要让其他线程在其他地方能够看见一个处于构造期的对象引用。不要指派给一个静态字段，不要作为一个 listener 注册给其他对象等。这些操作应该在构造方法完成之后进行，而不是构造方法中进行。</p>
-<pre class="prettyprint"><code class="language-java">class FinalFieldExample {
-  final int x;
-  int y;
-  static FinalFieldExample f;
-  
-  public FinalFieldExample() {
-    x = 3;
-    y = 4;
-  }
-
-  static void writer() {
-    f = new FinalFieldExample();
-  }
-
-  static void reader() {
-    if (f != null) {
-      int i = f.x;
-      int j = f.y;
-    }
-  }
-}
-</code></pre>
-<p>上面的类展示了 fianl 字段应该如何使用。一个正在执行 reader 方法的线程保证看到 f.x 的值为 3，因为它是 final 字段。它不保证看到 f.y 的值为 4，因为 f.y 不是 final 字段。如果 FinalFieldExample 的构造方法是如下这样：</p>
-<pre><code>public FinalFieldExample() { // bad!
-  x = 3;
-  y = 4;
-  // bad construction - allowing this to escape
-  global.obj = this;
-}
-</code></pre>
-<p>那么从 global.obj 中读取 this 引用线程不会保证读取到的 x 的值 3。</p>
-<p>能够看到字段的正确构造的值固然不错，但是，如果字段本身就是一个引用，那么，你还是希望你的代码能够看到引用所指向的这个对象(或数组)的最新值。如果你的字段是 final 字段，那就就是能够保证的。因此，当一个 final 指针指向一个数组，你无需担心线程能够看到引用的最新值却看不到引用所指向的数组的最新值。重复一下，这里的“正确的”是指“对象构造方法结尾的最新的值”而不是“最新可用的值”。</p>
-<p>现在，在讲了如上的片段之后，如果在一个线程构造了一个不可变对象之后(对象仅包含 final 字段)，你希望保证该对象被其他线程正确的查看，你仍然需要使用同步才行。例如，没有其他的方式可以保证不可变对象的引用将被第二个线程看到。使用 final 字段的程序应该仔细调试，这需要深入而且仔细的理解并发在你的代码中是如被被管理的。</p>
-<p>如果你使用 JNI 来改变你的 final 字段，这方面的行为是没有定义的。</p>
-<h2><a href="#volatile-的作用" name="volatile-的作用" class="anchor"><span class="anchor-link"></span></a>volatile 的作用</h2>
-<p>Volatile 字段是用于线程间通讯的特殊字段。每次读 volatile 字段都会看到其他线程写入该字段的最新值；实际上，开发者之所以要定义 volatile 字段是因为在某些情况下由于缓存和重排序所看到的陈旧的变量值是不可接受的，编译器和运行时禁止在寄存器里分配它们。它们还必须保证，在它们被写好之后，它们被从缓冲区刷新到主存中，因此，它们能够对其他线程立即可见。同样，在读取一个 volatile 字段之前，缓冲区必须失效，因为值是存在于主存中而不是本地处理器的缓冲区。在重排序访问 volatile 变量的时候还有其他的限制。</p>
-<p>在旧的内存模型下，访问 volatile 变量不能被重排序，但是，它们可能和访问非 volatile 变量一起被重排序。这破坏了 volatile 字段从一个线程到另一个线程作为一个信号条件的手段。</p>
-<p>下新的内存模型下，volatile 变量仍然不能彼此重排序。和旧模型不同的是，volatile 周围的普通字段也不再能随便的重排序了。写入一个 volatile 字段和释放监视器拥有相同的内存影响，而且读取 volatile 字段和获取监视器也有相同的内存影响。事实上，因为新的内存模型在重排序 volatile 字段访问上面和其他字段(volatile 或非 volatile)访问上面拥有更加严格的约束。当线程 A 写入一个 volatile 字段 f 的时候，如果这时线程 B 读取 f 的值，那么对线程 A 可见的任何东西都变得对线程 B 可见了。</p>
-<p>下面的例子展示了应该如何使用 volatile 字段：</p>
-<pre class="prettyprint"><code class="language-java">class VolatileExample {
-  int x = 0;
-  volatile boolean v = false;
-  public void writer() {
-    x = 42;
-    v = true;
-  }
-
-  public void reader() {
-    if (v == true) {
-      //uses x - guaranteed to see 42.
-    }
-  }
-}
-</code></pre>
-<p>假设一个名为 “writer” 的线程和一个名为 “reader” 的线程。对变量 v 的写操作会等到变量 x 被写入到内存之后，然后读线程才能看到 v 的值。因此，如果 reader 线程看到了 v 的值为 true，那么，这也保证能够看到之前发生的“向 x 写入 42”这个操作。而在旧的内存模型中未必如此。如果 v 不是 volatile 变量，那么，编译器可以在 writer 线程中重排序写入操作，然后 reader 线程中读取 x 变量的操作可能会看到其值为 0。</p>
-<p>实际上，volatile 的语义已经被加强了，已经块达到同步的级别了。为了可见性的原因，每次读取和写入一个 volatile 字段已经像是半个同步操作了。</p><div class="callout note "><div class="callout-title">Note</div>
-<p>对于两个线程来说，为了正确的设置 happens before 关系，访问相同的 volatile 变量是很重要的。以下结论是不正确的：当线程 A 写 volatile 字段 f 的时候，线程 A 可见的所有东西，在线程 B 读取字段 g 的时候，都变得对线程 B 可见了。释放操作和获取操作必须匹配(也就是在同一个 volatile 字段上完成)。</p></div>
-<h2><a href="#新的-jmm-是否修复了双重锁检查问题" name="新的-jmm-是否修复了双重锁检查问题" class="anchor"><span class="anchor-link"></span></a>新的 JMM 是否修复了双重锁检查问题</h2>
-<p>臭名昭著的双重锁检查(也称多线程单例模式)是一个骗人的把戏，它用来支持 lazy 初始化，同时避免过度使用同步。在非常早的 JVM 中，同步非常慢，开发人员非常系统删掉它。双重锁检查代码如下：</p>
-<pre><code>// double-checked-locking - don&#39;t do this!
-
-private static Something instance = null;
-
-public Something getInstance() {
-  if (instance == null) {
-    synchronized (this) {
-      if (instance == null)
-        instance = new Something();
-    }
-  }
-  return instance;
-}
-</code></pre>
-<p>这看起来好像非常聪明——在公用代码中避免了同步。这段代码只有一个问题——它不能正常工作。为什么呢？最明显的原因是，初始化实例的写入操作和实例字段的写入操作能够被编译器或缓冲区重排序，重排序可能会导致返回部分构造的一些东西。就是我们会读取到一个没有被初始化的对象。这段代码还有很多其他的错误，以及为什么对这段代码的算法修正是错误的。在旧的内存模型下无法将其修复。更多深入的信息参见：<a href="http://www.javaworld.com/jw-02-2001/jw-0209-double.html">Double-checkedlocking: Clever but broken</a> 和 <a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">The &ldquo;Double-Checked Locking is Broken&rdquo; Declaration</a>。</p>
-<p>很多人认为使用 volatile 关键字能够消除双重锁检查模式的问题。在 1.5 的 JVM 之前，volatile 并不能保证这段代码能够正常工作(因环境而定)。在新的内存模型中，实例字段使用 volatile 可以解决双重锁检查问题，因为在构造线程来初始化一些东西和读取线程返回它的值之间有 happens before 关系。</p>
-<p>然后，对于喜欢使用双重锁检查的人来说(我们真的希望没有人喜欢这么用)，仍然不是好消息。双重锁检查的重点是为了避免过度使用同步导致性能问题。从 Java 1.0 开始，同步不仅会有昂贵的性能开销，而在新的内存模型下，使用 volatile 的性能开销也有所上升，几乎达到了和同步一样的性能开销。因此，使用双重锁检查来实现单例模式仍然不是一个好的选择(注意这里需要修正，在大多数平台下，volatile 的性能开销还是比较低的)。</p>
-<p>使用 IODH 来实现多线程模式下的单例会更加易读：</p>
-<pre><code>private static class LazySomethingHolder {
-  public static Something something = new Something();
-}
-
-public static Something getInstance() {
-  return LazySomethingHolder.something;
-}
-</code></pre>
-<p>这段代码是正确的，因为初始化由 static 字段来保证。如果一个子弹设置在 static 舒适化中，对其他访问这个类的线程来说是能够正确的保证其可见性的。</p>
-<h2><a href="#如何实现一个-vm" name="如何实现一个-vm" class="anchor"><span class="anchor-link"></span></a>如何实现一个 VM</h2>
-<p>参考 <a href="http://gee.cs.oswego.edu/dl/jmm/cookbook.html">The JSR-133 Cookbook for Compiler Writers</a>。</p>
-<h2><a href="#为什么要关注-jmm" name="为什么要关注-jmm" class="anchor"><span class="anchor-link"></span></a>为什么要关注 JMM</h2>
-<p>为什么你需要关注java内存模型？并发程序的bug非常难找。它们经常不会在测试中发生，而是直到你的程序运行在高负荷的情况下才发生，非常难于重现和跟踪。你需要花费更多的努力提前保证你的程序是正确同步的。这不容易，但是它比调试一个没有正确同步的程序要容易的多。</p>
-<h2><a href="#reference" name="reference" class="anchor"><span class="anchor-link"></span></a>Reference</h2>
+<h3><a href="#3-4-2-volatile-写-读建立的-happens-before-关系" name="3-4-2-volatile-写-读建立的-happens-before-关系" class="anchor"><span class="anchor-link"></span></a>3.4.2　volatile 写-读建立的 happens-before 关系</h3>
+<p>上面讲的是 volatile 变量自身的特性，对程序员来说，volatile 对线程的内存可见性的影响比 volatile 自身的特性更为重要，也更需要我们去关注。</p>
+<p>从 JSR-133 开始，volatile 变量的写-读可以实现线程之间的通信。</p>
+<p>从内存语义的角度来说，volatile 的写-读与锁的释放-获取有相同的内存效果：volatile 写和锁的释放有相同的内存语义；volatile 读与锁的获取有相同的内存语义。</p>
+<p>请看下面使用 volatile 变量的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230624.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设线程 A 执行 writer 方法之后，线程 B 执行 reader 方法。根据 happens-before 规则，这个过程建立的 happens-before 关系可以分为 3 类：</p>
+<ol>
+  <li>根据程序次序规则，1 happens-before 2，3 happens-before 4。</li>
+  <li>根据 volatile 规则，2 happens-before 3。</li>
+  <li>根据 happens-before 的传递性规则，1 happens-before 4。</li>
+</ol>
+<p>上述 happens-before 关系的图形化表现形式如下。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230729.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在上图中，每一个箭头链接的两个节点，代表了一个 happens-before 关系。黑色箭头表示 序顺序规则；橙色箭头表示 volatile 规则；蓝色箭头表示组合这些规则后提供的 happens-before 保证。</p>
+<p>这里 A 线程写一个 volatile 变量后，B 线程读同一个 volatile 变量。A 线程在写 volatile 变量之前所有可见的共享变量，在 B 线程读同一个 volatile 变量后，将立即变得对 B 线程可见。</p>
+<h3><a href="#volatile-写-读的内存语义" name="volatile-写-读的内存语义" class="anchor"><span class="anchor-link"></span></a>volatile 写-读的内存语义</h3>
+<p>当写一个 volatile 变量时，JMM 会把该线程对应的本地内存中的共享变量值刷新到主内存。</p>
+<p>以上面示例程序 VolatileExample 为例，假设线程 A 首先执行 writer 方法，随后线程 B 执行 reader 方法，初始时两个线程的本地内存中的 flag 和 a 都是初始状态。图 3-17 是线程 A 执行 volatile 写后，共享变量的状态示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126230852.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如图 3-17 所示，线程 A 在写 flag 变量后，本地内存 A 中被线程 A 更新过的两个共享变量的值被刷新到主内存中。此时，本地内存 A 和主内存中的共享变量的值是一致的。</p>
+<p>volatile 读的内存语义如下。</p>
+<p>当读一个 volatile 变量时，JMM 会把该线程对应的本地内存置为无效。线程接下来将从主内存中读取共享变量。</p>
+<p>图 3-18 为线程 B 读同一个 volatile 变量后，共享变量的状态示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126231002.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如图所示，在读 flag 变量后，本地内存 B 包含的值已经被置为无效。此时，线程 B 必须从主内存中读取共享变量。线程 B 的读取操作将导致本地内存 B 与主内存中的共享变量的值变成一致。</p>
+<p>如果我们把 volatile 写和 volatile 读两个步骤综合起来看的话，在读线程 B 读一个 volatile 变量后，写线程 A 在写这个 volatile 变量之前所有可见的共享变量的值都将立即变得对读线程 B 可见。</p>
+<p>下面对 volatile 写和 volatile 读的内存语义做个总结。</p>
 <ul>
-  <li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html">JSR 133 (Java Memory Model) FAQ</a></li>
-  <li><a href="http://ifeve.com/jmm-faq/">Java 内存模型 FAQ</a></li>
+  <li>线程 A 写一个 volatile 变量，实质上是线程 A 向接下来将要读这个 volatile 变量的某个线程发出了(其对共享变量所做修改的)消息。</li>
+  <li>线程 B 读一个 volatile 变量，实质上是线程 B 接收了之前某个线程发出的(在写这个 volatile 变量之前对共享变量所做修改的)消息。</li>
+  <li>线程 A 写一个 volatile 变量，随后线程 B 读这个 volatile 变量，这个过程实质上是线程 A 通过主内存向线程B发送消息。</li>
+</ul>
+<h3><a href="#3-4-4-volatile-内存语义的实现" name="3-4-4-volatile-内存语义的实现" class="anchor"><span class="anchor-link"></span></a>3.4.4　volatile 内存语义的实现</h3>
+<p>前文提到过重排序分为编译器重排序和处理器重排序。为了实现 volatile 内存语义，JMM 会分别限制这两种类型的重排序类型。表 3-5 是 JMM 针对编译器制定的 volatile 重排序规则表。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126231121.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>举例来说，第三行最后一个单元格的意思是：在程序中，当第一个操作为普通变量的读或 写时，如果第二个操作为 volatile 写，则编译器不能重排序这两个操作。</p>
+<p>从表 3-5 我们可以看出。</p>
+<ul>
+  <li>当第二个操作是 volatile 写时，不管第一个操作是什么，都不能重排序。这个规则确保 volatile 写之前的操作不会被编译器重排序到 volatile 写之后。</li>
+  <li>当第一个操作是 volatile 读时，不管第二个操作是什么，都不能重排序。这个规则确保 volatile 读之后的操作不会被编译器重排序到 volatile 读之前。</li>
+  <li>当第一个操作是 volatile 写，第二个操作是 volatile 读时，不能重排序。</li>
+</ul>
+<p>为了实现 volatile 的内存语义，编译器在生成字节码时，会在指令序列中插入内存屏障来禁止特定类型的处理器重排序。对于编译器来说，发现一个最优布置来最小化插入屏障的总数几乎不可能。为此，JMM 采取保守策略。下面是基于保守策略的 JMM 内存屏障插入策略。</p>
+<ul>
+  <li>在每个 volatile 写操作的前面插入一个 StoreStore 屏障。</li>
+  <li>在每个 volatile 写操作的后面插入一个 StoreLoad 屏障。</li>
+  <li>在每个 volatile 读操作的后面插入一个 LoadLoad 屏障。</li>
+  <li>在每个 volatile 读操作的后面插入一个 LoadStore 屏障。</li>
+</ul>
+<p>上述内存屏障插入策略非常保守，但它可以保证在任意处理器平台，任意的程序中都能得到正确的 volatile 内存语义。</p>
+<p>下面是保守策略下，volatile 写插入内存屏障后生成的指令序列示意图，如图 3-19 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126231318.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>图 3-19 中的 StoreStore 屏障可以保证在 volatile 写之前，其前面的所有普通写操作已经对任意处理器可见了。这是因为 StoreStore 屏障将保障上面所有的普通写在 volatile 写之前刷新到主内存。</p>
+<p>这里比较有意思的是，volatile 写后面的 StoreLoad 屏障。此屏障的作用是避免 volatile 写与后面可能有的 volatile 读/写操作重排序。因为编译器常常无法准确判断在一个 volatile 写的后面是否需要插入一个 StoreLoad 屏障(比如，一个volatile写之后方法立即return)。为了保证能正确实现 volatile 的内存语义，JMM 在采取了保守策略：在每个 volatile 写的后面，或者在每个 volatile 读的前面插入一个 StoreLoad 屏障。从整体执行效率的角度考虑，JMM 最终选择了在每个 volatile 写的后面插入一个 StoreLoad 屏障。因为 volatile 写-读内存语义的常见使用模式是：一个写线程写 volatile 变量，多个读线程读同一个 volatile 变量。当读线程的数量大大超过写线程时，选择在 volatile 写之后插入 StoreLoad 屏障将带来可观的执行效率的提升。从这里可以看到 JMM 在实现上的一个特点：首先确保正确性，然后再去追求执行效率。</p>
+<p>下面是在保守策略下，volatile 读插入内存屏障后生成的指令序列示意图，如图 3-20 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126231539.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>图 3-20 中的 LoadLoad 屏障用来禁止处理器把上面的 volatile 读与下面的普通读重排序。LoadStore 屏障用来禁止处理器把上面的 volatile 读与下面的普通写重排序。</p>
+<p>上述 volatile 写和 volatile 读的内存屏障插入策略非常保守。在实际执行时，只要不改变 volatile 写-读的内存语义，编译器可以根据具体情况省略不必要的屏障。下面通过具体的示例代码进行说明。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126232634.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>针对 readAndWrite 方法，编译器在生成字节码时可以做如下的优化。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126232707.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>注意，最后的 StoreLoad 屏障不能省略。因为第二个 volatile 写之后，方法立即return。此时编译器可能无法准确断定后面是否会有 volatile 读或写，为了安全起见，编译器通常会在这里插入一个 StoreLoad 屏障。</p>
+<p>上面的优化针对任意处理器平台，由于不同的处理器有不同“松紧度”的处理器内存模 型，内存屏障的插入还可以根据具体的处理器内存模型继续优化。以 X86 处理器为例，图 3-21 中除最后的 StoreLoad 屏障外，其他的屏障都会被省略。</p>
+<p>前面保守策略下的 volatile 读和写，在 X86 处理器平台可以优化成如图 3-22 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126232815.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>前文提到过，X86 处理器仅会对写-读操作做重排序。X86 不会对读-读、读-写和写-写操作做重排序，因此在 X86 处理器中会省略掉这 3 种操作类型对应的内存屏障。在 X86 中，JMM 仅需在 volatile 写后面插入一个 StoreLoad 屏障即可正确实现 volatile 写-读的内存语义。这意味着在 X86 处理器中，volatile 写的开销比volatile 读的开销会大很多(因为执行StoreLoad屏障开销会比较大)。</p>
+<h3><a href="#jsr-133-为什么要增强-volatile-的内存语义" name="jsr-133-为什么要增强-volatile-的内存语义" class="anchor"><span class="anchor-link"></span></a>JSR-133 为什么要增强 volatile 的内存语义</h3>
+<p>在 JSR-133 之前的旧 Java 内存模型中，虽然不允许 volatile 变量之间重排序，但旧的 Java 内存模型允许 volatile 变量与普通变量重排序。在旧的内存模型中，VolatileExample 示例程序可能被重排序成下列时序来执行，如图 3-23 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126232911.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在旧的内存模型中，当 1 和 2 之间没有数据依赖关系时，1 和 2 之间就可能被重排序(3 和 4 类似)。其结果就是：读线程 B 执行 4 时，不一定能看到写线程 A 在执行 1 时对共享变量的修改。</p>
+<p>因此，在旧的内存模型中，volatile 的写-读没有锁的释放-获所具有的内存语义。为了提供一种比锁更轻量级的线程之间通信的机制，JSR-133 专家组决定增强 volatile 的内存语义：严格限制编译器和处理器对 volatile 变量与普通变量的重排序，确保 volatile 的写-读和锁的释放-获取具有相同的内存语义。从编译器重排序规则和处理器内存屏障插入策略来看，只要 volatile 变量与普通变量之间的重排序可能会破坏 volatile 的内存语义，这种重排序就会被编译器重排序规则和处理器内存屏障插入策略禁止。</p>
+<p>由于 volatile 仅仅保证对单个 volatile 变量的读/写具有原子性，而锁的互斥执行的特性可以确保对整个临界区代码的执行具有原子性。在功能上，锁比 volatile 更强大；在可伸缩性和执行性能上，volatile 更有优势。如果读者想在程序中用 volatile 代替锁，请一定谨慎，具体详情请参 阅 Brian Goetz 的<a href="https://www.ibm.com/developerworks/cn/java/j-jtp06197.html">文章</a>。</p>
+<h2><a href="#3-5-锁的内存语义" name="3-5-锁的内存语义" class="anchor"><span class="anchor-link"></span></a>3.5　锁的内存语义</h2>
+<p>众所周知，锁可以让临界区互斥执行。这里将介绍锁的另一个同样重要，但常常被忽视的 功能：锁的内存语义。</p>
+<h3><a href="#3-5-1-锁的释放-获取建立的-happens-before-关系" name="3-5-1-锁的释放-获取建立的-happens-before-关系" class="anchor"><span class="anchor-link"></span></a>3.5.1　锁的释放-获取建立的 happens-before 关系</h3>
+<p>锁是 Java 并发编程中最重要的同步机制。锁除了让临界区互斥执行外，还可以让释放锁的线程向获取同一个锁的线程发送消息。</p>
+<p>下面是锁释放-获取的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234009.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设线程 A 执行 writer 方法，随后线程 B 执行 reader 方法。根据 happens-before 规则，这个过程包含的 happens-before 关系可以分为 3 类。</p>
+<ol>
+  <li>根据程序次序规则，1 happens-before 2, 2 happens-before 3, 4 happens-before 5, 5 happens-before 6。</li>
+  <li>根据监视器锁规则，3 happens-before 4。</li>
+  <li>根据 happens-before 的传递性，2 happens-before 5。</li>
+</ol>
+<p>上述 happens-before 关系的图形化表现形式如图 3-24 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234104.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-24 中，每一个箭头链接的两个节点，代表了一个 happens-before 关系。黑色箭头表示程序顺序规则；橙色箭头表示监视器锁规则；蓝色箭头表示组合这些规则后提供的 happens-before 保证。</p>
+<p>图 3-24 表示在线程 A 释放了锁之后，随后线程 B 获取同一个锁。在上图中，2 happens-before 5。因此，线程 A 在释放锁之前所有可见的共享变量，在线程 B 获取同一个锁之后，将立刻变得对 B 线程可见。</p>
+<h3><a href="#3-5-2-锁的释放和获取的内存语义" name="3-5-2-锁的释放和获取的内存语义" class="anchor"><span class="anchor-link"></span></a>3.5.2　锁的释放和获取的内存语义</h3>
+<p>当线程释放锁时，JMM 会把该线程对应的本地内存中的共享变量刷新到主内存中。以上 面的 MonitorExample 程序为例，A 线程释放锁后，共享数据的状态示意图如图 3-25 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234208.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>当线程获取锁时，JMM 会把该线程对应的本地内存置为无效。从而使得被监视器保护的 临界区代码必须从主内存中读取共享变量。图 3-26 是锁获取的状态示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234243.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>对比锁释放-获取的内存语义与 volatile 写-读的内存语义可以看出：锁释放与 volatile 写有着相同的内存语义；锁获取与 volatile 读有相同的内存语义。</p>
+<p>下面对锁释放和锁获取的内存语义做个总结。</p>
+<ul>
+  <li>线程 A 释放一个锁，实质上是线程 A 向接下来将要获取这个锁的某个线程发出了(线程 A 对共享变量所做修改的)消息。</li>
+  <li>线程 B 获取一个锁，实质上是线程 B 接收了之前某个线程发出的(在释放这个锁之前对共享变量所做修改的)消息。</li>
+  <li>线程 A 释放锁，随后线程 B 获取这个锁，这个过程实质上是线程 A 通过主内存向线程 B 发送消息。</li>
+</ul>
+<h3><a href="#3-5-3-锁内存语义的实现" name="3-5-3-锁内存语义的实现" class="anchor"><span class="anchor-link"></span></a>3.5.3　锁内存语义的实现</h3>
+<p>本文将借助 ReentrantLock 的源代码，来分析锁内存语义的具体实现机制。请看下面的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234357.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在 ReentrantLock 中，调用 lock 方法获取锁；调用 unlock 方法释放锁。 </p>
+<p>ReentrantLock 的实现依赖于 Java 同步器框架AbstractQueuedSynchronizer。AQS 使用一个整型的 volatile 变量(命名为 state)来维护同步状态，马上我们会看到，这个 volatile 变量是 ReentrantLock 内存语义实现的关键。 </p>
+<p>图 3-27 是 ReentrantLock 的类图(仅画出与本文相关的部分)。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234455.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>ReentrantLock 分为公平锁和非公平锁，我们首先分析公平锁。使用公平锁时，加锁方法 lock 调用轨迹如下。</p>
+<ol>
+  <li>ReentrantLock:lock()。</li>
+  <li>FairSync:lock()。</li>
+  <li>AbstractQueuedSynchronizer:acquire(int arg)。</li>
+  <li>ReentrantLock:tryAcquire(int acquires)。</li>
+</ol>
+<p>在第 4 步真正开始加锁，下面是该方法的源代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234550.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从上面源代码中我们可以看出，加锁方法首先读 volatile 变量 state。在使用公平锁时，解锁方法 unlock 调用轨迹如下。</p>
+<ol>
+  <li>ReentrantLock:unlock()。</li>
+  <li>AbstractQueuedSynchronizer:release(int arg)。</li>
+  <li>Sync:tryRelease(int releases)。</li>
+</ol>
+<p>在第 3 步真正开始释放锁，下面是该方法的源代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234637.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从上面的源代码可以看出，在释放锁的最后写 volatile 变量 state。</p>
+<p>公平锁在释放锁的最后写 volatile 变量 state，在获取锁时首先读这个 volatile 变量。根据 volatile 的 happens-before 规则，释放锁的线程在写 volatile 变量之前可见的共享变量，在获取锁的线程读取同一个 volatile 变量后将立即变得对获取锁的线程可见。</p>
+<p>现在我们来分析非公平锁的内存语义的实现。非公平锁的释放和公平锁完全一样，所以这里仅仅分析非公平锁的获取。使用非公平锁时，加锁方法 lock 调用轨迹如下。</p>
+<ol>
+  <li>ReentrantLock:lock()。</li>
+  <li>NonfairSync:lock()。</li>
+  <li>AbstractQueuedSynchronizer:compareAndSetState(int expect,int update)。</li>
+</ol>
+<p>在第 3 步真正开始加锁，下面是该方法的源代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126234727.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>该方法以原子操作的方式更新 state 变量，本文把 Java 的 compareAndSet 方法调用简称为 CAS。JDK 文档对该方法的说明如下：如果当前状态值等于预期值，则以原子方式将同步状态设置为给定的更新值。此操作具有 volatile 读和写的内存语义。</p>
+<p>这里我们分别从编译器和处理器的角度来分析，CAS 如何同时具有 volatile 读和 volatile 写的内存语义。</p>
+<p>前文我们提到过，编译器不会对 volatile 读与 volatile 读后面的任意内存操作重排序；编译器不会对 volatile 写与 volatile 写前面的任意内存操作重排序。组合这两个条件，意味着为了同时实现 volatile 读和 volatile 写的内存语义，编译器不能对 CAS 与 CAS 前面和后面的任意内存操作重排序。</p>
+<p>下面我们来分析在常见的 intel X86 处理器中，CAS 是如何同时具有 volatile 读和 volatile 写的内存语义的。</p>
+<p>下面是 sun.misc.Unsafe 类的 compareAndSwapInt() 方法的源代码。</p>
+<pre class="prettyprint"><code class="language-java">public final native boolean compareAndSwapInt(Object o, long offset)
+</code></pre>
+<p>可以看到，这是一个本地方法调用。</p>
+<p>```c++</p>
+<p>```</p>
+<p>如上面源代码所示，程序会根据当前处理器的类型来决定是否为 cmpxchg 指令添加 lock 前缀。如果程序是在多处理器上运行，就为 cmpxchg 指令加上 lock 前缀(Lock Cmpxchg)。反之，如果程序是在单处理器上运行，就省略 lock 前缀(单处理器自身会维护单处理器内的顺序一致性，不需要 lock 前缀提供的内存屏障效果)。</p>
+<p>intel 的手册对 lock 前缀的说明如下。</p>
+<ol>
+  <li>确保对内存的读-改-写操作原子执行。在 Pentium 及 Pentium 之前的处理器中，带有 lock 前缀的指令在执行期间会锁住总线，使得其他处理器暂时无法通过总线访问内存。很显然，这会带来昂贵的开销。从 Pentium 4、Intel Xeon 及 P6 处理器开始，Intel 使用缓存锁定(Cache Locking)来保证指令执行的原子性。缓存锁定将大大降低 lock 前缀指令的执行开销。</li>
+  <li>禁止该指令，与之前和之后的读和写指令重排序。</li>
+  <li>把写缓冲区中的所有数据刷新到内存中。</li>
+</ol>
+<p>上面的第 2 点和第 3 点所具有的内存屏障效果，足以同时实现 volatile 读写的内存语义。</p>
+<p>经过上面的分析，现在我们终于能明白为什么 JDK 文档说 CAS 同时具有 volatile 读写的内存语义了。</p>
+<p>现在对公平锁和非公平锁的内存语义做个总结。</p>
+<ul>
+  <li>公平锁和非公平锁释放时，最后都要写一个 volatile 变量 state。</li>
+  <li>公平锁获取时，首先会去读 volatile 变量。</li>
+  <li>非公平锁获取时，首先会用 CAS 更新 volatile 变量，这个操作同时具有 volatile 读写的内存语义。</li>
+</ul>
+<p>从本文对 ReentrantLock 的分析可以看出，锁释放-获取的内存语义的实现至少有下面两种方式。</p>
+<ol>
+  <li>利用 volatile 变量的写-读所具有的内存语义。</li>
+  <li>利用 CAS 所附带的 volatile 读写的内存语义。</li>
+</ol>
+<h3><a href="#3-5-4-juc-包的实现" name="3-5-4-juc-包的实现" class="anchor"><span class="anchor-link"></span></a>3.5.4　JUC 包的实现</h3>
+<p>由于 Java 的 CAS 同时具有 volatile 读和 volatile 写的内存语义，因此 Java 线程之间的通信现在有了下面 4 种方式。</p>
+<ol>
+  <li>A 线程写 volatile 变量，随后 B 线程读这个 volatile 变量。</li>
+  <li>A 线程写 volatile 变量，随后 B 线程用 CAS 更新这个 volatile 变量。</li>
+  <li>A 线程用 CAS 更新一个 volatile 变量，随后 B 线程用 CAS 更新这个 volatile 变量。</li>
+  <li>A 线程用 CAS 更新一个 volatile 变量，随后 B 线程读这个 volatile 变量。</li>
+</ol>
+<p>Java 的 CAS 会使用现代处理器上提供的高效机器级别的原子指令，这些原子指令以原子方式对内存执行读-改-写操作，这是在多处理器中实现同步的关键(从本质上来说，能够支持原子性读-改-写指令的计算机，是顺序计算图灵机的异步等价机器，因此任何现代的多处理器都会去支持某种能对内存执行原子性读-改-写操作的原子指令)。同时，volatile 变量的读/写和 CAS 可以实现线程之间的通信。把这些特性整合在一起，就形成了整个 JUC 包得以实现的基石。如果我们仔细分析 JUC 包的源代码实现，会发现一个通用化的实现模式。</p>
+<ol>
+  <li>首先，声明共享变量为 volatile。</li>
+  <li>然后，使用 CAS 的原子条件更新来实现线程之间的同步。</li>
+  <li>同时，配合以 volatile 的读/写和 CAS 所具有的 volatile 读和写的内存语义来实现线程之间的通信。</li>
+</ol>
+<p>AQS，非阻塞数据结构和原子变量类，这些 JUC 包中的基础类都是使用这种模式来实现的，而 JUC 包中的高层类又是依赖于这些基础类来实现的。从整体来看，JUC 包的实现示意图如 3-28 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126235428.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<h2><a href="#3-6-final域的内存语义" name="3-6-final域的内存语义" class="anchor"><span class="anchor-link"></span></a>3.6　final域的内存语义</h2>
+<p>与前面介绍的锁和 volatile 相比，对 final 域的读和写更像是普通的变量访问。下面将介绍 final 域的内存语义。</p>
+<h3><a href="#3-6-1-final-域的重排序规则" name="3-6-1-final-域的重排序规则" class="anchor"><span class="anchor-link"></span></a>3.6.1　final 域的重排序规则</h3>
+<p>对于 final 域，编译器和处理器要遵守两个重排序规则。</p>
+<ul>
+  <li>在构造函数内对一个 final 域的写入，与随后把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。</li>
+  <li>初次读一个包含 final 域的对象的引用，与随后初次读这个 final 域，这两个操作之间不能重排序。</li>
+</ul>
+<p>下面通过一些示例性的代码来分别说明这两个规则。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126235606.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>这里假设一个线程 A 执行 writer 方法，随后另一个线程 B 执行 reader 方法。下面我们通过这两个线程的交互来说明这两个规则。</p>
+<h3><a href="#3-6-2-写-final-域的重排序规则" name="3-6-2-写-final-域的重排序规则" class="anchor"><span class="anchor-link"></span></a>3.6.2　写 final 域的重排序规则</h3>
+<p>写 final 域的重排序规则禁止把 final 域的写重排序到构造函数之外。这个规则的实现包含下面 2 个方面。</p>
+<ol>
+  <li>JMM 禁止编译器把 final 域的写重排序到构造函数之外。</li>
+  <li>编译器会在 final 域的写之后，构造函数 return 之前，插入一个 StoreStore 屏障。这个屏障禁止处理器把 final 域的写重排序到构造函数之外。</li>
+</ol>
+<p>现在让我们分析 writer 方法。writer 方法只包含一行代码：<code>finalExample=new FinalExample()</code>。这行代码包含两个步骤，如下。</p>
+<ol>
+  <li>构造一个 FinalExample 类型的对象。</li>
+  <li>把这个对象的引用赋值给引用变量 obj。</li>
+</ol>
+<p>假设线程 B 读对象引用与读对象的成员域之间没有重排序，图 3-29 是一种可能的执行时序。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181126235939.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-29 中，写普通域的操作被编译器重排序到了构造函数之外，读线程 B 错误地读取了普通变量 i 初始化之前的值。而写 final 域的操作，被写 final 域的重排序规则“限定”在了构造函数之内，读线程 B 正确地读取了 final 变量初始化之后的值。</p>
+<p>写 final 域的重排序规则可以确保：在对象引用为任意线程可见之前，对象的 final 域已经被正确初始化过了，而普通域不具有这个保障。以上图为例，在读线程 B “看到”对象引用 obj 时，很可能 obj 对象还没有构造完成(对普通域i的写操作被重排序到构造函数外，此时初始值 1 还 没有写入普通域 i)。</p>
+<h3><a href="#3-6-3-读-final-域的重排序规则" name="3-6-3-读-final-域的重排序规则" class="anchor"><span class="anchor-link"></span></a>3.6.3　读 final 域的重排序规则</h3>
+<p>读 final 域的重排序规则是，在一个线程中，初次读对象引用与初次读该对象包含的 final 域，JMM 禁止处理器重排序这两个操作(注意，这个规则仅仅针对处理器)。编译器会在读 final 域操作的前面插入一个 LoadLoad 屏障。</p>
+<p>初次读对象引用与初次读该对象包含的 final 域，这两个操作之间存在间接依赖关系。由于编译器遵守间接依赖关系，因此编译器不会重排序这两个操作。大多数处理器也会遵守间接依赖，也不会重排序这两个操作。但有少数处理器允许对存在间接依赖关系的操作做重排序(比如 alpha 处理器)，这个规则就是专门用来针对这种处理器的。</p>
+<p>reader 方法包含 3 个操作。</p>
+<ul>
+  <li>初次读引用变量 obj。</li>
+  <li>初次读引用变量 obj 指向对象的普通域 j。</li>
+  <li>初次读引用变量 obj 指向对象的 final 域 i。</li>
+</ul>
+<p>现在假设写线程 A 没有发生任何重排序，同时程序在不遵守间接依赖的处理器上执行，图 3-30 所示是一种可能的执行时序。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000141.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-30 中，读对象的普通域的操作被处理器重排序到读对象引用之前。读普通域时，该 域还没有被写线程 A 写入，这是一个错误的读取操作。而读 final 域的重排序规则会把读对象 final 域的操作“限定”在读对象引用之后，此时该 final 域已经被 A 线程初始化过了，这是一个正确的读取操作。</p>
+<p>读 final 域的重排序规则可以确保：在读一个对象的 final 域之前，一定会先读包含这个 final 域的对象的引用。在这个示例程序中，如果该引用不为 null，那么引用对象的 final 域一定已经被 A 线程初始化过了。</p>
+<h3><a href="#3-6-4-final域为引用类型" name="3-6-4-final域为引用类型" class="anchor"><span class="anchor-link"></span></a>3.6.4　final域为引用类型</h3>
+<p>上面我们看到的 final 域是基础数据类型，如果 final 域是引用类型，将会有什么效果？请看下列示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000226.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>本例 final 域为一个引用类型，它引用一个 int 型的数组对象。对于引用类型，写 final 域的重排序规则对编译器和处理器增加了如下约束：在构造函数内对一个 final 引用的对象的成员域的写入，与随后在构造函数外把这个被构造对象的引用赋值给一个引用变量，这两个操作之间不能重排序。</p>
+<p>对上面的示例程序，假设首先线程 A 执行 writerOne() 方法，执行完后线程 B 执行 writerTwo() 方法，执行完后线程 C 执行 reader() 方法。图 3-31 是一种可能的线程执行时序。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000322.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-31 中，1 是对 final 域的写入，2 是对这个 final 域引用的对象的成员域的写入，3 是把被构造的对象的引用赋值给某个引用变量。这里除了前面提到的 1 不能和 3 重排序外，2 和 3 也不能重排序。</p>
+<p>JMM 可以确保读线程 C 至少能看到写线程 A 在构造函数中对 final 引用对象的成员域的写入。即 C 至少能看到数组下标 0 的值为 1。而写线程 B 对数组元素的写入，读线程 C 可能看得到，也可能看不到。JMM 不保证线程 B 的写入对读线程 C 可见，因为写线程 B 和读线程 C 之间存在数据竞争，此时的执行结果不可预知。</p>
+<p>如果想要确保读线程 C 看到写线程B对数组元素的写入，写线程B和读线程 C 之间需要使用同步原语(lock/volatile)来确保内存可见性。</p>
+<h3><a href="#3-6-5-为什么-final-引用不能从构造函数内-溢出-" name="3-6-5-为什么-final-引用不能从构造函数内-溢出-" class="anchor"><span class="anchor-link"></span></a>3.6.5　为什么 final 引用不能从构造函数内“溢出”</h3>
+<p>前面我们提到过，写 final 域的重排序规则可以确保：在引用变量为任意线程可见之前，该引用变量指向的对象的 final 域已经在构造函数中被正确初始化过了。其实，要得到这个效果，还需要一个保证：在构造函数内部，不能让这个被构造对象的引用为其他线程所见，也就是对象引用不能在构造函数中“逸出”。为了说明问题，让我们来看下面的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000506.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设一个线程 A 执行 writer() 方法，另一个线程 B 执行 reader() 方法。这里的操作 2 使得对象还未完成构造前就为线程 B 可见。即使这里的操作 2 是构造函数的最后一步，且在程序中操作 2 排在操作 1 后面，执行 read() 方法的线程仍然可能无法看到 final 域被初始化后的值，因为这里的操作 1 和操作 2 之间可能被重排序。实际的执行时序可能如图 3-32 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000538.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从图 3-32 可以看出：在构造函数返回前，被构造对象的引用不能为其他线程所见，因为此时的 final 域可能还没有被初始化。在构造函数返回后，任意线程都将保证能看到 final 域正确初始化之后的值。</p>
+<h3><a href="#3-6-6-final-语义在处理器中的实现" name="3-6-6-final-语义在处理器中的实现" class="anchor"><span class="anchor-link"></span></a>3.6.6　final 语义在处理器中的实现</h3>
+<p>现在我们以 X86 处理器为例，说明 final 语义在处理器中的具体实现。</p>
+<p>上面我们提到，写 final 域的重排序规则会要求编译器在 final 域的写之后，构造函数 return 之前插入一个 StoreStore 障屏。读 final 域的重排序规则要求编译器在读 final 域的操作前面插入一个 LoadLoad 屏障。</p>
+<p>由于 X86 处理器不会对写-写操作做重排序，所以在 X86 处理器中，写 final 域需要的 StoreStore 障屏会被省略掉。同样，由于 X86 处理器不会对存在间接依赖关系的操作做重排序，所以在 X86 处理器中，读 final 域需要的 LoadLoad 屏障也会被省略掉。也就是说，在 X86 处理器中，final 域的读/写不会插入任何内存屏障！</p>
+<h3><a href="#3-6-7-jsr-133-为什么要增强-final-的语义" name="3-6-7-jsr-133-为什么要增强-final-的语义" class="anchor"><span class="anchor-link"></span></a>3.6.7　JSR-133 为什么要增强 final 的语义</h3>
+<p>在旧的 Java 内存模型中，一个最严重的缺陷就是线程可能看到 final 域的值会改变。比如，一个线程当前看到一个整型 final 域的值为 0(还未初始化之前的默认值)，过一段时间之后这个线程再去读这个 final 域的值时，却发现值变为 1(被某个线程初始化之后的值)。最常见的例子就是在旧的 Java 内存模型中，String 的值可能会改变。</p>
+<p>为了修补这个漏洞，JSR-133 专家组增强了 final 的语义。通过为 final 域增加写和读重排序规则，可以为 Java 程序员提供初始化安全保证：只要对象是正确构造的(被构造对象的引用在构造函数中没有“逸出”)，那么不需要使用同步(指 lock 和 volatile 的使用)就可以保证任意线程都能看到这个 final 域在构造函数中被初始化之后的值。</p>
+<h2><a href="#3-7-happens-before" name="3-7-happens-before" class="anchor"><span class="anchor-link"></span></a>3.7　happens-before</h2>
+<p>happens-before 是 JMM 最核心的概念。对应 Java 程序员来说，理解 happens-before 是理解 JMM 的关键。</p>
+<h3><a href="#3-7-1-jmm-的设计" name="3-7-1-jmm-的设计" class="anchor"><span class="anchor-link"></span></a>3.7.1　JMM 的设计</h3>
+<p>首先，让我们来看 JMM 的设计意图。从 JMM 设计者的角度，在设计 JMM 时，需要考虑两个关键因素。</p>
+<ul>
+  <li>程序员对内存模型的使用。程序员希望内存模型易于理解、易于编程。程序员希望基于 一个强内存模型来编写代码。</li>
+  <li>编译器和处理器对内存模型的实现。编译器和处理器希望内存模型对它们的束缚越少越 好，这样它们就可以做尽可能多的优化来提高性能。编译器和处理器希望实现一个弱内存模型。</li>
+</ul>
+<p>由于这两个因素互相矛盾，所以 JSR-133 专家组在设计 JMM 时的核心目标就是找到一个好的平衡点：一方面，要为程序员提供足够强的内存可见性保证；另一方面，对编译器和处理器的限制要尽可能地放松。下面让我们来看 JSR-133 是如何实现这一目标的。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000759.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>上面计算圆的面积的示例代码存在 3 个 happens-before 关系，如下。</p>
+<ul>
+  <li>A happens-before B。</li>
+  <li>B happens-before C。</li>
+  <li>A happens-before C。</li>
+</ul>
+<p>在 3 个 happens-before 关系中，2 和 3 是必需的，但 1 是不必要的。因此，JMM 把 happens-before 要求禁止的重排序分为了下面两类。</p>
+<ul>
+  <li>会改变程序执行结果的重排序。</li>
+  <li>不会改变程序执行结果的重排序。</li>
+</ul>
+<p>JMM对这两种不同性质的重排序，采取了不同的策略，如下。</p>
+<ul>
+  <li>对于会改变程序执行结果的重排序，JMM 要求编译器和处理器必须禁止这种重排序。</li>
+  <li>对于不会改变程序执行结果的重排序，JMM 对编译器和处理器不做要求(JMM 允许这种 重排序)。</li>
+</ul>
+<p>图 3-33 是 JMM 的设计示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127000911.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从图 3-33 可以看出两点，如下。</p>
+<ul>
+  <li>JMM 向程序员提供的 happens-before 规则能满足程序员的需求。JMM 的happens-before 规则不但简单易懂，而且也向程序员提供了足够强的内存可见性保证(有些内存可见性保证其实并不一定真实存在，比如上面的 A happens-before B)。</li>
+  <li>JMM 对编译器和处理器的束缚已经尽可能少。从上面的分析可以看出，JMM 其实是在遵循一个基本原则：只要不改变程序的执行结果(指的是单线程程序和正确同步的多线程程序)，编译器和处理器怎么优化都行。例如，如果编译器经过细致的分析后，认定一个锁只会被单个线程访问，那么这个锁可以被消除。再如，如果编译器经过细致的分析后，认定一个 volatile 变量只会被单个线程访问，那么编译器可以把这个 volatile 变量当作一个普通变量来对待。这些 优化既不会改变程序的执行结果，又能提高程序的执行效率。</li>
+</ul>
+<h3><a href="#3-7-2-happens-before-的定义" name="3-7-2-happens-before-的定义" class="anchor"><span class="anchor-link"></span></a>3.7.2　happens-before 的定义</h3>
+<p>happens-before 的概念最初由 Leslie Lamport 在其一篇影响深远的论文(Time，Clocks and the Ordering of Events in a Distributed System)中提出。Leslie Lamport 使用 happens-before 来定义分布式系统中事件之间的偏序关系(partial ordering)。Leslie Lamport 在这篇论文中给出了一个分布式算法，该算法可以将该偏序关系扩展为某种全序关系。</p>
+<p>JSR-133 使用 happens-before 的概念来指定两个操作之间的执行顺序。由于这两个操作可以在一个线程之内，也可以是在不同线程之间。因此，JMM 可以通过 happens-before 关系向程序员提供跨线程的内存可见性保证(如果 A 线程的写操作 a 与 B 线程的读操作 b 之间存在 happens-before 关系，尽管 a 操作和 b 操作在不同的线程中执行，但 JMM 向程序员保证 a 操作将对 b 操作可见)。</p>
+<p>JSR-133 对 happens-before 关系的定义如下:</p>
+<ol>
+  <li>如果一个操作 happens-before 另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前。</li>
+  <li>两个操作之间存在 happens-before 关系，并不意味着 Java 平台的具体实现必须要按照 happens-before 关系指定的顺序来执行。如果重排序之后的执行结果，与按 happens-before 关系来执行的结果一致，那么这种重排序并不非法(也就是说，JMM允许这种重排序)。</li>
+</ol>
+<p>上面的第一点是 JMM 对程序员的承诺。从程序员的角度来说，可以这样理解 happens-before 关系：如果 A happens-before B，那么 Java 内存模型将向程序员保证—— A 操作的结果将对 B 可见， 且A的执行顺序排在 B 之前。注意，这只是 Java 内存模型向程序员做出的保证！</p>
+<p>上面的第二点是 JMM 对编译器和处理器重排序的约束原则。正如前面所言，JMM 其实是在遵循一个基本原则：只要不改变程序的执行结果(指的是单线程程序和正确同步的多线程程序)，编译器和处理器怎么优化都行。JMM 这么做的原因是：程序员对于这两个操作是否真的被重排序并不关心，程序员关心的是程序执行时的语义不能被改变(即执行结果不能被改变)。因此，happens-before 关系本质上和 as-if-serial 语义是一回事。</p>
+<ul>
+  <li>as-if-serial 语义保证单线程内程序的执行结果不被改变，happens-before 关系保证正确同步的多线程程序的执行结果不被改变。</li>
+  <li>as-if-serial 语义给编写单线程程序的程序员创造了一个幻境：单线程程序是按程序的顺序来执行的。happens-before 关系给编写正确同步的多线程程序的程序员创造了一个幻境：正确同步的多线程程序是按 happens-before 指定的顺序来执行的。</li>
+</ul>
+<p>as-if-serial 语义和 happens-before 这么做的目的，都是为了在不改变程序执行结果的前提下，尽可能地提高程序执行的并行度。</p>
+<h3><a href="#3-7-3-happens-before-规则" name="3-7-3-happens-before-规则" class="anchor"><span class="anchor-link"></span></a>3.7.3　happens-before 规则</h3>
+<p>JSR-133 定义了如下 happens-before 规则。</p>
+<ol>
+  <li>程序顺序规则：一个线程中的每个操作，happens-before 于该线程中的任意后续操作。</li>
+  <li>监视器锁规则：对一个锁的解锁，happens-before 于随后对这个锁的加锁。</li>
+  <li>volatile 变量规则：对一个 volatile 域的写，happens-before 于任意后续对这个 volatile 域的读。</li>
+  <li>传递性：如果 A happens-before B，且 B happens-before C，那么 A happens-before C。</li>
+  <li>start() 规则：如果线程A执行操作 ThreadB.start()(启动线程B)，那么 A 线程的 ThreadB.start() 操作 happens-before 于线程B中的任意操作。</li>
+  <li>join() 规则：如果线程 A 执行操作 ThreadB.join() 并成功返回，那么线程 B 中的任意操作 happens-before 于线程 A 从 ThreadB.join() 操作成功返回。</li>
+</ol>
+<p>这里的规则 1~4 前面都讲到过，这里再做个总结。由于 2 和 3 情况类似，这里只以1、3 和 4 为例来说明。图 3-34 是 volatile 写-读建立的 happens-before 关系图。</p>
+<p>结合图 3-34，我们做以下分析。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001208.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<ol>
+  <li>1 happens-before 2 和 3 happens-before 4 由程序顺序规则产生。由于编译器和处理器都要遵守 as-if-serial 语义，也就是说，as-if-serial 语义保证了程序顺序规则。因此，可以把程序顺序规则看成是对 as-if-serial 语义的“封装”。</li>
+  <li>2 happens-before 3 是由 volatile 规则产生。前面提到过，对一个 volatile 变量的读，总是能看到“任意线程”之前对这个 volatile 变量最后的写入。因此，volatile 的这个特性可以保证实现 volatile 规则。</li>
+  <li>1 happens-before 4 是由传递性规则产生的。这里的传递性是由 volatile 的内存屏障插入策略和 volatile 的编译器重排序规则共同来保证的。</li>
+</ol>
+<p>下面我们来看 start() 规则。假设线程 A 在执行的过程中，通过执行 ThreadB.start() 来启动线程 B；同时，假设线程 A 在执行 ThreadB.start() 之前修改了一些共享变量，线程 B 在开始执行后会 读这些共享变量。图 3-35 是该程序对应的 happens-before 关系图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001326.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-35 中，1 happens-before 2 由程序顺序规则产生。2 happens-before 4 由 start() 规则产 生。根据传递性，将有 1 happens-before 4。这实意味着，线程 A 在执行 ThreadB.start() 之前对共享变量所做的修改，接下来在线程 B 开始执行后都将确保对线程B可见。</p>
+<p>下面我们来看 join() 规则。假设线程A在执行的过程中，通过执行 ThreadB.join() 来等待线程 B 终止；同时，假设线程 B 在终止之前修改了一些共享变量，线程 A 从 ThreadB.join() 返回后会 读这些共享变量。图 3-36 是该程序对应的 happens-before 关系图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001358.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在图 3-36 中，2 happens-before 4 由 join() 规则产生；4 happens-before 5 由程序顺序规则产生。根据传递性规则，将有 2 happens-before 5。这意味着，线程 A 执行操作 ThreadB.join() 并成功返回后，线程 B 中的任意操作都将对线程 A 可见。</p>
+<h2><a href="#3-8-双重检查锁定与延迟初始化" name="3-8-双重检查锁定与延迟初始化" class="anchor"><span class="anchor-link"></span></a>3.8　双重检查锁定与延迟初始化</h2>
+<p>在 Java 多线程程序中，有时候需要采用延迟初始化来降低初始化类和创建对象的开销。双重检查锁定是常见的延迟初始化技术，但它是一个错误的用法。本文将分析双重检查锁定的错误根源，以及两种线程安全的延迟初始化方案。</p>
+<h3><a href="#3-8-1-双重检查锁定的由来" name="3-8-1-双重检查锁定的由来" class="anchor"><span class="anchor-link"></span></a>3.8.1　双重检查锁定的由来</h3>
+<p>在 Java 程序中，有时候可能需要推迟一些高开销的对象初始化操作，并且只有在使用这些对象时才进行初始化。此时，程序员可能会采用延迟初始化。但要正确实现线程安全的延迟初始化需要一些技巧，否则很容易出现问题。比如，下面是非线程安全的延迟初始化对象的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001446.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在 UnsafeLazyInitialization 类中，假设A线程执行代码 1 的同时，B 线程执行代码 2。此时，线程 A 可能会看到 instance 引用的对象还没有完成初始化。</p>
+<p>对于 UnsafeLazyInitialization 类，我们可以对 getInstance() 方法做同步处理来实现线程安全的延迟初始化。示例代码如下。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001512.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>由于对 getInstance() 方法做了同步处理，synchronized 将导致性能开销。如果 getInstance() 方法被多个线程频繁的调用，将会导致程序执行性能的下降。反之，如果 getInstance() 方法不会被多个线程频繁的调用，那么这个延迟初始化方案将能提供令人满意的性能。</p>
+<p>在早期的 JVM 中，synchronized(甚至是无竞争的 synchronized)存在巨大的性能开销。因此，人们想出了一个“聪明”的技巧：双重检查锁定(Double-Checked Locking)。人们想通过双重检查锁定来降低同步的开销。下面是使用双重检查锁定来实现延迟初始化的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001542.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>如上面代码所示，如果第一次检查 instance 不为 null，那么就不需要执行下面的加锁和初始化操作。因此，可以大幅降低 synchronized 带来的性能开销。上面代码表面上看起来，似乎两全其美。</p>
+<ul>
+  <li>多个线程试图在同一时间创建对象时，会通过加锁来保证只有一个线程能创建对象。</li>
+  <li>在对象创建好之后，执行 getInstance() 方法将不需要获取锁，直接返回已创建好的对象。</li>
+</ul>
+<p>双重检查锁定看起来似乎很完美，但这是一个错误的优化！在线程执行到第 4 行，代码读取到 instance 不为 null 时，instance 引用的对象有可能还没有完成初始化。</p>
+<h3><a href="#3-8-2-问题的根源" name="3-8-2-问题的根源" class="anchor"><span class="anchor-link"></span></a>3.8.2　问题的根源</h3>
+<p>前面的双重检查锁定示例代码的第 7 行创建了一个对象。这一行代码可以分解为如下的 3 行伪代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001634.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>上面 3 行伪代码中的 2 和 3 之间，可能会被重排序(在一些 JIT 编译器上，这种重排序是真实发生的，详情见参考文献 1 的“Out-of-order writes”部分)。2 和 3 之间重排序之后的执行时序如下。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001654.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>根据 JLS，所有线程在执行 Java 程序时必须要遵守 intra-thread semantics。intra-thread semantics 保证重排序不会改变单线程内的程序执行结果。换句话说，intra-thread semantics 允许那些在单线程内、不会改变单线程程序执行结果的重排序。上面 3 行伪代码的 2 和 3 之间虽然被重排序了，但这个重排序并不会违反 intra-thread semantics。这个重排序在没有改变单线程程序执行结果的前提下，可以提高程序的执行性能。</p>
+<p>为了更好地理解 intra-thread semantics，请看如图 3-37 所示的示意图(假设一个线程 A 在构造对象后，立即访问这个对象)。</p>
+<p>如图 3-37 所示，只要保证 2 排在 4 的前面，即使 2 和 3 之间重排序了，也不会违反 intra-thread semantics。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001743.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>下面，再让我们查看多线程并发执行的情况。如图 3-38 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001814.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>由于单线程内要遵守 intra-thread semantics，从而能保证 A 线程的执行结果不会被改变。但是，当线程 A 和 B 按图 3-38 的时序执行时，B 线程将看到一个还没有被初始化的对象。</p>
+<p>回到本文的主题，DoubleCheckedLocking 示例代码的第 7 行如果发生重排序，另一个并发执行的线程B就有可能在第 4 行判断 instance 不为 null。线程 B 接下来将 访问 instance 所引用的对象，但此时这个对象可能还没有被 A 线程初始化！表 3-6 是这个场景的具体执行时序。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001847.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>这里 A2 和 A3 虽然重排序了，但 Java 内存模型的 intra-thread semantics 将确保 A2 一定会排在 A4 前面执行。因此，线程 A 的 intra-thread semantics 没有改变，但 A2 和 A3 的重排序，将导致线程 B 在 B1 处判断出 instance 不为空，线程 B 接下来将访问 instance 引用的对象。此时，线程 B 将会访问到一个还未初始化的对象。</p>
+<p>在知晓了问题发生的根源之后，我们可以想出两个办法来实现线程安全的延迟初始化。</p>
+<ol>
+  <li>不允许 2 和 3 重排序。</li>
+  <li>允许 2 和 3 重排序，但不允许其他线程“看到”这个重排序。</li>
+</ol>
+<p>后文介绍的两个解决方案，分别对应于上面这两点。</p>
+<h3><a href="#3-8-3-基于volatile的解决方案" name="3-8-3-基于volatile的解决方案" class="anchor"><span class="anchor-link"></span></a>3.8.3　基于volatile的解决方案</h3>
+<p>对于前面的基于双重检查锁定来实现延迟初始化的方案，只需要做一点小的修改(把 instance 声明为 volatile 型)，就可以实现线程安全的延迟初始化。请看下面的示例代码。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127001945.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>当声明对象的引用为 volatile 后，3.8.2 节中的 3 行伪代码中的 2 和 3 之间的重排序，在多线程环境中将会被禁止。上面示例代码将按如下的时序执行，如图 3-39 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002007.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>这个方案本质上是通过禁止图 3-39 中的 2 和 3 之间的重排序，来保证线程安全的延迟初始化。</p>
+<h3><a href="#3-8-4-基于类初始化的解决方案" name="3-8-4-基于类初始化的解决方案" class="anchor"><span class="anchor-link"></span></a>3.8.4　基于类初始化的解决方案</h3>
+<p>JVM 在类的初始化阶段(即在 Class 被加载后，且被线程使用之前)，会执行类的初始化。在执行类的初始化期间，JVM 会去获取一个锁。这个锁可以同步多个线程对同一个类的初始化。</p>
+<p>基于这个特性，可以实现另一种线程安全的延迟初始化方案(这个方案被称之为 Initialization On Demand Holder idiom)。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002042.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>假设两个线程并发执行 getInstance() 方法，下面是执行的示意图，如图 3-40 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002102.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>这个方案的实质是：允许 3.8.2 节中的 3 行伪代码中的 2 和 3 重排序，但不允许非构造线程(这里指线程 B)“看到”这个重排序。</p>
+<p>初始化一个类，包括执行这个类的静态初始化和初始化在这个类中声明的静态字段。根据 Java 语言规范，在首次发生下列任意一种情况时，一个类或接口类型 T 将被立即初始化。</p>
+<ol>
+  <li>T 是一个类，而且一个T类型的实例被创建。</li>
+  <li>T 是一个类，且 T 中声明的一个静态方法被调用。</li>
+  <li>T 中声明的一个静态字段被赋值。</li>
+  <li>T 中声明的一个静态字段被使用，而且这个字段不是一个常量字段。</li>
+  <li>T 是一个顶级类(Top Level Class)，而且一个断言语句嵌套在 T 内部被执行。</li>
+</ol>
+<p>在 InstanceFactory 示例代码中，首次执行 getInstance() 方法的线程将导致 InstanceHolder 类被初始化(符合情况 4)。</p>
+<p>由于 Java 语言是多线程的，多个线程可能在同一时间尝试去初始化同一个类或接口(比如这里多个线程可能在同一时刻调用 getInstance() 方法来初始化 InstanceHolder 类)。因此，在Java 中初始化一个类或者接口时，需要做细致的同步处理。</p>
+<p>Java 语言规范规定，对于每一个类或接口 C，都有一个唯一的初始化锁 LC 与之对应。从 C 到 LC 的映射，由 JVM 的具体实现去自由实现。JVM 在类初始化期间会获取这个初始化锁，并且每个线程至少获取一次锁来确保这个类已经被初始化过了(事实上，Java 语言规范允许 JVM 的具体实现在这里做一些优化，见后文的说明)。</p>
+<p>对于类或接口的初始化，Java 语言规范制定了精巧而复杂的类初始化处理过程。Java 初始化一个类或接口的处理过程如下。这里对类初始化处理过程的说明，省略了与本文无关的部分；同时为了更好的说明类初始化过程中的同步处理机制，笔者人为的把类初始化的处理过程分为了 5 个阶段。</p>
+<p>第1阶段：通过在 Class 对象上同步(即获取Class对象的初始化锁)，来控制类或接口的初始化。这个获取锁的线程会一直等待，直到当前线程能够获取到这个初始化锁。</p>
+<p>假设 Class 对象当前还没有被初始化(初始化状态 state，此时被标记为 state=noInitialization)，且有两个线程 A 和 B 试图同时初始化这个 Class 对象。图 3-41 是对应的示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002214.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>表 3-7 是这个示意图的说明。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002232.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>第 2 阶段：线程 A 执行类的初始化，同时线程 B 在初始化锁对应的 condition 上等待。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002337.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>表 3-8 是这个示意图的说明。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002254.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>第 3 阶段：线程 A 设置 state=initialized，然后唤醒在 condition 中等待的所有线程。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002426.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>表 3-9 是这个示意图的说明。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002443.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>第 4 阶段：线程B结束类的初始化处理。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002507.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002518.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002612.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>线程 A 在第 2 阶段的 A1 执行类的初始化，并在第 3 阶段的 A4 释放初始化锁；线程 B 在第 4 阶段的 B1 获取同一个初始化锁，并在第 4 阶段的 B4 之后才开始访问这个类。根据 Java 内存模型规范的锁规则，这里将存在如下的 happens-before 关系。</p>
+<p>这个 happens-before 关系将保证：线程 A 执行类的初始化时的写入操作(执行类的静态初始化和初始化类中声明的静态字段)，线程 B 一定能看到。</p>
+<p>第 5 阶段：线程 C 执行类的初始化的处理。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002652.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>表 3-11 是这个示意图的说明。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002712.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>在第 3 阶段之后，类已经完成了初始化。因此线程 C 在第 5 阶段的类初始化处理过程相对简单一些(前面的线程 A 和 B 的类初始化处理过程都经历了两次锁获取-锁释放，而线程 C 的类初始化处理只需要经历一次锁获取-锁释放)。</p>
+<p>线程 A 在第 2 阶段的 A1 执行类的初始化，并在第 3 阶段的 A4 释放锁；线程 C 在第 5 阶段的 C1 获取同一个锁，并在在第 5 阶段的 C4 之后才开始访问这个类。根据 Java 内存模型规范的锁规则，将存在如下的 happens-before 关系。</p>
+<p>这个 happens-before 关系将保证：线程 A 执行类的初始化时的写入操作，线程 C 一定能看到。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002754.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>通过对比基于 volatile 的双重检查锁定的方案和基于类初始化的方案，我们会发现基于类初始化的方案的实现代码更简洁。但基于 volatile 的双重检查锁定的方案有一个额外的优势：除了可以对静态字段实现延迟初始化外，还可以对实例字段实现延迟初始化。 </p>
+<p>字段延迟初始化降低了初始化类或创建实例的开销，但增加了访问被延迟初始化的字段的开销。在大多数时候，正常的初始化要优于延迟初始化。如果确实需要对实例字段使用线程安全的延迟初始化，请使用上面介绍的基于 volatile 的延迟初始化的方案；如果确实需要对静态字段使用线程安全的延迟初始化，请使用上面介绍的基于类初始化的方案。</p>
+<h2><a href="#3-9-java-内存模型综述" name="3-9-java-内存模型综述" class="anchor"><span class="anchor-link"></span></a>3.9　Java 内存模型综述</h2>
+<p>前面对 Java 内存模型的基础知识和内存模型的具体实现进行了说明。下面对 Java 内存模型的相关知识做一个总结。</p>
+<h3><a href="#3-9-1-处理器的内存模型" name="3-9-1-处理器的内存模型" class="anchor"><span class="anchor-link"></span></a>3.9.1　处理器的内存模型</h3>
+<p>顺序一致性内存模型是一个理论参考模型，JMM 和处理器内存模型在设计时通常会以顺 序一致性内存模型为参照。在设计时，JMM 和处理器内存模型会对顺序一致性模型做一些放松，因为如果完全按照顺序一致性模型来实现处理器和 JMM，那么很多的处理器和编译器优化都要被禁止，这对执行性能将会有很大的影响。</p>
+<p>根据对不同类型的读/写操作组合的执行顺序的放松，可以把常见处理器的内存模型划分 为如下几种类型。</p>
+<ul>
+  <li>放松程序中写-读操作的顺序，由此产生了 Total Store Ordering 内存模型，简称为TSO。</li>
+  <li>在上面的基础上，继续放松程序中写-写操作的顺序，由此产生了 Partial Store Order 内存模型，简称为PSO。</li>
+  <li>在前面两条的基础上，继续放松程序中读-写和读-读操作的顺序，由此产生了 Relaxed Memory Order 内存模型(简称为 RMO)和 PowerPC 内存模型。</li>
+</ul>
+<p>注意，这里处理器对读/写操作的放松，是以两个操作之间不存在数据依赖性为前提的。因 为处理器要遵守 as-if-serial 语义，处理器不会对存在数据依赖性的两个内存操作做重排序。</p>
+<p>表 3-12 展示了常见处理器内存模型的细节特征如下。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127002906.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从表 3-12 中可以看到，所有处理器内存模型都允许写-读重排序，原因在第 1 章已经说明过：它们都使用了写缓存区。写缓存区可能导致写-读操作重排序。同时，我们可以看到这些处理器内存模型都允许更早读到当前处理器的写，原因同样是因为写缓存区。由于写缓存区仅对当前处理器可见，这个特性导致当前处理器可以比其他处理器先看到临时保存在自己写缓存区中的写。</p>
+<p>表 3-12 中的各种处理器内存模型，从上到下，模型由强变弱。越是追求性能的处理器，内存模型设计得会越弱。因为这些处理器希望内存模型对它们的束缚越少越好，这样它们就可以做尽可能多的优化来提高性能。</p>
+<p>由于常见的处理器内存模型比JMM要弱，Java 编译器在生成字节码时，会在执行指令序 列的适当位置插入内存屏障来限制处理器的重排序。同时，由于各种处理器内存模型的强弱不同，为了在不同的处理器平台向程序员展示一个一致的内存模型，JMM 在不同的处理器中需要插入的内存屏障的数量和种类也不相同。图 3-48 展示了 JMM 在不同处理器内存模型中需要插入的内存屏障的示意图。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127003012.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>JMM 屏蔽了不同处理器内存模型的差异，它在不同的处理器平台之上为 Java 程序员呈现了一个一致的内存模型。</p>
+<h3><a href="#3-9-2-各种内存模型之间的关系" name="3-9-2-各种内存模型之间的关系" class="anchor"><span class="anchor-link"></span></a>3.9.2　各种内存模型之间的关系</h3>
+<p>JMM 是一个语言级的内存模型，处理器内存模型是硬件级的内存模型，顺序一致性内存 模型是一个理论参考模型。下面是语言内存模型、处理器内存模型和顺序一致性内存模型的 强弱对比示意图，如图 3-49 所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127003045.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>从图中可以看出：常见的 4 种处理器内存模型比常用的 3 中语言内存模型要弱，处理器内存模型和语言内存模型都比顺序一致性内存模型要弱。同处理器内存模型一样，越是追求执行性能的语言，内存模型设计得会越弱。</p>
+<h3><a href="#3-9-3-jmm-的内存可见性保证" name="3-9-3-jmm-的内存可见性保证" class="anchor"><span class="anchor-link"></span></a>3.9.3　JMM 的内存可见性保证</h3>
+<p>按程序类型，Java 程序的内存可见性保证可以分为下列 3 类。</p>
+<ul>
+  <li>单线程程序。单线程程序不会出现内存可见性问题。编译器、运行时和处理器会共同确 保单线程程序的执行结果与该程序在顺序一致性模型中的执行结果相同。</li>
+  <li>正确同步的多线程程序。正确同步的多线程程序的执行将具有顺序一致性(程序的执行 结果与该程序在顺序一致性内存模型中的执行结果相同)。这是 JMM 关注的重点，JMM 通过限制编译器和处理器的重排序来为程序员提供内存可见性保证。</li>
+  <li>未同步/未正确同步的多线程程序。JMM 为它们提供了最小安全性保障：线程执行时读取到的值，要么是之前某个线程写入的值，要么是默认值(0、null、false)。</li>
+</ul>
+<p>注意，最小安全性保障与 64 位数据的非原子性写并不矛盾。它们是两个不同的概念，它 们“发生”的时间点也不同。最小安全性保证对象默认初始化之后(设置成员域为0、null或 false)，才会被任意线程使用。最小安全性“发生”在对象被任意线程使用之前。64 位数据的非原子性写“发生”在对象被多个线程使用的过程中(写共享变量)。当发生问题时(处理器 B 看到仅仅被处理器 A “写了一半”的无效值)，这里虽然处理器 B 读取到一个被写了一半的无效值，但这个值仍然是处理器 A 写入的，只不过是处理器 A 还没有写完而已。最小安全性保证线程读取到的值，要么是之前某个线程写入的值，要么是默认值(0、null、false)。但最小安全性并不保证 线程读取到的值，一定是某个线程写完后的值。最小安全性保证线程读取到的值不会无中生有的冒出来，但并不保证线程读取到的值一定是正确的。</p>
+<p>图 3-50 展示了这 3 类程序在 JMM 中与在顺序一致性内存模型中的执行结果的异同。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181127003144.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>只要多线程程序是正确同步的，JMM 保证该程序在任意的处理器平台上的执行结果，与 该程序在顺序一致性内存模型中的执行结果一致。</p>
+<h3><a href="#3-9-4-jsr-133-对旧内存模型的修补" name="3-9-4-jsr-133-对旧内存模型的修补" class="anchor"><span class="anchor-link"></span></a>3.9.4　JSR-133 对旧内存模型的修补</h3>
+<p>JSR-133 对 JDK 5 之前的旧内存模型的修补主要有两个。</p>
+<ul>
+  <li>增强 volatile 的内存语义。旧内存模型允许 volatile 变量与普通变量重排序。JSR-133 严格限制 volatile 变量与普通变量的重排序，使 volatile 的写-读和锁的释放-获取具有相同的内存语义。</li>
+  <li>增强 final 的内存语义。在旧内存模型中，多次读取同一个 final 变量的值可能会不相同。为此，JSR-133 为 final 增加了两个重排序规则。在保证 final 引用不会从构造函数内逸出的情况下，final 具有了初始化安全性。</li>
 </ul>
 <div class="nav-next">
-<p><strong>Next:</strong> <a href="../../high-performance/java-thread-model/ch04/index.html">JSR-133 Cook</a></p>
+<p><strong>Next:</strong> <a href="../../high-performance/java-thread-model/ch04.html">CH04-JSR-133 FAQ</a></p>
 </div>
 </div>
 <div class="large-3 show-for-large column" data-sticky-container>
@@ -357,22 +990,18 @@ public static Something getInstance() {
 <div class="nav-title">On this page:</div>
 <div class="nav-toc">
 <ul>
-  <li><a href="../../high-performance/java-thread-model/ch03.html#ch02-jsr-133-faq" class="header">CH02-JSR-133 FAQ</a>
+  <li><a href="../../high-performance/java-thread-model/ch03.html#ch03-jmm-原理" class="header">CH03-JMM 原理</a>
   <ul>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#什么是内存模型" class="header">什么是内存模型</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#其他语言有内存模型吗" class="header">其他语言有内存模型吗</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#jsr-133-是什么" class="header">JSR 133 是什么</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#重排序意味着什么" class="header">重排序意味着什么</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#旧内存模型的缺陷有哪些-" class="header">旧内存模型的缺陷有哪些？</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#没有正确同步的含义是什么" class="header">没有正确同步的含义是什么</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#同步会做些什么" class="header">同步会做些什么</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#final-字段是如何改变其值的" class="header">final 字段是如何改变其值的</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#在新的-jmm-下-final-是如何工作的" class="header">在新的 JMM 下 final 是如何工作的</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#volatile-的作用" class="header">volatile 的作用</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#新的-jmm-是否修复了双重锁检查问题" class="header">新的 JMM 是否修复了双重锁检查问题</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#如何实现一个-vm" class="header">如何实现一个 VM</a></li>
-    <li><a href="../../high-performance/java-thread-model/ch03.html#为什么要关注-jmm" class="header">为什么要关注 JMM</a></li>
     <li><a href="../../high-performance/java-thread-model/ch03.html#reference" class="header">Reference</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-1-java内存模型的基础" class="header">3.1 Java内存模型的基础</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-2-重排序" class="header">3.2　重排序</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-3-顺序一致性" class="header">3.3　顺序一致性</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-4-volatile-的内存语义" class="header">3.4　volatile 的内存语义</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-5-锁的内存语义" class="header">3.5　锁的内存语义</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-6-final域的内存语义" class="header">3.6　final域的内存语义</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-7-happens-before" class="header">3.7　happens-before</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-8-双重检查锁定与延迟初始化" class="header">3.8　双重检查锁定与延迟初始化</a></li>
+    <li><a href="../../high-performance/java-thread-model/ch03.html#3-9-java-内存模型综述" class="header">3.9　Java 内存模型综述</a></li>
   </ul></li>
 </ul>
 </div>
