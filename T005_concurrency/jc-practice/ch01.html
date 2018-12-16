@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH01-简介 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../T005_concurrency/jc-practice/index.html">Java 并发实践</a></li>
+  <li>CH01-简介</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch01-简介" name="ch01-简介" class="anchor"><span class="anchor-link"></span></a>CH01-简介</h1>
+<div class="toc ">
+<ul>
+  <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-1-并发简史" class="header">1.1 并发简史</a></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-线程的优势" class="header">1.2 线程的优势</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-1-发挥多处理器的强大能力" class="header">1.2.1 发挥多处理器的强大能力</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-2-建模的简单性" class="header">1.2.2 建模的简单性</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-3-异步事件的简化处理" class="header">1.2.3 异步事件的简化处理</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-4-响应灵敏的用户界面" class="header">1.2.4 响应灵敏的用户界面</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-3-线程带来的风险" class="header">1.3 线程带来的风险</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-3-1-安全性问题" class="header">1.3.1 安全性问题</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-3-2-活跃性问题" class="header">1.3.2 活跃性问题</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-3-3-性能问题" class="header">1.3.3 性能问题</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-4-线程无处不在" class="header">1.4 线程无处不在</a></li>
+</ul>
+</div>
+<p>线程是 Java 语言中不可或缺的重要功能，它们能使复杂的异步代码更加简单，从而极大简化复杂系统的开发。此外，要想充分发挥多处理器的强大计算能力，最简单的方式就是使用线程。</p>
+<h2><a href="#1-1-并发简史" name="1-1-并发简史" class="anchor"><span class="anchor-link"></span></a>1.1 并发简史</h2>
+<p>操作系统的出现使得计算机每次能运行多个程序，并且不同的程序都在单独的进程中运行：“操作系统为各个独立执行的进程分配各种资源，包括内存、文件句柄及安全证书等。”如果需要的话，在不同的进程之间可以通过一些粗粒度的通信机制来交换数据，包括：套接字、信号处理器、共享内存、信号量及文件等。</p>
+<p><strong>在计算机中加入操作系统来实现多个程序的同时执行</strong>，主要是为了：</p>
+<ul>
+  <li><strong>资源利用率</strong>。如果在等待某些外部输入的同时能够运行另一个程序，可以提高资源的利用率。</li>
+  <li><strong>公平性</strong>。高效的运行方式是通过粗粒度的时间片使多个用户能够共享计算机资源，而不是由一个程序运行到尾、然后再启动另一个程序。</li>
+  <li><strong>便利性</strong>。通常在计算多个任务时应该编写多个程序，每个程序执行一个任务并在必要时进行互相通信，这比仅编写一个程序来计算所有任务来说要更容易实现。</li>
+</ul>
+<p>在早期的“分时系统”中，每个进程相当于一台“虚拟的”冯诺依曼计算机，它拥有存储指令和数据的内存空间，根据机器语言的语义以串行方式执行指令，并通过一组 IO 指令与外部设备通信。对于每条被执行的指令，都有相应的“下一条指令”，程序中的“控制流”是按照指令集的规则来确定的。当前，几乎所有的主流编程语言都遵循这种“串行编程模型”，并且在这些语言的规范中也都清晰定义了在某个动作之后需要执行的“下一个动作”。</p>
+<p>“串行编程模型”的优势在于其直观性和简单性，因为它模仿了人类的工作方式：每次只做一件事情，做完之后再做下一件。在编程语言中，这些现实世界的动作可以被进一步抽象为一组更细粒度的动作。例如，喝早茶的动作可以被进一步细化：打开橱柜，挑选喜欢的茶叶，将一些茶叶倒入杯中，看看茶壶中是否有足够的水，如果没有的话则添加足够的水，将茶壶放到火炉上，点燃火炉，然后等水烧开等等。在最后一步等水烧开的过程中包含了一定程度的“异步性”。当正在烧水时，你可以干等着，也可以做些其他事情，例如开始烤面包(这是一个异步任务)或者看报纸，同时留意茶壶中的水是否已经烧开。茶壶和面包机的生产商都很清楚：用户通常会采用异步方式来使用他们的产品，因此当这些机器完成任务时都会发出声音提示。“但凡做事高效的人，总能在串行性和异步性之间找到合理的平衡，对于程序来说同样如此。”</p>
+<p>“这些促使进程出现的因素(资源利用率、公平性、便利性)同样也促使着线程的出现”。“线程允许在同一个进程内同时存在多个程序控制流”。线程会共享进程范围内的资源，但每个线程都有各自的程序计数器、栈、局部变量。线程还提供了一种直观的“分解模式”来充分利用多处理器系统中的“硬件并行性”，而在同一个程序中的多个线程也可以同时被“调度”到多个 CPU 上运行。</p>
+<p>“线程被称为轻量级进程”。在大多数现代操作系统中，都是以线程为基本的“调度单位”，而不是进程。如果没有明确的“(线程间的)协同机制”，那么线程将彼此独立的运行。由于同一个进程中的所有线程都将共享进程的内存地址，因此这些线程都能访问相同的变量，并在同一个堆上分配对象，这就需要一种比在进程间共享数据粒度更细的“数据共享机制”。如果没有明确的“同步机制”来协同对共享数据的访问，那么当一个线程正在使用变量时，另一个线程可能同时访问这个变量，这将造成不可预测的结果。</p>
+<h2><a href="#1-2-线程的优势" name="1-2-线程的优势" class="anchor"><span class="anchor-link"></span></a>1.2 线程的优势</h2>
+<p>如果使用得当，线程可以有效降低程序的开发和维护成本，同时提升应用程序的性能。“线程能够将大部分的异步工作流转换为串行工作流”，因此能够更好的模拟人类的工作和交互方式。此外，线程还可以降低代码的复杂度，使代码更容易编写、阅读、维护。</p>
+<p>在 GUI 程序中，线程可以提供用户界面的响应灵敏度。而在服务器应用程序中，可以提升资源利用率及系统吞吐量。线程还可以简化 JVM 的实现，垃圾收集器通常在一个或多个专门的线程中运行。在许多重要的 Java 程序中，都在一定程度上使用了线程。</p>
+<h3><a href="#1-2-1-发挥多处理器的强大能力" name="1-2-1-发挥多处理器的强大能力" class="anchor"><span class="anchor-link"></span></a>1.2.1 发挥多处理器的强大能力</h3>
+<p>过去，多处理器系统是非常昂贵和稀少的，通常只有在大型数据中心和科学计算设备中才会使用多处理器系统。但现在，多处理器系统整日益普及，并且价格也在不断的降低，即使在底端服务器和中端桌面系统中，通常也会采用多个处理器。这种趋势还将进一步加快，因为通过提高时钟频率来提升性能已变得越来越困难，处理器生产厂商都开始转而在单个芯片上放置多个处理器核心。所有的主流芯片厂商都开始了这种转变，而我们已经看到了在一些机器上出现了更多的处理器。</p>
+<p>由于基本的调度单位是线程，因此如果在程序中只有一个线程，那么最多同时只能在一个处理器上运行。在双处理器系统上，单线程的程序只能使用一半的 CPU 资源，而在拥有 100 个处理器的系统上，将有 99% 的资源无法使用。另一方面，多线程程序可以同时在多个处理器上执行。如果设计正确，多线程程序可以通过提高处理器资源利用率来提升系统吞吐率。</p>
+<p>使用多个线程还有助于在单处理器系统上获得更高的吞吐率。如果程序是单线程的，那么当程序等待某个同步 IO 操作完成时，处理器将处于空闲状态。而在多线程程序中，如果一个线程在等待 IO 操作完成，另一个线程可以继续运行，使得程序能够在 IO 阻塞期间继续运行。(这就好比在等待烧水的同时看报纸，而不是等到水烧开之后再开始看报纸)</p>
+<h3><a href="#1-2-2-建模的简单性" name="1-2-2-建模的简单性" class="anchor"><span class="anchor-link"></span></a>1.2.2 建模的简单性</h3>
+<p>通常，当只需要执行一种类型的任务时，在时间管理方面比执行多种类型的任务要简单。当只有一种类型的任务需要完成时，只需要埋头工作，直到完成所有的任务，你不需要花任何精力来琢磨下一步该干什么。而另一方面，如果需要完成多种类型的任务，那么需要管理不同任务之间的优先级和执行时间，并在任务之间进行切换，这将带来额外的开销。</p>
+<p>对于软件来说同样如此：如果在程序中仅包含一种类型的任务，那么比包含多种不同类型的任务的程序要更易于编写，错误更少，也更容易测试。如果为模型中每种类型的任务都分配一个专门的线程，那么可以形成一种串行执行的假象，并将程序的执行逻辑与调度机制的细节、交替执行的操作、异步 IO、资源等待等问题分类出来。通过使用线程，可以将复杂并且异步的工作流进一步分解为一组简单且同步的工作流，每个工作流在一个单独的线程中运行，并在特定的同步位置进行交互。</p>
+<p>我们可以通过一些现有的框架来实现上述目标，例如 Servlet 和 RMI。框架负责解决一些细节问题，例如请求管理、线程创建、负载均衡，并且在正确的时刻将请求分发给正确的应用线程组件。编写 Servlet 的开发任务不需要了解有多少请求在同一时刻要被处理，也不需要了解套接字的输入输出流是否被阻塞。当调用 Servlet 的 service 方法来响应 Web 请求时，可以以同步的方式来处理这个请求，就好像它是一个单线程程序。这种方式可以简化组件的开发，并缩短掌握这种框架的学习时间。</p>
+<h3><a href="#1-2-3-异步事件的简化处理" name="1-2-3-异步事件的简化处理" class="anchor"><span class="anchor-link"></span></a>1.2.3 异步事件的简化处理</h3>
+<p>服务器应用程序在接收来自多个远程客户端的套接字连接请求时，如果为每个连接都分配其各自的线程且使用同步 IO，那么会降低这类程序的开发难度。</p>
+<p>如果某个应用程序对套接字执行读操作，而此时还没有数据到来，那么这个读操作将一直阻塞到有数据抵达。在单线程程序中，这不仅意味着在处理请求的过程中停顿，而且还意味着在该线程被阻塞期间，对所有请求的处理都将停顿。为了避免这个问题，单线程服务器应用程序必须使用非阻塞 IO，这种 IO 的复杂性要远远高于同步 IO，并且很容易出错。然而，如果每个请求都拥有自己的处理线程，那么在处理某个请求时发生的阻塞将不会影响其他请求的处理。</p>
+<p>早期的操作系统通常会将进程中可创建的线程数量限制在一个较低的阈值内，大约在数百个甚至更少。因此，操作系统提供了一些高效的方法来实现多路 IO，例如 Unix 的的 select 和 poll 等系统调用，要调用这些方法，Java 类库需要获得一组实现非阻塞 IO 的包(java.nio)。然而，在现代操作系统中，线程数量已经得到极大的提升，这使得在某些平台上，即使有更多的客户端，为每个客户分配一个线程也是可行的。</p>
+<h3><a href="#1-2-4-响应灵敏的用户界面" name="1-2-4-响应灵敏的用户界面" class="anchor"><span class="anchor-link"></span></a>1.2.4 响应灵敏的用户界面</h3>
+<p>传统的 GUI 程序都是单线程的，从而在代码的各个位置都需要调用 poll 方法来获得输入事件(这种方式将给代码带来极大的混乱)，或者通过一个“主事件循环”来间接的执行应用程序的所有代码。如果在主事件循环中调用的代码需要很长时间才能执行完成，那么用户界面就会“冻结”，直到代码执行完成。这是因为只有当执行控制权返回到主事件循环后，才能处理后续的用户界面事件。</p>
+<p>在现代的 GUI 框架中，例如 AWT 和 Swing 等工具，都采用一个事件分发线程来替代主事件循环。当某个用户界面事件发生时(如按下一个按钮)，在事件线程中将调用应用程序的事件处理器。由于大多数 GUI 框架都单线程子系统，因此到目前为止仍然存在主事件循环，但其它线程处于 GUI 工具的控制下并在其自己的线程中运行，而不是在应用程序的控制下。</p>
+<p>如果在事件线程中执行的任务都是短暂的，那么界面的响应灵敏度就较高，因为事件线程很够很快的处理用户的动作。然而，如果事件线程中的任务需要很长的执行时间，例如对一个大型文档进行拼写检查，或者从网络上获得一个资源，那么界面的响应灵敏度就会降低。如果用户在执行这类任务时触发了某个动作，那么必须等待很长时间才能获得响应，因为事件线程要先执行完该任务。更糟糕的是，不仅界面失去响应，而且即使在界面上包含了“取消”按钮，也无法取消这个长事件执行的任务，因为事件线程只有在执行完该任务后才能响应“取消”按钮的点击事件。然而，如果将这个长时间运行的任务放在一个单独的线程中运行，那么事件线程就能及时的处理其他界面事件，从而使得用户界面具有更高的灵敏度。</p>
+<h2><a href="#1-3-线程带来的风险" name="1-3-线程带来的风险" class="anchor"><span class="anchor-link"></span></a>1.3 线程带来的风险</h2>
+<p>Java 对线程的支持其实是一把双刃剑。虽然 Java 提供了相应的语言和库，以及一种明确的“跨平台内存模型”，这些工具简化了并发应用程序的开发，但同时也提高了对开发人员的技术要求，因为在更多的程序中会使用线程。当线程还是一项鲜为人知的技术时，并发性是一个“高深的”话题，但现在，主流开发任务都必须了解线程方面的内容。</p>
+<h3><a href="#1-3-1-安全性问题" name="1-3-1-安全性问题" class="anchor"><span class="anchor-link"></span></a>1.3.1 安全性问题</h3>
+<p>线程安全性是非常复杂的，在没有充分同步的情况下，多个线程中的操作执行顺序是不可预测的，甚至会产生奇怪的执行结果。如程序清单 1-1 的 UnsafeSequence 类中将产生一个整数值序列，该序列中的每个值都是唯一的。在这个类中简要说明了多个线程间的交替操作将如何导致出乎预料的结果。在单线程环境中，这个类能够正常工作，但在多线程环境中则不行。</p>
+<pre class="prettyprint"><code class="language-java">@NotThreadSafe
+public class UnsafeSequnce { 
+    private int value;
+	
+	/* 返回一个唯一的数值 */
+    public int getNext() {
+		return value++;
+	}
+}
+</code></pre>
+<p>UnsafeSequnce 的问题在于，如果执行时机不对，那么两个线程在调用 getNext 时会得到相同的值。在图 1-1 中给出了这种错误情况。虽然递增运算 <code>someVariable++</code> 看上去是单个操作，但事实上包含 3 个独立的操作：读取 value、将 value 加一、将结果写入 value。由于运行时可能将多个线程之间的操作交替执行，因此这两个线程可能同时执行读操作，从而使他们得到相同的值，并都将该值加 1。结果就是，在不同线程中的调用返回了相同的数值。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181117225555.png" style="display:block;width:70%;" alt="1-1" align=center />
+</div>
+<p>在 UnsafeSequnce 中使用了一个非标准的注解：<code>@NotThreadSafe</code>。这是在本书中使用的几个自定义注解之一，用于说明类和成员的并发属性。线程安全性注解在许多方面都是有用的。如果使用 @ThreadSafe 类标注某个类，那么开发人员可以放心的在多线程环境中使用该类，维护人员也会发现它能保证线程安全性，而软件分析工具还可以识别出潜在的编码错误。</p>
+<p>在 UnsafeSequnce 类中说明的是一种常见的并发安全问题，称为竟态条件(Race Condition)。在多线程环境下，getValue 是否返回唯一的值，要取决于运行时对线程中操作的交替执行方式，这并不是我们希望看到的情况。</p>
+<p><strong>由于多线程有共享相同的内存地址空间，并且是并发运行，因此它们可能会访问或修改其他线程正在使用的变量。当然，这是一种极大的便利，因为这种方式比其他线程间通信机制更容易实现数据共享。但它同样也带来的巨大的风险：线程会由于无法预料的数据变化而发生错误。当多个线程同时访问和修改相同的变量时，将会在串行模型编程中引入非串行因素，而这种非串行性是很难分析的。要使多线程程序的行为可以被预测，必须对共享变量的访问操作进行协同，这样才不会在线程之间发生彼此干扰。幸运的是，Java 提供了各种同步机制来协同这种访问。</strong></p>
+<p>通过将 getNext 修改为一个同步方法，可以修复 UnsafeSequnce 中的错误，如程序清单 1-2 中的 Sequnce，该类可以防止图 1-1 中错误的交替执行情况。</p>
+<pre class="prettyprint"><code class="language-java">@ThreadSafe
+public class Sequence {
+	@GuardedBy(&quot;this&quot;) private int value;
+	
+	public synchronized int getNext() {
+		return value++;
+	}
+}
+</code></pre>
+<p>如果没有同步，那么无论是“编译器、硬件、运行时”，都可以随意安排操作的执行时间和顺序，例如对寄存器或处理器中的变量进行缓存，而这些被缓存的变量对于其他线程来说是暂时的(甚至永久)不可见的。虽然这些技术有助于实现更优的性能，并且通常也是值得采用的方法，但这也给开发人员带来了负担，因为开发人员必须找出这些数据在那些位置被多个线程共享，只有这样才能使这些优化措施不破坏线程安全性。</p>
+<h3><a href="#1-3-2-活跃性问题" name="1-3-2-活跃性问题" class="anchor"><span class="anchor-link"></span></a>1.3.2 活跃性问题</h3>
+<p>在编写并发代码时，一定要注意线程安全性是不可破坏的。安全性不仅对于多线程程序很重要，对于单线程程序也是如此。此外，线程还会导致一些在单线程程序中不会出现的问题，比如活跃性问题。</p>
+<p>安全性的含义是“永远不发生糟糕的事情”，而活跃性则关注于另一个目标，即“某件正确的事情最终会发生”。当某个操作无法继续执行下去时，就会发生活跃性问题。在串行程序中，活跃性问题的形式之一就是无意中造成的无限循环，从而使循环之后的代码无法得到执行。线程将到来其他一些活跃性问题。如，如果线程 A 在等待线程 B 释放其持有的资源，而线程 B 永远都不释放该资源，那么 A 就会永久的等待下去。与大多数并发性错误一样，导致活跃性问题的错误同样是难以分析的，因为它们依赖于不同线程的事件发生时序，因此在开发或测试中并不总是能够重现。</p>
+<h3><a href="#1-3-3-性能问题" name="1-3-3-性能问题" class="anchor"><span class="anchor-link"></span></a>1.3.3 性能问题</h3>
+<p>与活跃性密切相关的是性能问题。活跃性意味着某件正确的事情最终会发生。但这还不够好，我们通常希望正确的事情尽快发生。性能问题包括多个方面，如服务时间过长、响应不够灵敏、吞吐率过低、资源消耗过高、可伸缩性较低等。与安全性和活跃性一样，在多线程程序中不仅存在与单线程程序相同的性能问题，而且还存在由于使用线程而引入的其他性能问题。</p>
+<p>在设计良好的并发程序中，线程能够提升程序的性能，但无论如何，线程总会带来某种程度的运行时开销。在多线程程序中，当线程调度器临时挂起活跃线程转而运行另一个线程时，就会频繁的出现上下文切换，这种操作将带来极大的开销：保存和恢复执行上下文、丢失现场，并且 CPU 时间将更多的花在线程调度而不是线程运行上。当线程共享数据时，必须使用同步机制，而这些机制往往会抑制某些编译器优化，使内存缓存区中的数据无效，以及增加共享内存总线的同步流量。所有这些因素都将带来额外的性能开销。</p>
+<h2><a href="#1-4-线程无处不在" name="1-4-线程无处不在" class="anchor"><span class="anchor-link"></span></a>1.4 线程无处不在</h2>
+<p>即使在程序中没有显式的创建线程，但在框架中人可能会创建线程，因此在这些线程中调用的代码同样必须是线程安全的。这将给开发人员在设计和实现上带来沉重负担，因为开发线程安全的类比开发非线程安全的类需要更加谨慎和细致。</p>
+<p>每个 Java 程序都会使用线程。当 JVM 启动时，它将为 JVM 的内部任务(如垃圾回收、终结操作)创建后台线程，并创建一个主线程来运行 main 方法。AWT 和 Swing 的用户界面框架将创建线程来管理用户界面事件。Timer 将创建线程来执行延时任务。一些组件框架，如 Servlet 和 RMI，都会创建线程池并调用这些线程中的方法。</p>
+<p>如果要使用这行功能，那么就必须熟悉并发性和线程安全性，因为这些框架将创建线程并且在这些线程中调用程序中的代码。虽然将并发性认为是一种“可选的”或“高级的”语言功能固然很理想，但现实情况是，几乎所有的 Java 程序都是多线程的，因此在使用这些框架时仍然需要对应用程序状态的访问进行协同。</p>
+<p>当某个框架在应用程序中引入并发性时，通常不可能将并发性仅仅局限于框架代码，因为框架本身会回调应用程序代码，而这些代码将访问应用程序的状态。同样，对线程安全性的需求也不能局限于被调用的代码，而是要延伸到需要访问这些代码所访问的程序状态的所有代码路径。因此，对线程安全性的需求将在程序中蔓延开来。</p>
+<p>下面给出的模块都将在应用程序之外的线程中调用应用程序的代码。尽管线程安全性需求可能源自这些模块，但却不会止步于它们，而是会延伸到整个应用程序。</p>
+<p>Timer。Timer 类的作用是使任务在稍后的时刻运行，运行一次或周期性的运行。引入 Timer 可能会使串行程序变得复杂，因为 TimerTask 访问了应用程序中其他线程访问的数据，那么不仅 TimerTask 需要以线程安全的方式来访问数据，其他类也必须采用线程安全的方式来访问该数据。通常，要实现这个目标，最简单的方式是确保 TimerTask 访问的对象本身是线程安全的，从而就能把线程安全性封装在共享对象内部。</p>
+<p>Servlet 和 JSP。Servlet 框架用于部署网页应用程序以及分来来自 HTTP 客户端的请求。到达服务器的请求可能会通过一个过滤器链被分发到正确的 Servlet 或 JSP。每个 Servlet 都表示一个程序逻辑组件，在高吞吐率的网站中，多个客户端可能同时请求一个 Servlet 的服务。在 Servlet 规范中，Servlet 同样需要满足被多个线程同时调用，换句话说，Servlet 需要是线程安全的。</p>
+<p>即使你可以确保每次只有一个线程调用某个 Servlet，但在构建网页应用程序时仍然必须注意线程安全性。Servlet 通常会访问与其他 Servlet 共享的信息，例如应用程序中的对象或者会话中的对象。当一个 Servlet 访问在多个 Servlet 或者请求中共享的对象时，必须正确的协同对这些对象的访问，因为多个请求可能在不同的线程中同时访问这些对象。Servlet 和 JSP，以及在 ServletContext 和 HttpSession 等容器中保存的 Servlet 过滤器和对象等，都必须是线程安全的。</p>
+<p>远程方法调用，RMI。RMI 使代码能够调用位于其他 JVM 中运行的对象。当通过 RMI 调用某个远程方法时，传递给方法的参数必须被打包到一个字节流中，通过网络传输给远程 JVM，然后由远程 JVM 拆包并传递给远程方法。</p>
+<p>当 RMI 代码调用远程对象时，这个调用将在哪个线程中执行？你并不知道，但肯定不会在你创建的线程中，而是将在一个由 RMI 管理的线程中调用对象。RMI 会创建多给少个线程？同一个对象上的同一个远程方法会不会在多个 RMI 线程中被同时调用？</p>
+<p>远程对象必须注意两个线程安全性问题：正确的协同在多个对象中共享的状态，以及对远程对象本身状态的访问。与 Servlet 相同，RMI 对象应用做好被多个线程同时调用的准备，并且必须确保它们自身的线程安全性。</p>
+<p>Swing 和 AWT。GUI 程序的一个固有属性就是异步性。用户可以在任何时刻选择执行一个菜单项或按下一个按钮，应用程序会及时响应，即使应用程序当时正在执行其他的任务。Swing 和 AWT 很好的解决了这个问题，他们创建了一个单独的线程来处理用户触发的事件，并对呈现给用户的图形界面进行了更新。</p>
+<p>Swing 的一些组件并不是线程安全的，例如 JTable。相反，Swing 程序通过将所有对 GUI 组件的访问局限在事件线程以实现线程安全性。如果某个程序希望在事件线程之外控制 GUI，那么必须将控制 GUI 的代码放在事件线程中运行。</p>
+<p>当用户触发某个 UI 动作时，在事件线程中就会有一个事件处理器被调用以执行用户请求的操作。如果事件处理器需要访问由其他线程同时访问的应用程序状态，那么这个事件处理器，以及访问这个状态的所有其他代码，都必须采用一种线程安全的方式来访问该状态。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T005_concurrency/jc-practice/ch02.html">CH02-线程安全性</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T005_concurrency/jc-practice/ch01.html#ch01-简介" class="header">CH01-简介</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-1-并发简史" class="header">1.1 并发简史</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-2-线程的优势" class="header">1.2 线程的优势</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-3-线程带来的风险" class="header">1.3 线程带来的风险</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch01.html#1-4-线程无处不在" class="header">1.4 线程无处不在</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

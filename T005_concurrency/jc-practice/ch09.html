@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH09-GUI应用 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../T005_concurrency/jc-practice/index.html">Java 并发实践</a></li>
+  <li>CH09-GUI应用</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch09-gui应用" name="ch09-gui应用" class="anchor"><span class="anchor-link"></span></a>CH09-GUI应用</h1>
+<div class="toc ">
+<ul>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-1-为什么-gui-是单线程的" class="header">9.1 为什么 GUI 是单线程的</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-1-1-串行事件处理" class="header">9.1.1 串行事件处理</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-1-2-swing-中的线程封闭机制" class="header">9.1.2 Swing 中的线程封闭机制</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-2-短时间的-gui-任务" class="header">9.2 短时间的 GUI 任务</a></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-3-长时间的-gui-任务" class="header">9.3 长时间的 GUI 任务</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-3-1-取消" class="header">9.3.1 取消</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-3-2-进度标识和完成标识" class="header">9.3.2 进度标识和完成标识</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-3-3-swingworker" class="header">9.3.3 SwingWorker</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-4-共享数据模型" class="header">9.4 共享数据模型</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-4-1-线程安全的数据模型" class="header">9.4.1 线程安全的数据模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-4-2-分解数据模型" class="header">9.4.2 分解数据模型</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-5-其他形式的单线程子系统" class="header">9.5 其他形式的单线程子系统</a></li>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#小结" class="header">小结</a></li>
+</ul>
+</div>
+<p>如果用 Swing 编写过简单的图形用户界面应用程序，那么就应该知道 GUI 应用程序有其奇特的线程问题。为了维护安全性，一些特定的任务必须运行在 Swing 的事件线程中。然而，在事件线程中不应该执行时间较长的操作，以免用户界面失去响应。而且，由于 Swing 的数据结构不是线程安全的，因此必须将它们限制在事件线程中。</p>
+<p>几乎所有的 GUI 工具包都被实现为单线程子系统，这意味着所有的 GUI 操作都被限制在单个线程中。如果你不打算编写一个单线程程序，那么就会有部分操作在一个应用程序线程中执行，而其他操作则在事件线程中执行。与其他线程错误一样，即使在这种操作分解中出现了错误，也会导致应用程序立即崩溃，而且程序将在一个难以确定的条件下表现出奇怪的行为。虽然 GUI 框架本身是单线程子系统，但应用程序可能不是单线程的，因此在编写 GUI 代码时仍然需要谨慎的考虑线程问题。</p>
+<h2><a href="#9-1-为什么-gui-是单线程的" name="9-1-为什么-gui-是单线程的" class="anchor"><span class="anchor-link"></span></a>9.1 为什么 GUI 是单线程的</h2>
+<p>早期的 GUI 程序都是单线程的，并且 GUI 事件在“主事件循环”进行处理。当前的 GUI 框架则使用了一种略有不同的模型：在该模型中创建一个专门事件分发线程(EDT)来处理 GUI 事件。</p>
+<p>单线程的 GUI 框架并不仅限于在 Java 中，在 Qt、NexiStep、MaxOS Cocoa、X Windows 以及其他环境中的 GUI 框架都是单线程的。许多人曾经尝试过编写多线程的 GUI 框架，但最终都由于竟态条件和死锁导致的稳定性问题而又重新回到单线程的事件队列模型：采用一个专门的线程从队列中抽取事件，并将它们转发到应用程序定义的事件处理器。(AWT 最初尝试在更大程度上支持多线程访问，而正是基于在 AWT 中得到的经验和教训，Swing 在实现时决定采用单线程模型)。</p>
+<p>在多线程的 GUI 框架中更容易发生死锁问题，其部分原因在于，在输入事件的处理过程与 GUI 组件的面向对象模型之间会存在错误的交互。用户引发的动过将通过一种类似于“气泡上升”的方式从操作系统传递给应用程序——操作系统首先检测到一个鼠标点击，然后通过工具包将其转换为“鼠标点击”事件，该事件最终被转换为一个更高层事件(如“鼠标键被按下”事件)转发给应用程序的监听器。另一个方面，应用程序引发的工作有会以“气泡下沉”的方式从应用程序返回到操作系统。例如，在应用程序中引发修改某个组件背景色的请求，该请求将被转发给某个特定的组件类，并最终转发给操作系统进行绘制。因此，一方面这组操作将以完全相反的顺序来访问相同的 GUI 对象；另一方面，又要确保对象都是线程安全的，从而导致不一致的锁定顺序，并引发死锁。这种问题几乎在每次开发 GUI 包时都会重现。</p>
+<p>另一个在多线程 GUI 框架中导致死锁的原因就是“模型——视图——控制(MVC)”这种设计模式的广泛应用。通过将用户的交互分解到模型、视图和控制等模块中，能极大的简化 GUI 应用程序的实现，但这却进一步增加了出现不一致锁定顺序的风险。“控制”模块将调用“模型”模块，而“模型”模块将发生的变化通知给“视图”模块。“控制”模块同样可以调用“视图”模块，并调用“模型”模块来查询模型的状态。这将再次导致不一致的锁定顺序并出现死锁。</p>
+<p>Sun 公司的前副总裁 Graham Hamilton 在其博客中总结了这些问题，详细阐述了为什么多线程的 GUI 工具包会成为计算机科学史上的又一个“失败的梦想”。</p>
+<blockquote>
+  <p>不过，我相信你还是可以成功的编写出多线程的 GUI 工具包，只要做到：非常晋升的设计多线程 GUI 工具包，详尽无遗的公开工具包的锁定方法，以及你非常聪明，非常仔细，并且对工具包的整体结构有着全局理解。然而，如果在上述某个方面稍有偏差，那么即使程序在大多数时候都能正确运行，但在偶尔情况下仍会出现(死锁引起的)挂起或(竞争引起的)运行故障。只有那些深入参与工具包设计的人们才能够正确的使用这种多线程的 GUI 框架。</p>
+  <p>然而，我并不认为这些特性能够在商业产品中得到广泛应用。可能出现的情况是：大多数普通的开发者发现应用程序无法可靠的运行，而又找不到其中的原因。于是，这些开发者会感到非常不满，并诅咒这些无辜的工具包。</p>
+</blockquote>
+<p>单线程的 GUI 框架通过线程封闭机制来实现线程安全性。所有 GUI 对象，包括可视化组件和数据模型等，都只能在事件线程中访问。当然，这只是将确保线程安全性的一部分工作交给应用程序的开发人员来负责，他们必须确保这些对象被正确的封闭在事件线程中。</p>
+<h3><a href="#9-1-1-串行事件处理" name="9-1-1-串行事件处理" class="anchor"><span class="anchor-link"></span></a>9.1.1 串行事件处理</h3>
+<p>GUI 应用程序需要处理一些细粒度的事件，例如点击鼠标、按下键盘或定时器超时等。事件是另一种类型的任务，而 AWT 和 Swing 提供的事件处理机制在结构上也类似于 Executor。</p>
+<p>因为只有单个线程来处理所有的 GUI 任务，因此会采用依次处理的方式——处理完一个任务后再开始下一个任务，在两个任务的处理之间不会重叠。清除了这一点，就可以更容易的编写任务代码，而无需担心其他任务会产生干扰。</p>
+<p>串行任务处理的不利之处在于，如果某个任务的处理时间很长，那么其他任务必须等到该任务执行结束。如果这些任务的工作是响应用户输入或者提供可视化界面反馈，那么应该程序看似会失去响应。如果在事件线程中执行时间较长的任务，那么用户甚至无法点击“取消”按钮，因为在该任务完成之前，将无法调用“取消”按钮的监听器。因此，在事件线程中执行的任务必须尽快的把控制权交换给事件线程。要启动一些执行耗时较长的任务，例如对某个大型文档执行拼写检查，在文件系统中执行搜索，或者通过网络获取资源等，必须在另一个线程中执行这些任务，从而尽快的将控制权交还给事件线程。如果要在执行某个事件较长的任务时更新进度标识，或者在任务完成后提高一个可视化的反馈，那么需要再次执行事件线程中的代码。这会很快使程序变得更加复杂。</p>
+<h3><a href="#9-1-2-swing-中的线程封闭机制" name="9-1-2-swing-中的线程封闭机制" class="anchor"><span class="anchor-link"></span></a>9.1.2 Swing 中的线程封闭机制</h3>
+<p>所有 Swing 组件和数据模型对象都被封闭在事件线程中，因此任何访问它们的代码都必须在事件线程中运行。GUI 对象并非通过同步来确保一致性，而是通过线程封闭机制。这种方法的好处在于，当访问表现对象时在事件线程中运行的任务无需担心同步问题，而坏处在于，无法从事件线程之外的线程中访问表现对象。</p>
+<blockquote>
+  <p>Swing 的单线程规则是：Swing 中的组件以及模型只能在这个事件分发线程中进行创建、修改、查询。</p>
+</blockquote>
+<p>与所有的规则不同，这个规则也存在一些例外情况。Swing 中只有少数方法可以安全的从其他线程中调用，而在 Javadoc 中已经很清楚的说明了这些方法的线程安全性。单线程规则的其他一些例外情况包括：</p>
+<ul>
+  <li>SwingUtilities.isEventDispatchThread，用于判断当前线程是否是事件线程。</li>
+  <li>SwingUtilities.invokeLater，该方法可以将一个 Runnable 任务调度到事件线程中执行(可以从任意线程中调用)。</li>
+  <li>SwingUtilities.invokeAndWait，该方法可以将一个 Runnable 任务调度到事件线程中执行，并阻塞当前线程直到任务完成(只能从非 GUI 线程中调用)。</li>
+  <li>所有将重绘请求或重生效请求插入队列的方法(可以从任意线程调用)。</li>
+  <li>所有添加或移除监听器的方法(这些方法可以在任意线程中调用，但监听器本身一定要在事件线程中调用)。</li>
+</ul>
+<p>invokeLater 和 invokeAndWait 两个方法的作用酷似 Executor。事实上，用单线程的 Executor 来实现 SwingUtilities 中与线程相关的方法是很容易的，如程序清单 9-1 所示。这并非是 SwingUtilities 中的真实实现，因为 Swing 的出现时间要早于 Executor 框架，但如果现在来实现 Swing，或许应该采用这种实现方式。</p>
+<pre class="prettyprint"><code class="language-java">public class SwingUtilities {
+
+	private static final ExecutorService exec = 
+		Executors.newSingleThreadExecutor(new SwingThreadFactory()); 
+	private static volatile Thread swingThread;
+
+	private static class SwingThreadFactory implements ThreadFactory { 
+		public Thread newThread(Runnable r) { 
+			swingThread = new Thread(r); 
+			return swingThread; 
+		} 
+	}
+
+	public static boolean isEventDispatchThread() { 
+		return Thread.currentThread() == swingThread; 
+	}
+
+	public static void invokeLater(Runnable task) { 
+		exec.execute(task); 
+	}
+
+	public static void invokeAndWait(Runnable task) 
+		throws InterruptedException, InvocationTargetException { 
+		Future f = exec.submit(task); 
+		try { f.get(); } 
+		catch (ExecutionException e) { 
+			throw new InvocationTargetException(e); 
+		} 
+	}
+}
+</code></pre>
+<p>可以将 Swing 的事件线程视为一个单线程的 Executor，它处理来自事件队列的任务。与线程池一样，有时候工作者线程会死亡并由另一个新线程来替代，但这一切要对任务透明。如果所有任务的执行时间都很短，或者任务调度的可预见性并不重要，又或者任务不能被并发执行，那么应该采用串行的和单线程的执行策略。</p>
+<p>程序清单 9-2 中的 GuiExecutor 是一个 Executor，它将任务委托给 SwingUtilities 来执行。也可以使用其他的 GUI 框架来实现它，例如 SWT 提供的 Display.asyncExec 方法，它类似于 Swing 中的 invokeLater。</p>
+<pre class="prettyprint"><code class="language-java">public class GuiExecutor extends AbstractExecutorService {
+
+	// Singletons have a private constructor and a public factory 
+	private static final GuiExecutor instance = new GuiExecutor();
+
+	private GuiExecutor() { }
+
+	public static GuiExecutor instance() { return instance; }
+
+	public void execute(Runnable r) { 
+		if (SwingUtilities.isEventDispatchThread()) 
+			r.run(); 
+		else SwingUtilities.invokeLater(r); 
+	}
+
+	// Plus trivial implementations of lifecycle methods
+}
+</code></pre>
+<h2><a href="#9-2-短时间的-gui-任务" name="9-2-短时间的-gui-任务" class="anchor"><span class="anchor-link"></span></a>9.2 短时间的 GUI 任务</h2>
+<p>在 GUI 应用中，事件在事件线程中产生，并通过“气泡上升”的方式来传递给应用程序提供的监听器，而监听器则根据收到的事件执行一些计算来修改表现对象。为了简便，短时间的任务可以把整个操作都放在事件线程中执行，而对于长时间的任务，则应该讲某些操作放到另一个线程中执行。</p>
+<pre class="prettyprint"><code class="language-java">final Random random = new Random();
+final JButton button = new JButton(&quot;change color&quot;);
+...
+button.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) {
+		button.setBackground(new Color(random.nexInt()));
+	}
+})
+</code></pre>
+<p>在这种情况下，表现对象封闭在事件线程中。程序清单 9-3 创建了一个按钮，它的颜色在被按下时会随机的变化。当用户点击按钮时，工具包将事件线程中的一个 ActionEvent 投递给所有已注册的 ActionListener，作为响应，ActionListener 将选择一个新的颜色，并将按钮的背景颜色设置为新颜色。这样，在 GUI 工具包中产生事件，然后发送到应用程序，而应用程序通过修改 GUI 来响应用户的动作。在这期间，执行控制始终不会离开事件线程，如图 9-1所示。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181118174040.png" style="display:block;width:70%;" alt="9-1" align=center />
+</div>
+<p>这个示例揭示了 GUI 应用程序和 GUI 工具包之间的主要交互。只要任务是短期的，并且只访问 GUI 对象(或者其他线程封闭的或线程安全的应用程序对象)，那么就可以忽略与线程相关的问题，而在时间线程中可以执行任何操作都不会出问题。</p>
+<p>图 9-2 给出了一个略微复杂的版本，其中使用了正式的数据模型，例如 TableModel 或 TreeModel。Swing 将大多数可视化组件都分为两个对象，即模型对象和视图对象。在模型对象中保存的是将被显示的数据，而在视图对象中则保存了控制显示方式的规则。模型对象可以通过引发事件来表示模型数据发生了变化，而视图对象则通过“订阅”来接收这些事件。当视图对象收到表示模型数据已经发生变化的事件，将向模型对象查询新的数据，并更新界面显示。因此，在一个修改表格内容的按钮监听器中，事件监听器将更新模型并调用其中一个 fireXxx 方法，这个方法会依次调用视图对象中表格模型监听器，从而更新视图的显示。同样，执行控制权仍然不会离开事件线程。(Swing 数据模型的 fireXxx 方法通常会直接调用模型监听器，而不会向线程队列中提交新的事件，因此 fireXxx 方法只能从事件线程中调用。)</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181118174102.png" style="display:block;width:70%;" alt="9-2" align=center />
+</div>
+<h2><a href="#9-3-长时间的-gui-任务" name="9-3-长时间的-gui-任务" class="anchor"><span class="anchor-link"></span></a>9.3 长时间的 GUI 任务</h2>
+<p>如果所有任务的执行时间都较短(并且应用中不包含执行时间较长的非 GUI 部分)，那么整个应用程序都可以在事件线程内部运行，并且完全不用关心线程。然而，在复杂的 GUI 应用中可能包含一些执行时间较长的任务，并且可能超过了用户可以等待的时间，例如拼写检查、后台编辑或者远程资源获取等。这些任务必须在另一个线程中运行，才能使得 GUI 在运行时保持高响应性。</p>
+<p>Swing 使得在事件线程中运行任务很容易，但(在 Java 6 之前)并没有提供任何机制来帮助 GUI 任务执行其他线程中的代码。然而在这里并不需要借助 Swing：可以创建自己的 Executor 来执行长时间的任务。对于长时间的任务，可以使用缓存线程池。只要 GUI 应用程序很少会发起大量的长时间任务，因此即使线程池可以无限制的增长也不会有太大风险。</p>
+<p>首先我们来看一个简单的任务，该任务不支持取消操作和进度指示，也不会在完成后更新 GUI，我们之后再将这些功能依次添加进来。在程序清单 9-4 中给出了一个与某个可视化组件绑定的监听器，它将一个长时间的任务提交给一个 Executor。尽管有两个层次的内部类，但通过这种方式使某个 GUI 任务启动另一个任务还是很简单的：在事件线程中调用 UI 动作监听器，然后将一个 Runnable 提交到线程池中执行。</p>
+<pre class="prettyprint"><code class="language-java">ExecutorService backgroundExec = 
+	Executors.newCachedThreadPool(); 
+...
+
+button.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) {
+		backgroundExec.execute(new Runnable() { 
+			public void run() { doBigComputation(); }
+	}); 
+}});
+</code></pre>
+<p>这个示例通过 “Fire and Forget” 方式将长时间运行的任务从事件线程中分类出来，这种方式可能不是非常有用。在执行完一个产时间的任务后，通常会产生某种可视化的反馈给用户。但你并不能从后台线程中访问这些表现对象，因此任务在完成时必须向事件线程提交另一个任务来更新用户界面。</p>
+<p>程序清单 9-5 给出了如何实现这个功能的方式，但此时已经开始变得复杂了，即已经有了三层内部类。动作监听器首先使按钮无效，并设置一个标签表示正在进行某个计算，然后将一个任务提交给后台的 Executor。当任务完成时，它会在事件下滑才能中增加另一个任务，该任务将重新激活按钮并恢复文本标签文本。</p>
+<pre class="prettyprint"><code class="language-java">button.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) { 	
+		button.setEnabled(false); 
+		label.setText(&quot;busy&quot;); 
+		backgroundExec.execute(new Runnable() { 
+			public void run() { 
+				try { doBigComputation(); } 
+				finally { 
+					GuiExecutor.instance().execute(new Runnable() { 
+						public void run() { 
+							button.setEnabled(true); 
+							label.setText(&quot;idle&quot;); 
+						} 
+					}); 
+				}
+			}
+		});
+	}
+});
+</code></pre>
+<p>在按下按钮时触发的任务中包含 3 个连续的子任务，它们将在事件线程与后台线程之间交替运行。第一个子任务更新用户界面，表示一个长时间的操作已经开始，然后在后台线程中启动第二个子任务。当第二个子任务完成时，它把第三个子任务再次提交到事件线程中运行，第三个子任务也会更新用户界面来表示操作已经完成。在 GUI 应程序中，这种“线程接力”是处理长时间任务的典型用法。</p>
+<h3><a href="#9-3-1-取消" name="9-3-1-取消" class="anchor"><span class="anchor-link"></span></a>9.3.1 取消</h3>
+<p>当某个任务在线程中运行了过长时间没有结束，用户可能希望取消它。你可以直接通过线程中断来实现取消操作，但是一种更简单的方式是使用 Future，专门用来管理可取消的任务。</p>
+<p>如果调用 Future 的 cancel 方法，并将参数 mayInterruptIfRunning 设置为 true，那么这个 Future 可以中断正在执行任务的线程。如果你编写的任务能够正确响应中断，那么当它被取消时就可以提前返回。在程序清单 9-6 给出的任务中，将轮询线程的中断状态，并且在返现中断时提前返回。</p>
+<pre class="prettyprint"><code class="language-java">Future&lt;?&gt; runningTask = null; 
+// thread-confined ...
+startButton.addActionListener(new ActionListener() {
+	public void actionPerformed(ActionEvent e) { 
+		if (runningTask != null) { 
+			runningTask = backgroundExec.submit(new Runnable() { 
+				public void run() { 
+					while (moreWork()) { 
+						if  (Thread.currentThread().isInterrupted()) { 	
+							cleanUpPartialWork(); 
+							break; 
+						} 
+					doSomeWork(); 
+					} 
+				}
+			});	
+		}
+	}
+}});
+
+cancelButton.addActionListener(new ActionListener() { 
+	public void actionPerformed(ActionEvent event) { 
+		if (runningTask != null) 
+		runningTask.cancel(true); 
+}});
+</code></pre>
+<p>由于 runningTask 被封闭在事件线程中，因此在对它进行设置会检查时不需要同步，并且“开始”按钮的监听器可以确保每次只有一个后台任务在运行。然而，当任务完成时最好能通知按钮监听器，例如说可以禁用“取消”按钮。我们将在下一节解决这个问题。</p>
+<h3><a href="#9-3-2-进度标识和完成标识" name="9-3-2-进度标识和完成标识" class="anchor"><span class="anchor-link"></span></a>9.3.2 进度标识和完成标识</h3>
+<p>通过 Future 来表示一个长时间的任务，可以极大的简化取消操作的实现。在 FutureTask 中也有一个 done 方法同样有助于实现完成通知。当后台的 Callable 完成后，将调用 done。通过 done 方法在事件线程中触发一个完成任务，我们能够构造一个 BackgroundTask 类，这个类将提供一个在事件线程中调用 onCompletion 方法，如程序清单 9-7 所示。</p>
+<pre class="prettyprint"><code class="language-java">abstract class BackgroundTask&lt;V&gt; implements Runnable, Future&lt;V&gt; { 
+	private final FutureTask&lt;V&gt; computation = new Computation();
+
+	private class Computation extends FutureTask&lt;V&gt; {
+		public Computation() { 
+			super(new Callable&lt;V&gt;() { 
+				public V call() throws Exception { 
+					return BackgroundTask.this.compute();
+				}
+			}); 
+		} 
+		protected final void done() {
+			GuiExecutor.instance().execute(new Runnable() {
+				public void run() { 
+					V value = null; 
+					Throwable thrown = null; 
+					boolean cancelled = false; 
+					try { value = get(); } 
+					catch (ExecutionException e) { 
+						thrown = e.getCause(); 
+					} catch (CancellationException e) { 
+						cancelled = true; 
+					} catch (InterruptedException consumed) { 
+					} finally { 
+						onCompletion(value, thrown, cancelled); 
+					}
+				};
+			});
+		}
+	} 
+	
+	protected void setProgress(final int current, final int max) {
+		GuiExecutor.instance().execute(new Runnable() {
+			public void run() { 
+				onProgress(current, max); 
+			}
+		}); 
+	} 
+	
+	// Called in the background 
+	thread protected abstract V compute() throws Exception; 
+	// Called in the event thread 
+	protected void onCompletion(V result, Throwable exception, boolean cancelled) { } 
+	protected void onProgress(int current, int max) { } 
+	// Other Future methods forwarded to computation
+}
+</code></pre>
+<p>BackgroundTask 还支持进度标识。conpute 方法可以调用 setProgress 方法以数字形式来指示进度。因而在事件线程中调用 onProgress，从而更新用户界面以显示可视化的进度信息。</p>
+<p>要想实现 BackgroundTask，只需要实现 compute 方法，该方法将在后台线程中调用。也可以改写 onCompletion 和 onProgress，这两个方法会在事件线程中调用。</p>
+<p>基于 FutureTask 构造的 BackgroundTask 还能简化取消操作。Compute 不会检查线程的中断状态，而是调用 Future.isCancelled。程序清单 9-8 通过 BackgroundTask 重新实现了程序清单 9-6 中的示例程序。</p>
+<pre class="prettyprint"><code class="language-java">public void runInBackground(final Runnable task) {
+	startButton.addActionListener(new ActionListener() { 
+		public void actionPerformed(ActionEvent e) { 
+			class CancelListener implements ActionListener { 
+				BackgroundTask&lt;?&gt; task; 
+				public void actionPerformed(ActionEvent event) { 
+					if (task != null) task.cancel(true); 
+				}
+			}
+
+			final CancelListener listener = new CancelListener();
+
+			listener.task = new BackgroundTask&lt;Void&gt;() { 	
+				public Void compute() { 
+					while (moreWork() &amp;&amp; !isCancelled()) 
+						doSomeWork(); 
+						return null; 
+				} 
+				public void onCompletion(boolean cancelled, String s, Throwable exception) { 
+				    cancelButton.removeActionListener(listener); 
+				    label.setText(&quot;done&quot;); 
+				}
+			}; 
+			cancelButton.addActionListener(listener); 
+			backgroundExec.execute(task);
+		}
+	});
+}
+</code></pre>
+<h3><a href="#9-3-3-swingworker" name="9-3-3-swingworker" class="anchor"><span class="anchor-link"></span></a>9.3.3 SwingWorker</h3>
+<p>我们已经通过 FutureTask 和 Executor 构建了一个简单的框架，它会在后台线程中执行较长耗时的任务，因此不会影响 GUI 的响应性。在任何单线程的 GUI 框架中都可以使用这些技术，而不仅局限于 Swing。在 Swing 中，这类给出的许多特性是由 SwingWorker 类提供的，包括取消、完成通知、进度指示灯。在 “Swing Connection” 和 “The Java Tutorial” 等资料中介绍了不同版本的 SwingWorker，并在 Java 6 中包含了一个更新好的版本。</p>
+<h2><a href="#9-4-共享数据模型" name="9-4-共享数据模型" class="anchor"><span class="anchor-link"></span></a>9.4 共享数据模型</h2>
+<p>Swing 的表现对象都被封装在事件线程中。在加单的 GUI 程序中，所有的可变状态都被保存在表现对象中，并且除了事件线程之外，唯一的线程就是主线程。要在这些程序中强制实施单线程规则是很容易的：不要从主线程中访问数据模型或表现组件。在一些更复杂的程序中，可能会使用其他线程对持久化的存储进行读写操作以免降低系统的响应性。</p>
+<p>最简单的情况是，数据模型中的数据由用户来输入或由应用程序在启动时静态的从文件或其他数据源加载。在这种情况下，除了事件线程之外的任何线程都不可能访问到数据。但在某些情况下，表现模型对象只是一个数据源的视图对象。这时，当数据在应用程序中进出时，有多个线程可以访问这些数据。</p>
+<p>例如，你可以使用一个树形空间来显示远程文件系统的内容。在显示树形控件之前，并不需要枚举真个文件系统——那样做会消耗大量的时间和内存。正确的做法是，当树节点被展开时才读取相应的内容。即使只枚举远程卷上的单个目录也可能花费很长的时间，因此你可以考虑在后台线程中执行枚举操作。当后台任务完成后，必须通过某种方式将数据填充到树形模型中。可以使用线程安全的树形模型来实现这个功能：通过 invokeLater 提交一个任务，将数据从后台任务中“推入”事件线程，或者让事件线程通过轮询来查看是否有数据可用。</p>
+<h3><a href="#9-4-1-线程安全的数据模型" name="9-4-1-线程安全的数据模型" class="anchor"><span class="anchor-link"></span></a>9.4.1 线程安全的数据模型</h3>
+<p>只要阻塞操作不会过度影响响应性，那么多个线程操作同一份数据的问题都可以通过线程安全的数据模型来解决。如果数据模型支持细粒度的开发，那么事件线程和后台线程就能共享该数据模型，而不会发生响应性问题。例如，第五章的 DelegatingVehicleTracker 在底层使用了一个 ConcurrentHashMap 来提供高度并发的读写操作。这种方法的缺点在于，ConcurrentHashMap 无法提供一致的数据快照，而这可能是需求的一部分。线程安全的数据模型必须在更新模板时产生事件，这样视图才能在数据发生变化后进行更新。</p>
+<p>有时候，在使用版本化数据模型时，例如 CopyOnWriteArrayList，可能要同时获得线程安全性，一致性以及良好的响应性。当获取一个“写实复制”容器的迭代时，这个迭代器将遍历真个容器。然而，只有在遍历操作远远多于修改操作时，“写时复制”容器才能提供更好的性能，例如在车辆追踪应用程序中就不适合采用这种方法。一些特定的数据结构或许可以避免这种限制，但要构建一个既能提供高效并发访问又能在旧数据无效后不再维护它们的数据结构却并不容易，因此只有其他方法都行不通后才应该考虑使用它。</p>
+<h3><a href="#9-4-2-分解数据模型" name="9-4-2-分解数据模型" class="anchor"><span class="anchor-link"></span></a>9.4.2 分解数据模型</h3>
+<p>从 GUI 的角度看，Swing 的表格模型类，例如 TableModel 和 TreeModel，都是保存将要显示的数据的正式方法。然而，这些模型对象本身通常都是应用程序中其他对象的视图。如果在程序中既包含用于表示的数据模型，又包含应用程序特定的数据模型，那么这种应该程序就被称为一种分解模型设计。</p>
+<p>在分解模型设计时，表现模型被封闭在事件线程汇总，而其他模型，即共享模型，是线程安全的，因此既可以由事件线程方法，也可以由应用程序线程访问。表现模型会注册共享模型的监听器，从而在更新时得到通知。然后，表示模型可以在共享模型中得到更新：通过将相关状态的快照嵌入到更新消息中，或者由表现模型在收到更新事件时直接从共享模型中获取数据。</p>
+<p>快照这种方法虽然简单，但却存在着一些局限。当数据模型很小，更新频率不高，并且这两个模型的结构相似时，他可以工作良好。如果数据模型很大，或者更新频率极高，在分解模型包含的信息中有一方或者双方对另一方不可见，那么更高效的方式是发送增量更新信息而不是发送完整的快照。这种方法将共享模型上的更新操作序列化，并在事件线程中重现。增量更新的另一个好处是，细粒度的变化信息可以提高显示的视觉效果——如果只有一辆车移动，那么只需要更新发生变化的区域，而不用重绘整个显示图形。</p>
+<blockquote>
+  <p>如果一个数据模型必须被多个线程共享，而且由于阻塞、一致性或复杂度等原因而无法实现一个线程安全的模型时，可以考虑使用分解模型设计。</p>
+</blockquote>
+<h2><a href="#9-5-其他形式的单线程子系统" name="9-5-其他形式的单线程子系统" class="anchor"><span class="anchor-link"></span></a>9.5 其他形式的单线程子系统</h2>
+<p>线程封闭不仅仅可以在 GUI 中使用，每当某个工具需要被实现为单线程子系统时，都可以使用这项技术。有时候，当程序员无法避免同步或死锁等问题时，也将不得不使用线程封闭。例如，一些原生库要求：所有对库的访问，甚至通过 System.loadLibiary 来加载库时，都必须在同一个线程中执行。</p>
+<p>借鉴 GUI 框架中采用的方法，可以很容易创建一个专门的线程或一个单线程的 Executor 来访问那些库，并提供一个代理对象来拦截所有对线程封闭对象的调用，并将这些调用作为一个任务来提交给专门的线程。将 Future 和 newSingleThreadExecutor 一起使用，可以简化这项工作。在代理方法中可以调用 submit 方法提交任务，然后立即调用 Future.get 来等待结果。(如果在封闭线程的类中实现了一个接口，那么每次可以自动的让方法将一个 Callable 提交给后台线程并通过动态的代理来等待结果。)</p>
+<h2><a href="#小结" name="小结" class="anchor"><span class="anchor-link"></span></a>小结</h2>
+<p>所有 GUI 框架基本上都实现为单线程的子系统，其中所有与表现相关的代码都作为任务在事件线程中运行。由于只有一个事件线程，因此运行时间较长的任务会降低 GUI 程序的响应性，所以应该放在后台线程中运行。在一些辅助类(例如 SwingWorker 以及在本章中构建的 BackgroundTask) 中提供了对取消、进度指示以及完成指示的支持，因此对于执行时间较长的任务来说，无论在任务中包含了 GUI 组件还是非 GUI 组件，在开发时都可以的到简化。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T005_concurrency/jc-practice/ch10.html">CH10-活跃性危险</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T005_concurrency/jc-practice/ch09.html#ch09-gui应用" class="header">CH09-GUI应用</a>
+  <ul>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-1-为什么-gui-是单线程的" class="header">9.1 为什么 GUI 是单线程的</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-2-短时间的-gui-任务" class="header">9.2 短时间的 GUI 任务</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-3-长时间的-gui-任务" class="header">9.3 长时间的 GUI 任务</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-4-共享数据模型" class="header">9.4 共享数据模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#9-5-其他形式的单线程子系统" class="header">9.5 其他形式的单线程子系统</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/ch09.html#小结" class="header">小结</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

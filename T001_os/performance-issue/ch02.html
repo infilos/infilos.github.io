@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH02-分支预测、流水线与多核 CPU · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T001_os/index.html">操作系统</a></li>
+  <li><a href="../../T001_os/performance-issue/index.html">^性能之殇</a></li>
+  <li>CH02-分支预测、流水线与多核 CPU</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch02-分支预测-流水线与多核-cpu" name="ch02-分支预测-流水线与多核-cpu" class="anchor"><span class="anchor-link"></span></a>CH02-分支预测、流水线与多核 CPU</h1>
+<p>CPU 硬件为了提高性能，逐步发展出了指令流水线(分支预测)和多核 CPU，本文我们将简单的探讨它们的原理和效果。</p>
+<h2><a href="#指令流水线" name="指令流水线" class="anchor"><span class="anchor-link"></span></a>指令流水线</h2>
+<p>在一台纯粹的图灵机中，指令是一个接一个顺序执行的。而现实世界中的通用计算机所用的很多基础算法都是可以并行的，如加法器和乘法器，它们可以很容易的被切分成能够同时运行的多个指令，这样就可以大大提升性能。</p>
+<blockquote>
+  <p>指令流水线，说白了是就是 CPU 电路层面的编发。</p>
+  <p>Intel Core i7 自 Sandy Bridge（2010）架构以来一直都是 14 级流水线设计。基于 Cedar Mill 架构的最后一代奔腾 4，在 2006 年就拥有 3.8GHz 的超高频率，却因为其长达 31 级的流水线而成了为样子货，被 AMD 1GHz 的芯片按在地上摩擦。</p>
+</blockquote>
+<p>流水线是现代 RISC(精简指令集) 核心的一个重要设计，它极大地提高了性能。</p>
+<p>对于一条指令的执行过程，通常分为：取指令、指令译码、取操作数、运算、写结果。前面三步由控制器完成，后面两步由运算器完成。按照传统的做法，当控制器工作的时候运算器在休息，在运算器工作的时候控制器在休息。流水线的做法就是当控制器完成第一条指令的操作后，直接开始开始第二条指令的操作，同时运算器开始第一条指令的操作。这样就形成了流水线系统，这是一条2级流水线。</p>
+<h3><a href="#risc-机器的五层流水线示意图" name="risc-机器的五层流水线示意图" class="anchor"><span class="anchor-link"></span></a>RISC 机器的五层流水线示意图</h3>
+<p>下图形象的展示了流水线是如何提高性能的。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181125165946.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<h3><a href="#缺点" name="缺点" class="anchor"><span class="anchor-link"></span></a>缺点</h3>
+<p>指令流水线通过硬件层面的并发来提高性能，却也带来了一些无法避免的缺点。</p>
+<ul>
+  <li>设计难度高，一步小心就成了高频低能的奔腾 4。</li>
+  <li>并发导致每条指令的执行时间变长。</li>
+  <li>优化难度大，有时候两行代码的顺序变动可能导致数倍的性能差异，这对编译器提出了更高的要求。</li>
+  <li>如果多次分支预测失败，将会导致严重的性能损失。</li>
+</ul>
+<h2><a href="#分支预测" name="分支预测" class="anchor"><span class="anchor-link"></span></a>分支预测</h2>
+<p>指令形成流水线以后，就需要一种高效的调控来保证硬件层面的并发效果：最佳情况是每条流水线里的十几个指令都是正确的，这样完全不浪费时钟周期。而分支预测就是干这个的。</p>
+<p>分支预测器猜测条件表达式两路分支中那一路最优可能发生，然后推测执行这一路的指令，来避免流水线停顿造成时间的浪费。但是，如果后来发现分支预测错误，那么流水线中推测执行的那些中间结果就要全部被放弃，重新获取正确的分支路线上的指令开始执行，这就带来了是一个时钟周期的延迟，这个时候，该 CPU 核心就是完全在浪费时间。</p>
+<blockquote>
+  <p>幸运的是，当下主流的 CPU 在现代编译器的配合下，能够越来越高的完成这项工作。</p>
+  <p>还记得那个让 Intel CPU 性能跌 30% 的漏洞补丁吗，那个漏洞就是 CPU 设计的时候，分支预测设计的不完善导致的。</p>
+</blockquote>
+<h2><a href="#多核-cpu" name="多核-cpu" class="anchor"><span class="anchor-link"></span></a>多核 CPU</h2>
+<p>多核 CPU 的每个核心拥有自己独立的运算单元、寄存器、一二级缓存，所有核心共用同一条内存总线，同一段内存。</p>
+<p>多核 CPU 的出现，标志着人类的集成电路工艺遇到了一个严酷的瓶颈，无法再大规模提升单核性能，只能通过多核类聊以自慰。实际上，多核 CPU 性能的提升极其有限，还不如增加一点点单核频率所能提升的性能多。</p>
+<h3><a href="#优势" name="优势" class="anchor"><span class="anchor-link"></span></a>优势</h3>
+<p>多核 CPU 的优势很明显，就是可以并行地执行多个图灵机，可以显而易见地提升性能。只不过由于使用同一条内存总线，实际带来的效果有限，并且需要操作系统和编译器的密切配合才行。</p>
+<blockquote>
+  <p>题外话： AMD64 技术可以运行 32 位的操作系统和应用程序，所用的方法是依旧使用 32 位宽的内存总线，每计算一次要取两次内存，性能提升也非常有限，不过好处就是可以使用大于 4GB 的内存了。大家应该都没忘记第一篇文章中提到的冯·诺依曼架构拥有 CPU 和内存通信带宽不足的弱点。（注：AMD64 技术是和 Intel 交叉授权的专利，i7 也是这么设计的）</p>
+</blockquote>
+<h3><a href="#劣势" name="劣势" class="anchor"><span class="anchor-link"></span></a>劣势</h3>
+<p>多核 CPU 劣势其实更加明显，但是人类也没有办法，谁不想用 20GHz 的 CPU 呢，谁想用这八核的 i7 呀。</p>
+<ol>
+  <li>内存读写效率不变，甚至有降低的风险。</li>
+  <li>操作系统复杂度提升很多倍，计算资源的管理变得非常复杂。</li>
+  <li>依赖操作系统的进步：微软以肉眼可见的速度，在这十几年间大幅提升了 Windows 的多核效率和安全性：XP 只是能利用，7 可以自动调配一个进程在多个核心上游走，2008R2 解决了依赖 CPU0 调度导致司机的 BUG，8 可以利用多核心启动，10 优化了杀死进程依赖 CPU0 的问题。</li>
+</ol>
+<blockquote>
+  <p>超线程技术：Intel 的超线程技术是将 CPU 核心内部再分出两个逻辑核心，只增加了 5% 的裸面积，就带来了 15%~30% 的性能提升。</p>
+</blockquote>
+<h2><a href="#怀念过去" name="怀念过去" class="anchor"><span class="anchor-link"></span></a>怀念过去</h2>
+<p>Intel 肯定怀念摩尔定律提出时候的黄金年代，只依靠工艺的进步，就能一两年就性能翻番。AMD 肯定怀念 K8 的黄金一代，1G 战 4G，靠的就是把内存控制器从北桥芯片移到 CPU 内部，提升了 CPU 和内存的通信效率，自然性能倍增。而今天，人类的技术已经到达了一个瓶颈，只能通过不断的提升 CPU 和操作系统的复杂度来获得微弱的性能提升，呜呼哀哉。</p>
+<p>不过我们也不能放弃希望，AMD RX VAGA64 显卡拥有 2048 位的显存位宽，理论极限还是很恐怖的，这可能就是未来内存的发展方向。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T001_os/performance-issue/ch03.html">CH03-通用电子计算机的胎记：事件驱动</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/performance-issue/ch02.html#ch02-分支预测-流水线与多核-cpu" class="header">CH02-分支预测、流水线与多核 CPU</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/ch02.html#指令流水线" class="header">指令流水线</a></li>
+    <li><a href="../../T001_os/performance-issue/ch02.html#分支预测" class="header">分支预测</a></li>
+    <li><a href="../../T001_os/performance-issue/ch02.html#多核-cpu" class="header">多核 CPU</a></li>
+    <li><a href="../../T001_os/performance-issue/ch02.html#怀念过去" class="header">怀念过去</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

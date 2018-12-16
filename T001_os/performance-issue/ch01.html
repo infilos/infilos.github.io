@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH01-冯·诺伊曼瓶颈 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T001_os/index.html">操作系统</a></li>
+  <li><a href="../../T001_os/performance-issue/index.html">^性能之殇</a></li>
+  <li>CH01-冯·诺伊曼瓶颈</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch01-冯-诺伊曼瓶颈" name="ch01-冯-诺伊曼瓶颈" class="anchor"><span class="anchor-link"></span></a>CH01-冯·诺伊曼瓶颈</h1>
+<h2><a href="#天才冯-诺依曼" name="天才冯-诺依曼" class="anchor"><span class="anchor-link"></span></a>天才冯·诺依曼</h2>
+<p>冯·诺依曼于 1903年12月28日出生在奥匈帝国的布达佩斯，1957年2月8日卒于美国，终年 53 岁。在他短暂的一生中，他取得了绝大的成就，远不止于世人熟知的“冯·诺依曼架构”。</p>
+<blockquote>
+  <p>约翰·冯·诺伊曼，出生于匈牙利的美国籍犹太人数学家家庭，现代电子计算机与博弈论的重要创始人，在泛函分析、遍历理论、几何学、拓扑学和数值分析等众多数学领域及计算机学、量子力学和经济学中都有重大贡献。</p>
+</blockquote>
+<p>出列对计算机科学的贡献，他还有一个称号不为大众所熟知：“博弈论之父”。博弈论被认为是 20 世纪经济学领域最伟大的成果之一。(说到博弈论，我相信很多人第一个想到的肯定跟我一些样，那么就是“纳什均衡”)。</p>
+<h2><a href="#冯-诺依曼架构" name="冯-诺依曼架构" class="anchor"><span class="anchor-link"></span></a>冯·诺依曼架构</h2>
+<p>冯·诺依曼由于在曼哈顿工程中需要进行大量的运算，从而使用了当时最先进的两台计算机 Mark I 和 ENIAC，在使用 Mark I 和 ENIAC 的过程中，他意识到了存储程序的重要性，从而提出了存储程序逻辑架构。</p>
+<p>“冯·诺依曼架构”定义如下：</p>
+<ol>
+  <li>以运算单元为中心。</li>
+  <li>采用存储程序原理。</li>
+  <li>存储器是按地址访问、线性编址的空间。</li>
+  <li>控制流由指令流产生。</li>
+  <li>指令码由操作码和地址码组成。</li>
+  <li>数据以二进制编码。</li>
+</ol>
+<h3><a href="#优势" name="优势" class="anchor"><span class="anchor-link"></span></a>优势</h3>
+<p>冯·诺依曼架构第一次将存储器和运算器分开，指令和数据均放置在存储器中，为计算机的通用性奠定了基础。虽然在规范中计算单元依然是核心，但冯·诺依曼架构事实上导致了以存储器为核心的现代计算机的诞生。</p>
+<blockquote>
+  <p>注：请各位在心里明确一件事情，“存储器指的是内存，即 RAM。”而磁盘在理论上属于输入输出设备。</p>
+</blockquote>
+<p>该架构的另一项重要共现是使用二进制取代十进制，大幅降低了运算电路的复杂性。这为晶体管时代超大规模集成电路的诞生提供了最重要的基础，让我们实现了今天手腕上 Apple Watch 的运算性能能够远超早期大型计算机的壮举，这也是摩尔定律得以实现的基础。</p>
+<h3><a href="#瓶颈" name="瓶颈" class="anchor"><span class="anchor-link"></span></a>瓶颈</h3>
+<p>冯·诺依曼架构为计算机大提速铺平了道路，却也埋下了一个隐患：在内存容量指数级增长以后，CPU 和内存之间的数据传输带宽称为了瓶颈。</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181125164709.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<p>上图是 i9-7980XE 18 核 36 线程的民用最强 CPU，其配合超频过的 DDR4 3200MHz 内存，测试出的内存读取速度是 90GB/s。看起来是不是很快？看看图中的 L1 Cache，3.7TB/s。</p>
+<p>我们再来算算时间。这颗 CPU 的最大睿频是 4.4GHz，就是说 CPU 执行一条指令需要的时间是 0.000000000227273 秒，即 0.22ns，而内存的延迟是 68.1ns。换句话说，只要去内存里读取一个字节，就需要 CPU 等待 300 个时钟周期，何其的浪费 CPU 时间啊。</p>
+<p>CPU 的 L1/L2/L3 三级缓存是使用和 CPU 同样的 14 纳米工艺执照的硅半导体，每个 bit 都是用 6 个场效应管(即通俗讲的三极管)构成，成本高昂且非常占用 CPU 的核心面积，故不能做成很大的容量。</p>
+<p>除此之外，三级缓存对计算机速度的提升来源于计算机内存的“局部性”，相关内容后续再展开讨论。</p>
+<h2><a href="#接下来" name="接下来" class="anchor"><span class="anchor-link"></span></a>接下来</h2>
+<p>下一篇文章，我们将讨论分支预测、流水线与多个 CPU，看看那些上古大神为了提升性能都迸发出了什么奇思妙想，又都搞出了什么奇技淫巧。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T001_os/performance-issue/ch02.html">CH02-分支预测、流水线与多核 CPU</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/performance-issue/ch01.html#ch01-冯-诺伊曼瓶颈" class="header">CH01-冯·诺伊曼瓶颈</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/ch01.html#天才冯-诺依曼" class="header">天才冯·诺依曼</a></li>
+    <li><a href="../../T001_os/performance-issue/ch01.html#冯-诺依曼架构" class="header">冯·诺依曼架构</a></li>
+    <li><a href="../../T001_os/performance-issue/ch01.html#接下来" class="header">接下来</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

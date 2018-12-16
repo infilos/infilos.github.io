@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH03-通用电子计算机的胎记：事件驱动 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T001_os/index.html">操作系统</a></li>
+  <li><a href="../../T001_os/performance-issue/index.html">^性能之殇</a></li>
+  <li>CH03-通用电子计算机的胎记：事件驱动</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch03-通用电子计算机的胎记-事件驱动" name="ch03-通用电子计算机的胎记-事件驱动" class="anchor"><span class="anchor-link"></span></a>CH03-通用电子计算机的胎记：事件驱动</h1>
+<p>Event-Driven(事件驱动)这个词这几年随着 Node.js 的大热也成了一个热词，似乎已经成了“高性能”的代名词，殊不知事件驱动其实是通用计算机的胎记，是一种与生俱来的能力。本文我们就要一起了解一下事件驱动的价值和本质。</p>
+<h2><a href="#通用计算机中的时间驱动" name="通用计算机中的时间驱动" class="anchor"><span class="anchor-link"></span></a>通用计算机中的时间驱动</h2>
+<p>首先我们定义当下最火的 x86 PC 机为典型的通用电子计算机：可以写文章，可以打游戏，可以上网聊天，可以读U盘，可以打印，可以设计三维模型，可以编辑渲染视频，可以作路由器，还可以控制巨大的工业机器。那么，这种计算机的事件驱动能力就很容易理解了：</p>
+<ol>
+  <li>假设 Chrome 正在播放 Youtube 视频，你按下了键盘上的空格键，视频暂停了。这个操作就是事件驱动：计算机获得了你单机空格的事件，于是把视频暂停了。</li>
+  <li>假设你正在跟人聊 QQ，别人发了一段文字给你，计算机获得了网络传输事件，于是将信息提取出来显示到了屏幕上，这也是事件驱动。</li>
+</ol>
+<h2><a href="#事件驱动的实现方式" name="事件驱动的实现方式" class="anchor"><span class="anchor-link"></span></a>事件驱动的实现方式</h2>
+<p>事件驱动本质是由 CPU 提供的，因为 CPU 作为控制器+运算器，它需要随时响应意外事件，如上面例子中的键盘和网络。</p>
+<p>CPU 对于意外事件的响应是依靠 Execption Control Flow(异常控制流)来实现的。</p>
+<h2><a href="#强大的异常控制流" name="强大的异常控制流" class="anchor"><span class="anchor-link"></span></a>强大的异常控制流</h2>
+<p>异常控制流是 CPU 的核心功能，它是以下听起来高大上的功能的基础。</p>
+<h3><a href="#时间片" name="时间片" class="anchor"><span class="anchor-link"></span></a>时间片</h3>
+<p>CPU 时间片的分配也是利用异常控制流来实现的，它让多个进程在宏观上位于同一个 CPU 核心上同时运行，而我们知道在微观上任一个时刻，每个 CPU 核心都只能运行一条指令。</p>
+<h3><a href="#虚拟内存" name="虚拟内存" class="anchor"><span class="anchor-link"></span></a>虚拟内存</h3>
+<blockquote>
+  <p>这里的虚拟内存不是 Windows 的虚拟内存，是 Linux 虚拟内存，即逻辑内存。</p>
+</blockquote>
+<p>逻辑内存是用一段内存和一段磁盘上的存储空间放在一起组成的一个逻辑内存空间，对外依然表现为“线性数组内存空间”。逻辑内存引出了现代计算机的一个重要性能观念：</p>
+<blockquote>
+  <p>内存局部性天然的让相邻指令需要读写的内存空间也相邻，于是可以把一个进程的内存放到磁盘上，再把一小部分的“热数据”放到内存中，让其作为磁盘的缓存，这样可以在降低很少性能的情况下，大幅提升计算机能够同时运行的进程数量，从而大幅提升性能。</p>
+</blockquote>
+<p>虚拟内存的本质其实是使用缓存+乐观的手段来提升计算机的性能。</p>
+<h3><a href="#系统调用" name="系统调用" class="anchor"><span class="anchor-link"></span></a>系统调用</h3>
+<p>系统调用是进程向操作系统索取资源的通道，这也是利用异常控制流来实现的。</p>
+<h3><a href="#硬件中断" name="硬件中断" class="anchor"><span class="anchor-link"></span></a>硬件中断</h3>
+<p>键盘点击、鼠标移动、网络接收到数据、麦克风有声音输入、插入 U 盘这些操作全部需要 CPU 暂时停下手头的工作，来做出响应。</p>
+<h3><a href="#进程-线程" name="进程-线程" class="anchor"><span class="anchor-link"></span></a>进程、线程</h3>
+<p>进程的创建、管理和销毁全部都是基于异常控制流实现的，其生命周期的钩子函数也是操作系统依赖异常控制流实现的。在 Linux 上线程和进程没有功能上的区别。</p>
+<h3><a href="#编程语言中的-try-catch" name="编程语言中的-try-catch" class="anchor"><span class="anchor-link"></span></a>编程语言中的 try-catch</h3>
+<p>C++ 编译成二进制程序，其异常控制语句是直接基于异常控制流实现的。Java 这种硬虚拟机语言，PHP 这种软虚拟机语言，其异常控制流的一部分也是基于最底层的异常控制流来实现的，另一部分可以用逻辑判断来实现。</p>
+<h2><a href="#基于异常控制流的事件驱动" name="基于异常控制流的事件驱动" class="anchor"><span class="anchor-link"></span></a>基于异常控制流的事件驱动</h2>
+<p>其实现在人们讨论的事件驱动，是由 Linux 内核提供的 epoll，是 2002年10月18日伴随着 kernel 2.5.44 发布的，是 Linux 首次将操作系统中的 IO 事件和异常控制流暴露给了进程，实现了本文开头提的事件驱动。</p>
+<h3><a href="#kqueue" name="kqueue" class="anchor"><span class="anchor-link"></span></a>Kqueue</h3>
+<p>FreeBSD 4.1 版本于 2000 年发布，一起携带的 Kqueue 是 BSD 系统中事件驱动的 API 提供者。BSD 系统如今已遍地开花，从 macOS 到 iOS，从 watchOS 到 PS4 游戏机，都受到了 Kqueue 的蒙荫。</p>
+<h3><a href="#epoll-是什么" name="epoll-是什么" class="anchor"><span class="anchor-link"></span></a>epoll 是什么</h3>
+<p>操作系统本身就是事件驱动的，所以 epoll 并不是什么新发明，而只是把本来不给用户空间的 API 暴露给了用户空间而已。</p>
+<h3><a href="#epoll-做了什么" name="epoll-做了什么" class="anchor"><span class="anchor-link"></span></a>epoll 做了什么</h3>
+<p>网络 IO 是一种纯异步的 IO 模型，所以 Nginx 和 Node.js 都基于 epoll 实现了完全的事件驱动，活得好了相比于 select/epoll 巨量的性能提升。而磁盘 IO 就没有这么幸运的，因此磁盘本身也是单体阻塞资源：即，有进程在写磁盘的时候，其他写入请求只能等待，就是天王老子来了也不行，磁盘做不到呀。所以磁盘 IO 是基于 epoll 实现的非阻塞 IO，但是其底层依旧是异步阻塞，即便这样，性能也已经爆棚了。Node 的磁盘 IO 性能远超其他解释型语言，过去几年在 web 后端霸占了一些对磁盘 IO 要求较高的领域。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T001_os/performance-issue/ch04.html">CH04-Unix 进程模型的局限</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/performance-issue/ch03.html#ch03-通用电子计算机的胎记-事件驱动" class="header">CH03-通用电子计算机的胎记：事件驱动</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/ch03.html#通用计算机中的时间驱动" class="header">通用计算机中的时间驱动</a></li>
+    <li><a href="../../T001_os/performance-issue/ch03.html#事件驱动的实现方式" class="header">事件驱动的实现方式</a></li>
+    <li><a href="../../T001_os/performance-issue/ch03.html#强大的异常控制流" class="header">强大的异常控制流</a></li>
+    <li><a href="../../T001_os/performance-issue/ch03.html#基于异常控制流的事件驱动" class="header">基于异常控制流的事件驱动</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

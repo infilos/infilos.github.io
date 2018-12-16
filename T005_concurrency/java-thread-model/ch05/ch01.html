@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH01-指令重排 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../js/page.js"></script>
+<script type="text/javascript" src="../../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../../index.html">Infilos</a></li>
+  <li><a href="../../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../../T005_concurrency/java-thread-model/index.html">Java 并发模型</a></li>
+  <li><a href="../../../T005_concurrency/java-thread-model/ch05/index.html">CH-05-JSR-133 Cook</a></li>
+  <li>CH01-指令重排</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch01-指令重排" name="ch01-指令重排" class="anchor"><span class="anchor-link"></span></a>CH01-指令重排</h1>
+<p>对于编译器的编写者来说，JMM 主要是由“禁止指令重排的规则”所组成的，其中包括了字段(包括数组中的元素)的存取指令和监视器(锁)的控制指令。</p>
+<h2><a href="#volatile-与监视器" name="volatile-与监视器" class="anchor"><span class="anchor-link"></span></a>Volatile 与监视器</h2>
+<p>JMM 中关于 volatile 和监视器的主要规则可以被看做是一个矩阵。这个矩阵中的单元格表示当存在一些特定的后续关联指令的情况下，指令不能被重排。下面的表格并非 JMM 所包含的内容，而是一个用来观察 JMM 对编译器和运行系统所造成的影响的工具。</p>
+<table>
+  <thead>
+    <tr>
+      <th>能否重排 </th>
+      <th>下个操作 </th>
+      <th>下个操作 </th>
+      <th>下个操作 </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>第一个操作 </td>
+      <td>Nomal Load/Nornal Store </td>
+      <td>Volatile Load/Moitor Enter </td>
+      <td>Volatile Store/Monitor Exit </td>
+    </tr>
+    <tr>
+      <td>Nomal Load/Nornal Store </td>
+      <td> </td>
+      <td> </td>
+      <td>NO </td>
+    </tr>
+    <tr>
+      <td>Volatile Load/Moitor Enter </td>
+      <td>NO </td>
+      <td>NO </td>
+      <td>NO </td>
+    </tr>
+    <tr>
+      <td>Volatile Store/Monitor Exit </td>
+      <td> </td>
+      <td>NO </td>
+      <td>NO </td>
+    </tr>
+  </tbody>
+</table>
+<p>术语说明：</p>
+<ul>
+  <li>Normal Load 指令包括：对非 volatile 字段的读取，getField/getStatic/arrayLoad。</li>
+  <li>Normal Store 指令包括：对非 volatile 字段的存储，putFiled/putStatic/arrayStore。</li>
+  <li>Volatile Load 指令包括：对多线程环境的 volatile 变量的读取，getField/getStatic。</li>
+  <li>Volatile Store 指令包括：对多线程环境的 volatile 变量的存储，putField/putStatic。</li>
+  <li>Monitor Enter(包括进入同步块 synchronized 方法)是用于多线程环境的锁对象。</li>
+  <li>Monitor Exist(包括离开同步块 synchronized 方法)是用于多线程环境的锁对象。</li>
+</ul>
+<p>在 JMM 中，Normal Load 指令与 Nornal Store 指令的规则是一致的，类似的还有 Volatile Load 指令与 Monitor Enter 指令，以及 Volatile Store 指令和 Monitor Exit 指令，因此这几对指令的单元格在上面的表格中都被合并在了一起(但是在后续的表格中，会在必要的时候将其展开)。在这个小节中，我们仅仅考虑那些被当做原子单元的可读写的变量，也就是说那些没有位域(bit fields)、非对齐访问(unaligned acesses)、或者超过平台最大字长(word size)的访问。</p>
+<p>任意数量的指令操作都可被表示成这个表格中的“第一个操作”或“下一个操作”。例如在单元格 [Normal Store, Volatile Store] 中，有一个 NO，就表示任何非 volatile 字段的 store 指令操作不能与后面任何一个 vaolatile store 指令重排，如果出现任何这样的重排就会使得多线程程序的行为发生变化。</p>
+<p>JSR 133 规范规定上述关于 volatile 和监视器的规则仅仅适用于可能会被多线程访问的变量或对象。因此，如果一个编译器可以最终证明(这往往需要很大的努力)一个锁仅被单线程访问，那么这个锁就可以被移除。与之类似，一个 volatile 变量只被单线程访问也可以被当做是普通的变量。还有进一步耕细粒度的分析与优化，例如：那些被证明在一段时间内对多线程不可访问的字段。</p>
+<p>在上表中，空白的单元格代表在不违反 Java 的基本语义下重排是允许的(详细可参考 <a href="https://docs.oracle.com/javase/specs/">JLS</a> 中的说明)。例如，即使上表中没有说明，但是也不能对同一内存地址上的 load 指令和之后紧跟着的 store 指令进行重排。但是你可以对两个不同内存地址上的 load 和 store 指令进行重排，而且往往还在很多编译器转换和优化中会这么做。这往往就包括了一些不被认为是指令重排的例子，如：重用一个基于已加载的字段的计算后的值，而不是像第一次指令重排那样去重新加载并重新计算。然而，JMM 规范允许编译器经过一些转换后消除这些可以避免的依赖，使其可以支持指令重排。</p>
+<p>在任何情况下，即使是开发者错误的使用了同步读取，指令重排的结果也必须达到最基本的 Java 安全要求，所有的显式字段都必须要么被设定成 0 或 null 这样的与构造值，要么被其他线程设置值。这通常必须把所有存储在堆内存里的对象在其被构造函数使用前进行归零操作，并且从来不对归零 store 指令进行重排。一种比较好的方式是在垃圾回收中对回收的内存进行归零操作。可以参考 JSR 133 规范中其他情况下的一些关于安全保证的规则。</p>
+<p>这里描述的规则和属性都是适用于读取 Java 环境的字段。在实际的应用中，这些都可能会另外与读取内部的一些记账字段和数据交互，例如对象头，GC 表和动态生成的代码。</p>
+<h2><a href="#final-字段" name="final-字段" class="anchor"><span class="anchor-link"></span></a>final 字段</h2>
+<p>Final 字段的 load 和 store 指令相对于有锁的或者 volatile 字段来说，就跟 Normal load 和 Normal store 的存取是一样的，但是需要加入两条附加的指令重排规则：</p>
+<ol>
+  <li>如果在构造函数中有一条 fianl 字段的 store 指令，同时这个字段是一个引用，那么它将不能与构造函数外后续可以让持有这个 final 字段的对象被其他线程访问的指令重排。例如，你不能重排下列语句：</li>
+</ol>
+<pre><code>x.finalField = v;
+...;
+sharedRef = x;
+</code></pre>
+<p>这条规则会在下列情况下生效，例如当你内联一个构造函数时，正如“&hellip;”的部分表示的该构造函数的逻辑边界那样。你不能把这个构造函数中的对这个 final 字段的 store 紫菱移动到构造函数外的一条 store 指令之后，因为这可能会使这个对象对其他线程可见。(正如你将在下面看到的，这样的操作还需要声明一个内存屏障)。类似的，你不能把下面的前两条指令与第三条指令进行重排：</p>
+<pre><code>x.afield = 1;
+x.finalField = v;
+...;
+sharedRef = x;
+</code></pre>
+<ol>
+  <li>一个 final 字段的初始化 load 指令不能与包含该字段的对象的初始化 load 指令进行重排。在下面的情况中，这条规则就会生效：<code>x = shareRef;...;x=x.finalField</code>。由于这两条指令是依赖的，编译器不能对这样的指令进行重排。但是，这条规则会对某些处理器有影响。</li>
+</ol>
+<p>上述规则，要求对于带有 fianl 字段的对象的 load 本身是 synchronized、volatile、final 或来自类似的 load 指令，从而确保 Java 开发者对于 fianl 字段的正确使用，并最终使构造函数中初始化的 store 指令和构造函数外的 store 指令排序。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../../T005_concurrency/java-thread-model/ch05/ch02.html">CH02-内存屏障</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../../T005_concurrency/java-thread-model/ch05/ch01.html#ch01-指令重排" class="header">CH01-指令重排</a>
+  <ul>
+    <li><a href="../../../T005_concurrency/java-thread-model/ch05/ch01.html#volatile-与监视器" class="header">Volatile 与监视器</a></li>
+    <li><a href="../../../T005_concurrency/java-thread-model/ch05/ch01.html#final-字段" class="header">final 字段</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

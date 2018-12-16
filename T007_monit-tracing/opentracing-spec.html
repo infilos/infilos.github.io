@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>OpenTracing · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/page.js"></script>
+<script type="text/javascript" src="../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html" class="active page">OpenTracing</a></li>
+    <li><a href="../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html" class="active page">OpenTracing</a></li>
+    <li><a href="../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../index.html">Infilos</a></li>
+  <li><a href="../T007_monit-tracing/index.html">监控&amp;追踪</a></li>
+  <li>OpenTracing</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#opentracing" name="opentracing" class="anchor"><span class="anchor-link"></span></a>OpenTracing</h1>
+<h2><a href="#数据模型" name="数据模型" class="anchor"><span class="anchor-link"></span></a>数据模型</h2>
+<p>OpenTracing 中的 <strong>Trace</strong> 由其 <strong>Span</strong> 隐式定义。**Trace** 可以被认为是由一组 <strong>Span</strong> 定义的有向无环图(DAG)，**Span** 之间的关系被称为 <strong>Reference</strong>。</p>
+<p>以下是一个由 8 个 <strong>Span</strong> 构成的 <strong>Trace</strong> 的结构：</p>
+<pre><code>一个 Trace 中 Span 之间的因果关系：
+
+        [Span A]  ←←←(the root span)
+            |
+     +------+------+
+     |             |
+ [Span B]      [Span C] ←←←(Span C之于Span A的关系是 `ChildOf` )
+     |             |
+ [Span D]      +---+-------+
+               |           |
+           [Span E]    [Span F] &gt;&gt;&gt; [Span G] &gt;&gt;&gt; [Span H]
+                                       ↑
+                                       ↑
+                         (Span G `FollowsFrom` Span F)
+</code></pre>
+<p>有时使用时间轴来显示 <strong>Trace</strong> 则更为直观：</p>
+<pre><code>一个 Trace 中 Span 之间的时间关系
+
+––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–&gt; time
+
+ [Span A···················································]
+   [Span B··············································]
+      [Span D··········································]
+    [Span C········································]
+         [Span E·······]        [Span F··] [Span G··] [Span H··]
+</code></pre>
+<p>每个 Span 中封装了如下信息：</p>
+<ul>
+  <li>操作名称；</li>
+  <li>开始时间戳；</li>
+  <li>结束时间戳；</li>
+  <li>一组包含零个或多个*键值*结构的 <strong>Span 标签(Tags)</strong>。键必须是字符串，值可以是字符串、布尔值、数字；</li>
+  <li>一组包含零个或多个 <strong>Span 日志(Logs)</strong>，每条日志都是一个键值映射，并与一个时间戳配对。键必须是字符串，值可以是任何类型(但并非所有的 OpenTracing 实现都必须支持每种值类型)；</li>
+  <li>一个 <strong>SpanContext</strong> 上下文；</li>
+  <li>零个或多个因果相关的 <strong>Span</strong> 间的 <strong>Reference</strong>，基于对应 <strong>Span</strong> 的 <strong>SpanContext</strong> 进行关联。</li>
+</ul>
+<p>每个 <strong>SpanContext</strong> 封装了如下状态：</p>
+<ul>
+  <li>任何需要跟跨进程 <strong>Span</strong> 关联的、依赖于 OpenTracing 实现的状态，比如 Trace 和 Span 的 ID；</li>
+  <li>键值结构的、需要跨进程传递的 <strong>Baggage Items(随身行李条目)</strong>。</li>
+</ul>
+<h2><a href="#span-间的-reference" name="span-间的-reference" class="anchor"><span class="anchor-link"></span></a>Span 间的 Reference</h2>
+<p>一个 Span 可以引用零个或多个因果相关的 <strong>SpanContext</strong>。OpenTracing 目前定义类两种类型的 Reference：<code>ChildOf</code> 和 <code>FollowsFrom</code>。两种 Reference 类型都对父子 Span 间的关系进行了建模。未来，OpenTracing 可能会为不具因果关系的 Span 提供不同类型的 Reference(比如一组批量 Span、阻塞在队列中的 Span 等)。</p>
+<h3><a href="#childof-reference" name="childof-reference" class="anchor"><span class="anchor-link"></span></a><code>ChildOf</code> Reference</h3>
+<p>一个 Span 作为另一个 Span 的子 Span。在 <code>ChildOf</code> 引用中，父 Span 在某种程度上取决于子 Span。下列情况会构成 <code>ChildOf</code> 关系：</p>
+<ul>
+  <li>在一个 RPC 中，代表服务端的 Span 可以使用 <code>ChildOf</code> 关联到代表客户端的父 Span。</li>
+  <li>在一次持久化过程中，代表 SQL 插入的 Span 可以使用 <code>ChildOf</code> 关联到代表 ORM Save 方法的父 Span。</li>
+  <li>多个并发(可能是分布式)执行任务的 Span 可能分别使用 <code>ChildOf</code> 关联到合并了所有子 Span 执行结果的父 Span。</li>
+</ul>
+<p>下列都是具有有效的 <code>ChildOf</code> 关系的时序图：</p>
+<pre><code>[-Parent Span---------]
+	[-Child Span----]
+
+[-Parent Span--------------]
+	[-Child Span A----]
+	[-Child Span B----]
+	[-Child Span C----]
+	[-Child Span D---------------]
+	[-Child Span E----]
+</code></pre>
+<h3><a href="#followsfrom-reference" name="followsfrom-reference" class="anchor"><span class="anchor-link"></span></a><code>FollowsFrom</code> Reference</h3>
+<p>有些父 Span 不依赖于任何子 Span 的结果。这种情况下，我们仅认为子 Span 在因果上 <code>FollowsFrom</code> 父 Span。有多种不同的 <code>FollowsFrom</code> 引用子类别，在 OpenTracing 的未来版本中，它们可能会被更正式的区分。</p>
+<p>下列都是具有有效的 <code>FollowsFrom</code> 关系的时序图：</p>
+<pre><code>[-Parent Span-]  [-Child Span-]
+
+[-Parent Span--]
+	[-Child Span-]
+
+[-Parent Span-]
+	[-Child Span-]
+</code></pre>
+<h2><a href="#接口定义" name="接口定义" class="anchor"><span class="anchor-link"></span></a>接口定义</h2>
+<p>OpenTracing 规范中有三种相互关联的关键类型 <code>Tracer</code>、<code>Span</code>、<code>SpanContext</code>。下面我们将介绍各种类型的行为；简单来说，每种行为在编程语言中分别对应一个“方法”，尽管实际上可能是一组重载方法。</p>
+<p>当我们讨论可选参数时，应当清楚，不同的语言有不同的方式来解释这个概念。比如 Go 语言中我们会使用 “Functional Options” 这个术语，而在 Java 中我们会使用 Builder 模式。</p>
+<h3><a href="#tracer" name="tracer" class="anchor"><span class="anchor-link"></span></a>Tracer</h3>
+<p><code>Tracer</code> 接口能够创建 <code>Span</code> 并且能够跨进程地 <code>Inject(序列化)</code> 和 <code>Extract(反序列化)</code>。严格来说，它应该具备以下能力：</p>
+<h4><a href="#启动一个新-span" name="启动一个新-span" class="anchor"><span class="anchor-link"></span></a>启动一个新 <code>Span</code></h4>
+<p>必要参数：</p>
+<ul>
+  <li>操作名称，一个人类可读的、富有意义的、简练字符串，它简洁地表示由 Span 完成的工作，比如：RPC 方法名称、函数名称、一个较大计算任务的其中一个阶段的名称。操作名称应用用**泛化**的字符串形式来标识一个 Span 实例，也就是说，<code>get_user</code> 比 <code>get_user/12345</code> 要好。</li>
+</ul>
+<p>可选参数：</p>
+<ul>
+  <li>零个或多个与 <code>SpanContext</code> 相关的 Reference，尽可能包括 <code>ChildOf</code> 和 <code>FollowsFrom</code> 引用类型的信息。</li>
+  <li>开始时间戳，如果没有的话，默认使用现实时间(walltime)。</li>
+  <li>零个或多个标签(tag)</li>
+</ul>
+<p><strong>返回值</strong>是一个刚启动的 <code>Span</code> 实例。</p>
+<h4><a href="#注入-inject-spancontext-到载体中" name="注入-inject-spancontext-到载体中" class="anchor"><span class="anchor-link"></span></a>注入(Inject) <code>SpanContext</code> 到载体中</h4>
+<p>必要参数：</p>
+<ul>
+  <li><code>SpanContext</code> 实例。</li>
+  <li><strong>格式描述符(format descriptor)</strong>(通常但不一定是字符串常量)，告诉 Tracer 实现如何在载体对象中对 <code>SpanContext</code> 进行编码。</li>
+  <li><strong>载体(carrier)</strong>，其类型由类型描述符指定。Tracer 的实现将根据**格式描述符**对此载体对象中的 <code>SpanContext</code> 进行编码。</li>
+</ul>
+<h4><a href="#从载体中提取-extract-spancontext" name="从载体中提取-extract-spancontext" class="anchor"><span class="anchor-link"></span></a>从载体中提取(Extract) <code>SpanContext</code></h4>
+<p>必要参数：</p>
+<ul>
+  <li><strong>格式描述符</strong>，告诉 Tracer 实现如何在载体对象中对 SpanContext 进行解码</li>
+  <li><strong>载体</strong>，其类型由类型描述符指定。Tracer 的实现将根据**格式描述符**对此载体对象中的 <code>SpanContext</code> 进行解码。</li>
+</ul>
+<p><strong>返回值</strong>是一个 SpanContext 实例，适合作为通过 Tracer 启动 Span 时的 reference。</p>
+<h4><a href="#注意-injection-extraction-所需的格式" name="注意-injection-extraction-所需的格式" class="anchor"><span class="anchor-link"></span></a>注意：Injection/Extraction 所需的格式</h4>
+<p>Injection 和 Extraction 都依赖于一个可扩展的格式描述符参数，它指定了相关联的“载体”类型以及 <code>SpanContext</code> 是如何被编码的。Tracer 实现必须支持下列所有格式。</p>
+<ul>
+  <li>文本映射(Text Map)：任意的无字符编码限制的 String-String 型键值结构。</li>
+  <li>HTTP Headers：String-String 型键值结构在 HTTP Headers(<a href="https://tools.ietf.org/html/rfc7230#section-3.2.4">RFC 7230</a>)中也适用。在实践中，由于 HTTP Headers 容易被各种不同的方式处理，强烈建议在 Tracer 实现中使用有限的键空间和保守的转义值。</li>
+  <li>二进制：表示了 <code>SpanContext</code> 的任意二进制数据。</li>
+</ul>
+<h3><a href="#span" name="span" class="anchor"><span class="anchor-link"></span></a>Span</h3>
+<p>除了获取 <code>Span</code> 的 <code>SpanContext</code> 的方法之外，下列任何方法都不能在 <code>Span</code> 结束后被调用。</p>
+<h4><a href="#获取-span-的-spancontext" name="获取-span-的-spancontext" class="anchor"><span class="anchor-link"></span></a>获取 Span 的 SpanContext</h4>
+<p>无需参数。返回值是 Span 的 SpanContext。返回值甚至能够在 Span 结束后被使用。</p>
+<h4><a href="#重写操作名" name="重写操作名" class="anchor"><span class="anchor-link"></span></a>重写操作名</h4>
+<p>必要参数：</p>
+<ul>
+  <li>新的**操作名**，当 Span 启动时取代旧的操作名。</li>
+</ul>
+<h4><a href="#结束-span" name="结束-span" class="anchor"><span class="anchor-link"></span></a>结束 Span</h4>
+<p>可选参数：</p>
+<ul>
+  <li>显式添加 Span 的结束时间戳，如果不提供该参数则会默认使用现实时间。</li>
+</ul>
+<h4><a href="#设置-span-标签" name="设置-span-标签" class="anchor"><span class="anchor-link"></span></a>设置 Span 标签</h4>
+<p>必要参数：</p>
+<ul>
+  <li>标签的键，必须是字符串。</li>
+  <li>标签的值，必须是字符串、布尔值、数值。</li>
+</ul>
+<p>注意 OpenTracing 中已经为一些**<a href="https://github.com/opentracing/specification/blob/master/semantic_conventions.md">标准标签</a>**规定了语义。</p>
+<h4><a href="#记录-log-结构化的数据" name="记录-log-结构化的数据" class="anchor"><span class="anchor-link"></span></a>记录(Log)结构化的数据</h4>
+<p>必要参数：</p>
+<ul>
+  <li>一个或多个键值对，键必须是字符串，值可以是任意类型。有些 OpenTracing 的实现可以处理更多的日志值。</li>
+</ul>
+<p>可选参数：</p>
+<ul>
+  <li>显式时间戳。该参数必须处于当前 Span 的开始与结束时间戳之间。</li>
+</ul>
+<p>注意 OpenTracing 中已经为一些**<a href="https://github.com/opentracing/specification/blob/master/semantic_conventions.md">日志标准键</a>**规定了语义。</p>
+<h4><a href="#设置-baggage-item" name="设置-baggage-item" class="anchor"><span class="anchor-link"></span></a>设置 Baggage Item</h4>
+<p>Baggage Item 是对应于某个 <code>Span</code> 及其 <code>SpanContext</code>，以及**所有直接或间接地引用自本地(local) Span 的 Span 的键值对**。也就是说，Baggage Item 是随 Trace 一起传播的。</p>
+<p>Baggage Item 为全栈式的 OpenTracing 集成提供了强大的功能(比如在移动 APP 上使用时，它可以一路追踪数据直至后端存储系统的深度)，不过使用这些功能时要当心。</p>
+<p>每个键值都会被拷贝到每个本地或远程的子 <code>Span</code>，这可能导致巨大的网络或 CPU(序列化/反序列化) 开销。</p>
+<p>必要参数：</p>
+<ul>
+  <li>Baggage 键，字符串</li>
+  <li>Baggage 值，字符串</li>
+</ul>
+<h4><a href="#获取-baggage-item" name="获取-baggage-item" class="anchor"><span class="anchor-link"></span></a>获取 Baggage Item</h4>
+<p>必要参数：</p>
+<ul>
+  <li>Baggage 键，字符串</li>
+</ul>
+<h3><a href="#spancontext" name="spancontext" class="anchor"><span class="anchor-link"></span></a>SpanContext</h3>
+<p>在一般所指的 OpenTracing 层面上，<code>SpanContext</code> 更像是一个概念而非一种具体的功能。也就是说，这对 OpenTracing 的实现来说提供一层薄的接口是有必要的。当启动一个 <code>Span</code> 或注入、提取 <code>Trace</code> 时，多数 OpenTracing 用户仅需通过 <code>Reference</code> 与 <code>SpanContext</code> 进行交互。</p>
+<p>在 OpenTracing 中，<code>SpanContext</code> 被强制设定为不可变的(immutable)，以应对在 <code>Span</code> 结束时和被引用时产生的复杂生命周期的问题。</p>
+<h4><a href="#遍历所有的-baggage-item" name="遍历所有的-baggage-item" class="anchor"><span class="anchor-link"></span></a>遍历所有的 Baggage Item</h4>
+<p>不同编程语言对此有不同的建模方式，不过给出一个 <code>SpanContext</code> 实例，语义上还是能让该调用者在短时间内遍历所有关联的 Baggage Item。</p>
+<h3><a href="#nooptracer" name="nooptracer" class="anchor"><span class="anchor-link"></span></a>NoopTracer</h3>
+<p>所有编程语言的 OpenTracing API 必须提供某种 <code>NoopTracer</code>(no-op，无操作) 实现，可以用作标记控制(flag-control)或者进行一些用于测试的无害注入等。某些情况下(比如 Java)，<code>NoopTrace</code>r 可能在它自己的制品包(packaging artifact)中。</p>
+<h3><a href="#可选的-api-元素" name="可选的-api-元素" class="anchor"><span class="anchor-link"></span></a>可选的 API 元素</h3>
+<p>有些语言提供了在单进程中用来传递活动的 <code>Span</code> 和 <code>SpanContext</code> 工具。比如，<code>opentracing-go</code> 提供的 Go 语言 <code>context.Context</code> 机制中，用 <code>set</code> 和 <code>get</code> 来获得或设置 <code>Span</code> 的帮助函数。</p>
+<h2><a href="#reference" name="reference" class="anchor"><span class="anchor-link"></span></a>Reference</h2>
+<ul>
+  <li><a href="http://opentracing.io">opentracing.io</a></li>
+</ul>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../T007_monit-tracing/zipkin/index.html">Zipkin</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../T007_monit-tracing/opentracing-spec.html#opentracing" class="header">OpenTracing</a>
+  <ul>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html#数据模型" class="header">数据模型</a></li>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html#span-间的-reference" class="header">Span 间的 Reference</a></li>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html#接口定义" class="header">接口定义</a></li>
+    <li><a href="../T007_monit-tracing/opentracing-spec.html#reference" class="header">Reference</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../js/magellan.js"></script>
+
+<style type="text/css">@import "../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH11-验证 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../T005_concurrency/ipph/index.html">深入并行编程</a></li>
+  <li>CH11-验证</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch11-验证" name="ch11-验证" class="anchor"><span class="anchor-link"></span></a>CH11-验证</h1>
+<p>我也写过一些并行软件，他们一来就能够运行。但这仅仅是因为在过去的 20 年中我写了大量的并行软件。而更多的并行程序是在捉弄我，但却让我认为它们第一次就能正确工作。</p>
+<p>因此，我强烈需要对我的并行程序进行验证。与其他软件验证相比，并行软件验证的基本点是：意识到计算机知道什么是错误的。因此，你的任务就是逼迫计算机告诉你哪里是错误的。所以说，本章可以认为是一个审问计算机的简单教程。</p>
+<p>更多的教程可以在最近的验证书籍中找到，至少有一本比较老但相当有价值的书籍。验证是及其重要的主题，它涵盖了所有形式的软件，因此也值得深入研究。但是，本书主要关注并行方面，因此本章只会粗略对这一重要主题进行阐述。</p>
+<h2><a href="#简介" name="简介" class="anchor"><span class="anchor-link"></span></a>简介</h2>
+<h3><a href="#bug-来自何处" name="bug-来自何处" class="anchor"><span class="anchor-link"></span></a>BUG 来自何处</h3>
+<p>BUG 来自于开发者。基本问题是：人类大脑并没有伴随着计算机一起进化。相反，人类大脑是伴随着其他人类以及动物大脑而进化的。由于这个历史原因，下面三个计算机的特征往往会让人类觉得惊奇。</p>
+<ol>
+  <li>计算机缺乏常识性的东西。几十年来，人工智能总是无功而返。</li>
+  <li>计算机通常无法理解人类的意图，或者更正式的说，计算机缺少心理理论。</li>
+  <li>计算机通常不能做局部性的计划，与之相反，它需要你将所有细节和每一个可能的场景都一一列出。</li>
+</ol>
+<p>前两点是毋庸置疑的，这已经被大量失败的产品证明。这些产品中，最著名的可能要算 Clippy 和 Microsoft Bob 了。通过视图与人类用户相关联，这两款产品所表现出的常识和心理理论预期不尽如人意。也许，最近在智能手机上出现的软件助手将有良好的表现。也就是说，开发者仍然在走老路，软件助手可能对终端用户有益，但对开发者来说并没有什么助益。</p>
+<p>对于人类喜欢的局部性计划来说，需要跟过的解释。特别是它是一个典型的双刃剑。很显然，人类对局部性计划的偏爱是由于我们假设这些计划将拥有常识和对计划意图的良好理解。后一个假设通常类似于这样一种常见情况，执行计划的人和制定计划的人是同一个人。在这种情况下，当阻碍计划执行的情况出现时，计划总是会在随后被修正。因此，局部性计划对于人类来说表现的很不错。举个特别的例子，在无法订立计划时，与其等待死亡还不如采取一些随机动作，这有更高的可能性找到食物。不过，以往在日常生活中行之有效的局部性计划，在计算机中并不见得凑效。</p>
+<p>而且，对遵循局部性计划的需求，对于人类心灵有重要的影响。这来自于贯穿人类历史的事实，生命通常是艰难而危险的。这一点通常好不令人奇怪，当遭遇到锋利的牙齿好爪子时，执行一个局部性的计划需要一种几乎癫狂的乐观精神——这种精神实际上存在于绝大多数人类身上。这也延伸到对编程能力的自我评估上来了。这已经被包括实验性编程这样的面试技术的效果锁证实。实际上，比疯狂更低一级的乐观水平，在临床上被称为“临床型郁闷”。在他们的日常生活中，这类人通常面临严重的困扰。这里强调一下，近乎疯狂的乐观对于一个正常、健康的生命反直觉的重要性。如果你没有近乎癫狂的乐观精神，就不太可能会启动一个困难但有价值的项目。</p>
+<p>一个重要的特殊情况是，虽然项目有价值，但是其价值尚不值得花费它所需要的时间。这种特殊情况是十分常见的，早期遇到的情况是，投资者没有足够的意愿投入项目实际需要的投资。对于开发者来说，自然的反应就是产生不切实际的乐观估计，认为项目已经被允许启动。如果组织足够强大，幸运的结果是进度受到影响或者预算超支，而项目终归还有见到天日的哪一天。但是，如果组织还不够强大，并且决策者在项目变得明朗之前预估它不值得投资，因而快速、错误的终止项目，这样的项目将可能毁掉组织。这可能导致其他组织重拾该项目，并且要么完美它、要么终止它，或者被它所毁掉。这样的项目可能会在毁掉多个组织后取得成功。人们只能期望，组织最终能够成功的管理一系列杀手项目，使其保持一个适当的水平，使得自身不会被下一个项目毁掉。</p>
+<p>虽然疯狂乐观可能是重要的，但是它是 BUG 的重要来源(也许还包括组织失败)。因此问题是，如何保持一个大型项目所需要的乐观情绪，同时保持足够清醒的认识，使 BUG 保持在足够低的水平？</p>
+<h3><a href="#心态" name="心态" class="anchor"><span class="anchor-link"></span></a>心态</h3>
+<p>当你进行任何验证工作时，应当记住以下规则：</p>
+<ol>
+  <li>没有 BUG 的程序，仅仅是那种微不足道的程序。</li>
+  <li>一个可靠的程序，不存在已知的 BUG。</li>
+</ol>
+<p>从这些规则来看，可以得出结论，任何可靠的、有用的程序至少都包含一个未知的 BUG。因此，对一个有用的程序进行验证工作，如果没有找到任何 BUG，这本身就是一件失败的事情。因此，一个好的验证工作，就是一项破坏性的实践工作。这意味着，如果你是那种乐于破坏事务的人，验证工作就是一项好差事。</p>
+<p>要求脚本检查错误的输入，如果找到 time 输出错误，还要给出相应的诊断结果。你应当向这个程序提供什么样的测试输入？这些输入与单线程程序生成的 time 输出一致。</p>
+<p>但是，也许你是超级程序员，你的代码每次都在初次完成时就完美无缺。如果真是这样，那么祝贺你！可以放心跳过本章了。但是请原谅，我对此表示怀疑。我遇到那些声称能在第一次就能写出完美程序的人，比真正能够实现这一壮举的人还要多的多。根据前面堆乐观和过于自信的讨论，这并不令人奇怪。并且，即使你真是一个超级程序员，也将会发现，你的调试工作也仅仅是比一般人少一些而已。</p>
+<p>对我们其他人来说，另一种情况是，在正常的乐观状态和严重的悲观情绪之间摇摆。如果你乐于毁坏事物，这将是有帮助的。如果你不喜欢毁坏事物，或者仅仅乐于毁坏其他人的事物，那就找那些喜欢毁坏代码并且让他们帮助你测试这些代码吧。</p>
+<p>另一种有用的心态是，当其他人找到代码中的 BUG 时，你就仇恨代码吧。这种仇恨有助于你越过理智的界限，折磨你的代码，以便增加自己发现代码中 BUG 的可能性，而不是由其他人来发现。</p>
+<p>最后一种心态是，考虑其他人的生命依赖于你的代码的正确性的几率。这将激励你去折磨代码，以找到 BUG 的下落。</p>
+<p>不同种类的心态，导致了这样一种可能性，不同的人带着不同的心态参与到项目中。如果组织得当，就能很好的工作。</p>
+<p>有些人可能会提醒自己，他们只不过是在折磨一个没有生命的物品。而且，他们也会做这样的假设，谁不折磨自己的代码，代码将会反过来折磨自己。</p>
+<p>不过，这也留下一个问题，在项目生命周期中，何时开始验证工作。</p>
+<h3><a href="#何时开始验证" name="何时开始验证" class="anchor"><span class="anchor-link"></span></a>何时开始验证</h3>
+<p>验证工作应该与项目的启动同时进行。</p>
+<p>需要明白这一点，需要考虑到，与小型软件相比，在大型软件中找到一个 BUG 困难的多。因此，要将查找 BUG 的时间和精力减少到最小，应当对较小的代码单元进行测试。即使这种方式不会找到所有 BUG，至少能找到相当大一部分 BUG，并且更易于找到并修复这些 BUG。这种层次的测试也可以提醒在设计中的不足之处，将设计不足造成的浪费在代码编写上的时间减少的最小。</p>
+<p>但是为什么在验证设计之前，要等待代码就绪呢？希望你阅读一下第 3、4 章，这两章展示了避免一些常见设计缺陷的信息。与同事讨论你的设计，甚至将其简单写出来，这将有助于消除额外的缺陷。</p>
+<p>有一种很常见的情形，当你拥有一份设计，并等待开始验证时，其等待时间过长。在你完整理解需求之前，过于乐观的心态难道不会导致你开始设计？对此问题的回到总是会是“是的”。避免缺陷需求的一个好办法是，了解你的用户。要真正为用户服务好，你不得不与他们一起共度一段时间。</p>
+<p>某类项目的首个项目，需要不同的方法进行验证，例如，快速原型。第一个原型的主要目的，是学习应当如何实现项目，而不是在第一次尝试时就创建一个正确的实现。但是，请注意，你不应该忽略验证工作，这是很重要的。不过，对于一个原型的验证工作可以采取不同的、快速的方法。</p>
+<p>现在，我们已经为你树立了这样的观念，你应当在开始项目时就启动验证工作。后面的章节包含了一定数量的验证技术和方法，这些技术和方法已经证明了其价值。</p>
+<h3><a href="#开元之路" name="开元之路" class="anchor"><span class="anchor-link"></span></a>开元之路</h3>
+<p>开源编程技术已经证明其有效，它包含严格的代码审查和测试。</p>
+<p>我本人可以证明开源社区代码审查的有效性。我早期为 Linux 内核所提供的某个补丁，涉及一个分布式文件系统。在这个分布式文件系统中，某个节点上的用户向一个特定文件写入数据，而另一个节点的用户已经将该文件映射到内存中。在这种情况下，有必要使收到影响的页面映射失效，以允许在写入操作期间，文件系统所维护数据的一致性。我在补丁中进行了初次尝试，并且恪守开源格言“尽早发布、经常发布”，我提交了补丁。然后考虑如何测试它。</p>
+<p>但是就在我确定整体测试策略之前，我收到一个回复，指出了补丁中的一些 BUG。我修复了这些 BUG，重新提交补丁，然后回过头来考虑测试策略。但是，在我有机会编写测试代码之前，我收到了针对重新提交补丁的回复，指出了更多的 BUG。这样的过程重复了很多次，以至于我不确定自己是否有机会测试补丁了。</p>
+<p>这个经历将开源界所说的真理在我的脑海中打上了深深的烙印：只要有足够多的眼球，所有 BUG 都是浅显的。</p>
+<p>当你提交代码或补丁时，想想以下问题：</p>
+<ol>
+  <li>到底有多少这样的眼球真正看了你的代码？</li>
+  <li>到底有多少这样的眼球，他们经验丰富、足够聪明，能够真正找到你的 BUG？</li>
+  <li>他们究竟什么时候看你的代码？</li>
+</ol>
+<p>我是幸运的，有一些人，他们期望我的补丁中提供的功能，他们在分布式文件系统方面有着长期的经验，并且几乎立即就查看了我的补丁。如果没有人查看我的补丁，就不会有代码走查，因此也就不会找到 BUG。如果查看我补丁的人缺少分布式文件系统方面的经验，那么就不大可能找到所有的 BUG。如果它们等几个月或几年之后才查看我的补丁，我可能会忘记补丁是如何工作的，修复它们将更困难。</p>
+<p>我们也千万不能忘记开源开发的第二个原则，即密集测试。例如，大量的人测试 Linux 内核。它们某些人会提交一些测试补丁，甚至你也提交过这样的补丁。另外一些人测试 next 树，这是有益的。但是，很有可能在你编写补丁，到补丁出现在 next 树之间，存在几周甚至几个月的延迟。这样的延迟可能使你对补丁没了新鲜感。对于其他测试维护树来说，仍然有类似的延迟。</p>
+<p>相当一部分人直接将补丁提交到主线，或者提交到主源码树时，才测试它们的代码。如果你的维护者只有在你已经提交测试之后才会接受代码，这将形成死锁情形，你的代码需要测试后才能被接受，而只有被接受后才能开始测试。但是，测试主线代码的人们还是很积极的，因为很多人及组织要等到代码被拉入 Linux 分发版才测试其代码。</p>
+<p>即使有人测试了你的补丁，也不能保证他们在适当的硬件和软件配置，以及适当的工作负载下测试了这些补丁，而这些配置和负载是找到 BUG 所必须的。</p>
+<p>因此，即使你是为开源项目写代码，也有必要为开发和运行自己的测试套件而做好准备。测试开发是一项被低估，但是非常有价值的技能，因此请务必获取可用套件的全部优势。鉴于测试开发的重要性，我们将对这个主题进行更多的讨论。因此，随后的章节中，将讨论当你已经有一个好的测试套件时，怎么找到代码中的 BUG。</p>
+<h2><a href="#跟踪" name="跟踪" class="anchor"><span class="anchor-link"></span></a>跟踪</h2>
+<p>如果你正在基于用户态 C 语言程序进行工作，当所有其他手段失效时，添加 printk 或 printf。</p>
+<p>原理很简单，如果你不清楚如何运行到代码中某一点，在代码中多加点打印语句，以展示出到底发生了什么。你可以通过使用类似 gdb 或 kgdb 这样的调试器，来达到类似的效果，并且这些调试器拥有更多的方便性和灵活性。还有其他更多先进的工具，一些最新发行的工具提供在错误点回放的能力。</p>
+<p>这些强大的测试工具都是有价值的。尤其是目前的典型系统都拥有超过 64K 内存，并且 CPU 都允许在超过 4MHZ 的频率。关于这些工具已经存在不少文章了，本章将再补充一点。</p>
+<p>但是，当手上的工作是为了在高性能并行算法的快速路径上指出错误所在，那么这些工具都有严重的缺陷，即这些工具本身机会带来过高的负载。为了这个目的，存在一些特定的跟踪技术，典型的是使用数据所有权技术，以便将运行时数据收集负载最小化。在 Linux 内核中的一个例子是“teace event”。另一个处理用户态程序的例子是 LTTng。这些技术都无一例外使用了每 CPU 缓冲区，这允许以极低的负载来收集数据。即使如此，使用跟踪有时也会改变时序，并足以隐藏 BUG，导致海森堡 BUG。</p>
+<p>即使你避免了海森堡 BUG，也还有其他陷阱。例如，即使机器知道所有的东西，它几乎知道所有的东西，以至于超过了大脑的处理能力，该怎么办呢？为此，高质量的测试套件通常配有精巧的脚本来分析大量的输出数据。但是请注意：脚本并不必然揭示那些奇怪的事件。有的 RCU 压力脚本就是一个很好的例子，在 RCU 周期被无限延迟的情况下，这个脚本的早期版本运行的很好。这当然会导致脚本被修改，以检查 RCU 优雅周期延迟的情况，但是这并不能改变如下事实，该脚本仅仅检查那些为认为能够检查的问题。这个脚本是有用的，但是有时候，它仍然不能代替对 RCU 压力输出结果的手动扫描。</p>
+<p>对应产品来说，使用追踪，特别是使用 printk 调用进行追踪，存在另外一个问题，他们的负载太高了。在这样的情况下，断言是有用的。</p>
+<h2><a href="#断言" name="断言" class="anchor"><span class="anchor-link"></span></a>断言</h2>
+<p>通常假设以下面的方式实现断言：</p>
+<pre class="prettyprint"><code class="language-c">1 if (something_bad_is_happening()) 
+2 	complain();
+</code></pre>
+<p>这种模式通常被封装成 C-预处理宏或者语言内联函数，例如，在 Linux 内核中，它可能被表示为 WARN_ON(something_bad_is_happening())。当然，如果 something_bad_is_happening 被调用得过于频繁，其输出结果将掩盖其错误报告，在这种情况下 WARN_ON_ONCE(something_bad_is_happening) 可能更合适。</p>
+<p>在并行代码中，可能发生的一个特别糟糕的情况是，某个函数期望在一个特定的锁保护下运行，但是实际上并没有获得锁。有时候，这样的函数会有这样的注释，调用者在调用本函数时，必须持有 foo_lock。但是，这样的注释并没有真正的作用，除非有人真的读了它。像 lock_is_held(&amp;foo_lock) 这样的语句则会更有效。</p>
+<p>Linux 内核的 lockdep 机制更进一步，它即报告潜在的死锁，也允许函数验证适当的锁持有者。当然，这些额外的函数引入了大量负载。因此，lockdep 并不一定适用于生产环境。</p>
+<p>那么，当检查是必须的，但是运行时负载不能被容忍时，能够做些什么呢？一种方式是静态分析。</p>
+<h2><a href="#静态分析" name="静态分析" class="anchor"><span class="anchor-link"></span></a>静态分析</h2>
+<p>静态分析是一种验证技术，其中一个程序将第二个程序作为输入，它报告第二个程序的错误和漏洞。非常有趣的是，几乎所有的程序都通过它们的编译器和解释器来执行静态分析。这些工具远远算不上完美，但在过去的几十年中，它们定位错误的能力得到了几大的改善。部分原因是它们现在拥有超过 64K 内存进行它们的分析工作。</p>
+<p>早期的 UNIX lint 工具是非常有用的，虽然它的很多功能都被并入 C 编译器了。目前仍然有类似 lint 的工具在开发和使用中。</p>
+<p>Sparse 静态分析查找 Linux 内核中的高级错误，包括：</p>
+<ol>
+  <li>对指向用户态数据结构的指针进行误用。</li>
+  <li>对过长的常量接收赋值。</li>
+  <li>空的 switch 语句。</li>
+  <li>不匹配的锁申请、释放原语。</li>
+  <li>对每 CPU 原语的误用。</li>
+  <li>在非 RCU 指针上使用 RCU 原语，反之亦然。</li>
+</ol>
+<p>虽然编译器极有可能会继续提升其静态分析能力，但是 sparse 静态分析展示了编译器外静态分析的优势，尤其是查找应用特定 BUG 的优势。</p>
+<h2><a href="#代码走查" name="代码走查" class="anchor"><span class="anchor-link"></span></a>代码走查</h2>
+<p>各种代码走查活动是特殊的静态分析活动，只不过是由人来完成分析而已。</p>
+<h3><a href="#审查" name="审查" class="anchor"><span class="anchor-link"></span></a>审查</h3>
+<p>传统意义上来说，正式的代码审查采取面对面会谈的形式，会谈者有正式定义的角色：主持人、开发者以及一个或两个其他参与者。开发者通读整个代码，解释做什么，以及它为什么这样运行。一个或者两个参与者提出疑问并抛出问题。而主持人的任务，则是解决冲突并做记录。这个过程对于定于 BUG 是非常有效的，尤其是当所有参与者都熟悉手头代码时，更加有效。</p>
+<p>但是，对于全球 Linux 内核开发社区来说，这种面对面的过程并不一定运行得很好，虽然通过 IRC 会话它也许能够很好运行。与之相反，全球 Linux 内核社区有个人进行单独的代码审查，并通过邮件或者 IRC 提供意见。则记录由邮件文档或者 IRC 日志提供。主持人志愿提供相应的服务。偶尔来一点口水战，这样的过程也允许的相当不错，尤其是参与者对手头的代码都很熟悉的时候。</p>
+<p>是时候进行 Linux 内核社区的代码审查过程改进了，这是很有可能的。</p>
+<ol>
+  <li>有时，人们缺少进行有效的代码审查所需要的时间和专业知识。</li>
+  <li>即使所有的审查讨论都被存档，人们也经常没有记录对问题的见解，人们通常无法找到这些讨论过程。这会导致相同的错误被再次引入。</li>
+  <li>当参与者吵得不可开交时，有时难于解决口水纷争。尤其是交战双方的目的、经验及词汇都没有共同之处时。</li>
+</ol>
+<p>因此，在审查时，查阅相关的提交记录、错误报告及 LWN 文档等相关文档是有价值的。</p>
+<h3><a href="#走查" name="走查" class="anchor"><span class="anchor-link"></span></a>走查</h3>
+<p>传统的代码走查类似于正式的代码审查，只不过小组成员以特定的测试用例集来驱动，对着代码摆弄电脑。典型的走查小组包含一个主持人，一个秘书，一个测试专家，以及一个或者两个其他的人。这也是非常有效的，但是也非常耗时。</p>
+<p>自从我参加到正式的走查依赖，已经有好几十年了。而且我也怀疑如今的走查将使用单步调试。我想到的一个特别恐怖的过程是这样的：</p>
+<ol>
+  <li>测试者提供测试用例。</li>
+  <li>主持人使用特定的用例作为输入，在调试器中启动代码。</li>
+  <li>在每一行语句执行前，开发者需要预先指出语句的输出，并解释为什么这样的输出是正确的。</li>
+  <li>如果输出与开发者预先指出的不一致，这将被作为一个潜在 BUG 的迹象。</li>
+  <li>在并发代码走查中，一个并发老手将提出问题，什么样的代码会与当前代码并发运行，为什么这样的并行没有问题？</li>
+</ol>
+<p>恐怖吧，当然。但是有效吗？也许。如果参与者对需求、软件工具、数据结构及算法都有良好的理解，相应的走查可能非常有效。如果不是如此，走查通常是在浪费时间。</p>
+<h3><a href="#自查" name="自查" class="anchor"><span class="anchor-link"></span></a>自查</h3>
+<p>虽然开发者审查自己的代码并不总是有效，但是有一些情形下，无法找到合适的替代方案。例如，开发者可能是被授权查看代码的唯一人员，其他合格的开发人员可能太忙，或者有问题的代码太离奇，以至于只有在开发者展示一个原型后，他才能说服他人认证对待它。在这行情况下，下面的过程是十分有用的，特别是对于复杂的并行代码而言。</p>
+<ol>
+  <li>写出包含需求的设计文档、数据结构图表，以及设计选择的原因。</li>
+  <li>咨询专家，如果有必要就修正设计文档。</li>
+  <li>用笔在纸上写下代码，一边写代码一边修正错误。抵制住对已经存在的、几乎相同的代码序列的引用，相反，你应该复制他们。</li>
+  <li>如果有错误，用笔在干净的纸上面复制代码，以便做这些事情一边修正错误。一直重复，直到最后两份副本完全相同。</li>
+  <li>为那些不是那么显而易见的代码，给出正确性证明。</li>
+  <li>在可能的情况下，自底向上的测试代码片段。</li>
+  <li>当所有代码都集成后，进行全功能测试和压力测试。</li>
+  <li>一旦代码通过了所有测试，写下代码级的文档，也许还会对前面讨论的设计文档进行扩充。</li>
+</ol>
+<p>当我在新的 RCU 代码中，忠实的遵循这个流程时，最终只有少量 BUG 存在。在面对一些著名的异常时，我通常能够在其他人之前定位 BUG。也就是说，随着时间的推移，以及 Linux 内核用户数量和种类的增加，这变得更难以解决。</p>
+<p>对于新代码来说，上面的过程运转的很好，但是如果你需要对已经编写完成的代码进行审查时，又会怎样呢？如果你编写哪种将废弃的代码，在这种情况下，当然可以实施上面的过程，但是下面的方法也是有帮助的，这是不是会令你感到不适那么绝望。</p>
+<ol>
+  <li>使用你喜欢的文档工具，描述问题中所述代码的高层设计。使用大量的图来表示数据结构，以及这些是如何被修改的。</li>
+  <li>复制一份代码，删掉所有的注释。</li>
+  <li>用文档逐行记录代码是在干什么。</li>
+  <li>修复你所找到的 BUG。</li>
+</ol>
+<p>这种方法能够工作，是因为对代码进行详细描述，是一种极为有效的发现 BUG 的方法。虽然后面的过程也是一种真正理解别人代码的好方法，但是在很多情况下，只需要第一步就够了。</p>
+<p>虽然由别人来进行复查及审查可能更有效，但是由于某种原因无法让别人参与进来时，上述过程就十分有用了。</p>
+<p>在这一点上，你可能想知道如何在不做上述那些无聊的纸面工作的情况下，编写并行代码。下面是一些能够达到目的的且经过时间检验的方法。</p>
+<ol>
+  <li>通过扩展使用已有并行库函数，写出一个顺序程序。</li>
+  <li>为并行框架写出顺序执行的插件。如果地图渲染、BIONC 或者 WEB 应用服务器。</li>
+  <li>做如下优秀的并行设计，问题被完整的分割，然后仅仅实现顺序程序，这些顺序程序并发运行而不必相互通信。</li>
+  <li>坚守在某个领域(如线性代数)，在这些领域中，工具可以自定对问题进行分解及并行化。</li>
+  <li>对并行原语进行及其严格的使用，这样最终代码容易被看出其正确性。但是请注意，它总是诱使你打破“小步前进”这个规则，以获得更好的性能可扩展性。破坏规则常常导致意外。也就是说，除非你小心进行本节描述的纸面工作，否则就会有意外发生。</li>
+</ol>
+<p>一个不幸的事情是，即使你做了纸面工作，或者使用前述某个方法，以安全地避免纸面工作，仍然会有 BUG。如果不出意外，更多用户或者更多类型的用户将更快暴露出更多的 BUG。特别是，这些用户做了最初那些开发者所没有考虑到的事情时，更容易暴露 BUG。下一步将描述如何处理概率性 BUG，这些 BUG 在验证并行软件时都非常常见。</p>
+<h2><a href="#几率和海森堡-bug" name="几率和海森堡-bug" class="anchor"><span class="anchor-link"></span></a>几率和海森堡 BUG</h2>
+<p>某些时候你的并行程序失败了。</p>
+<p>但是你使用前面章节的技术定位问题，现在，有了适当的修复办法！</p>
+<p>现在的问题是，需要多少测试以确定你真的修复了 BUG，而不仅仅是降低了故障发生的几率，或者说仅仅修复了几个相关 BUG 中的某几个，或者是干了一些无效的、不相关的修改。简而言之，是通过了还是侥幸？</p>
+<p>不幸的是，摸着良心来回答这个问题，其答案是：要获得绝对的确定性，其所需要的测试量是无限的。</p>
+<p>假如我们愿意放弃绝对的确定性，取而代之的是获得某种高几率的东西。那么我们可以用强大的统计工具来应对这个问题。但是，本节专注于简单的统计工具。这些工具是及其有用的，但是请注意，阅读本节并不能代替你采用那些优秀的统计工具。</p>
+<p>从简单的统计工具开始，我们需要确定，我们是在做离散测试，还是在做连续测试。离散测试以良好定义的、独立的测试用例为特征。例如，Linux 内核补丁的启动测试就是一个离散测试的例子。启动内核，它要么启动、要么不能启动。虽然你可能花费一小时来进行内核启动测试，试图启动内核的次数、启动成功的次数，通常比花在测试上面的时间更人关注。功能测试往往是离散的。</p>
+<p>另一方面，如果我的补丁与 RCU 相关，我很可能会运行 rcutortue，这是一个十分奇妙的内核模块，用于测试 RCU。它不同于启动测试。在启动测试中，一旦出现相应的登录提示符，就表名离散测试已经成功结束。Rcutortue 则会一直持续运行，知道内存崩溃或要求它停止为止。因此，rcutortue 测试的持续时间，将比启动、停止它的次数更令人关注。所以说，rcutortue 是一个持续测试的例子，这类测试包含很多压力测试。</p>
+<p>离散测试和持续测试的统计方式有所不同。离散测试的统计更简单，并且，离散测试的统计通常可以被计入持续测试中。因此，我们先从离散测试开始。</p>
+<h3><a href="#离散测试统计" name="离散测试统计" class="anchor"><span class="anchor-link"></span></a>离散测试统计</h3>
+<p>假设在一个特定的测试中，BUG 有 10% 的机会发生，并且我们做了 5 次测试。我们怎么算一次运行失败的几率？方法如下：</p>
+<ol>
+  <li>计算一次测试过程成功的几率，应该是 90%。</li>
+  <li>计算所有 5 次测试成功的几率，应该是 0.9 的 5 次方，大约是 59%。</li>
+  <li>存在两种可能性，要么 5 次全都成功，要么至少又一次失败。因此，至少又一次失败的可能是 100% 减去 59%，即 41%。</li>
+</ol>
+<p>假设一个特定测试有 10% 的几率失败。那需要允许多少次测试用例，才能导致失败的几率超过 99%？毕竟，如果我们将测试用例运行的次数足够多，使得至少有一次失败的几率达到 99%，如果此时并没有失败，那么斤斤有 1% 的几率表名这是由于好运气所导致。</p>
+<p>公式太多&hellip;.省略&hellip;</p>
+<h3><a href="#持续测试统计" name="持续测试统计" class="anchor"><span class="anchor-link"></span></a>持续测试统计</h3>
+<h3><a href="#定位海森堡-bug" name="定位海森堡-bug" class="anchor"><span class="anchor-link"></span></a>定位海森堡 BUG</h3>
+<p>这个思路也有助于说明海森堡 BUG，增加追踪和断言可以轻易减少 BUG 出现的几率。这也是为什么轻量级追踪和断言机制是如此重要的原因。</p>
+<p>“海森堡 BUG” 这个名字来源于量子力学的海森堡不确定性原理，该原理指出，在任何特定时间点，不可能同时精确计量某个粒子的位置和速度。任何视图更精确计量某个粒子位置的手段，都会增加速度的不确定性。类似的效果出现在海森堡 BUG 上，视图对海森堡 BUG 进行追踪，将会根本上改变其症状，甚至导致 BUG 不再出现。</p>
+<p>既然物理领域启发出这个问题的名字，那么我们着眼于物理领域的解决方案是合乎逻辑的。幸运的是，粒子物理学能够用于这个任务，为什么不构造“反——海森堡 BUG”的东西来消灭海森堡 BUG 呢？</p>
+<p>本节描述一些手段来实现这一点。</p>
+<ol>
+  <li>为竞争区增加延迟。</li>
+  <li>增加负载强度。</li>
+  <li>独立的测试可疑子系统。</li>
+  <li>模拟不常见的事件。</li>
+  <li>对有惊无险的事件进行计数。</li>
+</ol>
+<p>针对海森堡 BUG 来构造“反——海森堡 BUG”，这更像是一种艺术，而不是科学。</p>
+<h4><a href="#增加延迟" name="增加延迟" class="anchor"><span class="anchor-link"></span></a>增加延迟</h4>
+<h4><a href="#增加负载强度" name="增加负载强度" class="anchor"><span class="anchor-link"></span></a>增加负载强度</h4>
+<h4><a href="#隔离可疑的子系统" name="隔离可疑的子系统" class="anchor"><span class="anchor-link"></span></a>隔离可疑的子系统</h4>
+<h4><a href="#模拟不常见的事件" name="模拟不常见的事件" class="anchor"><span class="anchor-link"></span></a>模拟不常见的事件</h4>
+<h4><a href="#对有惊无险的事件进行计数" name="对有惊无险的事件进行计数" class="anchor"><span class="anchor-link"></span></a>对有惊无险的事件进行计数</h4>
+<h2><a href="#性能评估" name="性能评估" class="anchor"><span class="anchor-link"></span></a>性能评估</h2>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T005_concurrency/ipph/ch12-verification.html">CH12-形式验证</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T005_concurrency/ipph/ch11-validation.html#ch11-验证" class="header">CH11-验证</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#简介" class="header">简介</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#跟踪" class="header">跟踪</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#断言" class="header">断言</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#静态分析" class="header">静态分析</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#代码走查" class="header">代码走查</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#几率和海森堡-bug" class="header">几率和海森堡 BUG</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch11-validation.html#性能评估" class="header">性能评估</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

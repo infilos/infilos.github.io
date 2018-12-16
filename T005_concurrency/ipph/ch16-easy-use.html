@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH16-易于使用 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../T005_concurrency/ipph/index.html">深入并行编程</a></li>
+  <li>CH16-易于使用</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch16-易于使用" name="ch16-易于使用" class="anchor"><span class="anchor-link"></span></a>CH16-易于使用</h1>
+<p>“创建完美的 API 就像进行天衣无缝的犯罪。至少有 50 种可能出错的机会，如果你是天才，那么你能预见到其中的 25 种。”</p>
+<h2><a href="#简单是什么" name="简单是什么" class="anchor"><span class="anchor-link"></span></a>简单是什么</h2>
+<p>“简单”是相对而言的。比如很多人都会认为 15 小时的航空旅程有点痛苦——除非他们停下来考虑其他可选的出行方式，尤其是游泳。这意味着创建易于使用的 API 要求你相当了解目标用户。</p>
+<p>下面的问题说明了这一点——在目前仍然活着的所有人中随机选择一个，哪一种改变将提升他的生活？</p>
+<p>不存在某个唯一改变能够却把有助于每一个人的生活。毕竟，及其广泛的人有着极其广泛的需求、需要、欲望、愿望。饥饿的人需要食物，而额外的食物可能反而会加速严重肥胖者的死亡。过于兴奋对于很多年轻人来说是热切希望的，但是对那些正在从心脏病恢复的人来说却是致命的。有些信息，对于某些人的成功来说是极其关键的，但是这些信息对于其他人来说可能会是信息负担。如果你正在为某个软件项目工作，该项目想帮助某些人，而你对这些人一无所知。那么，当某些人对你的印象与你的努力不相符时，你不应该感到惊讶。</p>
+<p>如果你真的想帮助一群特定的人，应当与他们近距离工作一段时间，除此之外别无他法。不过，也有一些简单的事情可做，以提升用户对于你的软件幸福感的几率。</p>
+<h2><a href="#api-设计的-rusty-原则" name="api-设计的-rusty-原则" class="anchor"><span class="anchor-link"></span></a>API 设计的 Rusty 原则</h2>
+<p>本节改编自 Rusty Russell 在 2003 Ottawa Linux 研讨会主题演讲的一部分。Rusty 的关键点在于，设计目标不是使 API 易于使用，而是使 API 难于被误用。为此，Rusty 指出，他的“Rusty 准则”大大降低了这种“难于被误用”的属性。</p>
+<p>如下几点试图归纳 Linux 内核之上的 Rusty 准则：</p>
+<ol>
+  <li>它不能出错。虽然这是所有 API 设计都应该努力达到的标准，但是仅仅只有虚构的 dwim 命令才可能接近此标准。</li>
+  <li>编译器或者连接器不会让你出错。</li>
+  <li>如果出错了，编译器或连接器将向你警告。</li>
+  <li>最简单的用法是适合的。</li>
+  <li>名称将告诉你如何使用它。</li>
+  <li>要么正确的运行，要么就在运行时终止。</li>
+  <li>遵循通常的惯例，你将得到正确的结果。malloc 库函数是一个好的例子。虽然很容易使得内存分配失败，许许多多的项目没法使用它正常运行，至少大部分时间能够使其正常运行。与 Valgrind 集合使用 malloc，将 malloc 提升到“正确的做事，否则它总是会在运行时出错”的地步。</li>
+  <li>阅读文档，将正确的处理它。</li>
+  <li>查阅其实现，将正确的处理它。</li>
+  <li>阅读正确的邮件列表文档，将正确的处理它。</li>
+  <li>阅读正确的邮件列表文档，将错误的处理它。</li>
+  <li>查阅其实现，将错误的处理它。最初的 rcu_read_lock 非 CONFIG_PREEMPT 实现是一个糟糕的例子。</li>
+  <li>阅读文档，将错误的处理它。例如，DEC Alpha wmb 指令文档会误导一些开发者，认为该指令拥有更强大的内存序语义，而实际上并非如此。随后的文档澄清了这一点，将 wmb 指令提升到“阅读文档，将正确的处理它”的地步。</li>
+  <li>遵循常用的惯例，将错误的处理它。printf 语句就是这样的例子，因为开发者几乎总是不会去检查 printf 的错误返回值。</li>
+  <li>正确的做事，但是它将在运行时终止。</li>
+  <li>名称将告诉不要如何去使用它。</li>
+  <li>表面的用法是错误的。Linux 内核的 smp_mb 函数是这方面的例子。很多开发者都认为这个函数有比实际情况更强的内存序语义。14.2 节包含避免此错误的必要信息，正如 Linux 内核源码树的 Documentation 目录所述那样。</li>
+  <li>在你正确处理的时候，编译器或连接器反而警告你。</li>
+  <li>编译器或连接器不能让你得到正确的结果。</li>
+  <li>不可能得到正确的结果。gets 是一个著名的例子。实际上，gets 也许可以被描述为无条件的缓冲区溢出安全漏洞。</li>
+</ol>
+<h2><a href="#修整-mandelbrot-集合" name="修整-mandelbrot-集合" class="anchor"><span class="anchor-link"></span></a>修整 Mandelbrot 集合</h2>
+<p>有用程序集合类似于 Mandlebrot 集合，它并没有清晰的光滑边界——如果有，停机问题就可以被解决。我们需要可供人们使用的 API，而不是那些为完成博士论文所潜在需要的 API。因此，我们“修整 Mandlebrot 集合”，限制对 API 的使用，以简单描述所有潜在用途的子集。</p>
+<p>这样的修整似乎适得其反。毕竟，如果算法能够运行，为什么不使用它呢？</p>
+<p>要明白为什么至少有一些修整是绝对必要的，不妨考虑避免死锁的锁设计，它也许是其中最糟糕的设计方式。该设计使用一个环形双向链表，每一个线程有一个元素位于其中，该元素作为其头元素。当一个新线程被创建时，父线程必须向其中插入一个新元素，这需要某种方式的同步操作。</p>
+<p>保护该链表的一个方法是使用一个全局锁。但是，如果线程被频繁创建并删除，就可能形成一个瓶颈。另一个方法是使用一个哈希表，并且对哈希桶进行单独上锁。但是，当对链表进行按序扫描时，其性能堪忧。</p>
+<p>第三种方法是锁住单独的链表元素，并且需要在插入期间，将前驱元素和后继元素同时锁住。由于必须获得两把锁，因此需要确定获取锁的顺序。两种常规的方法是：按锁的地址顺序，或者按锁在链表中出现的顺序来获取，当链表头是被锁住的两个元素之一时，它总是被首先获取。但是，这两种方法都需要特殊的检测和判断。</p>
+<p>经过修整的解决方法是无条件的按照其在链表中的出现顺序来获得锁。但是会出现死锁吗？不会。</p>
+<p>要明白这一点，对链表中的元素进行编号，作为链表头的第一个元素编号为 0，最后一个元素其编号为 N(如果链表是环形的，其前驱元素就是链表头)。类似的，从 0 到 N-1 将线程进行编号。如果每一个线程视图锁住某些连续的元素对，至少确保有一个线程能够获得其中的两把锁。</p>
+<p>为什么？</p>
+<p>因为没有足够的线程能够遍历完整的链表。假设线程 0 获取元素 0 的锁，如果他被阻塞了，则必然有其他一些线程已经获取到了元素 1 的锁。我们假设是线程 1 获取到了元素 1 的锁。类似的，线程 1 也被阻塞了，则必然有其他线程获得了元素 2 的锁，以此类推，直到线程 N-1，该线程获得元素 N-1 的锁。如果线程 N-1 也被阻塞，则存在其他线程已经获取了元素 N 的锁。但是由于没有更多的线程，那么线程 N-1 不可能被阻塞，因此，死锁不可能会发生。</p>
+<p>因此，为什么要禁止使用这种看起来不错的简单算法呢？</p>
+<p>实际上，如果你真的想这么做，我们也不能阻拦。但是，对那些我们关注的项目，如果包含了这样的代码，我们要奉劝两句。</p>
+<p>在这个算法之前，请好好考虑如下小问题。</p>
+<p>事实上，这个算法是极其特殊的(它仅仅能在确定长度的链表上运行)，并且一点也不健壮。一不小心，错误的向链表中增加一个元素则可能导致死锁。甚至是稍微迟一点向其添加一个元素都会死锁。</p>
+<p>另外，前面描述的其他算法既不错、也足以解决问题。例如，简单的按照地址顺序获取锁，这是相当简单的，并且速度也快。而这种方法允许用于任意长度的链表。需要小心的是对特殊情况的处理：链表为空或链表仅包含一个元素。</p>
+<p>当然，我们不能因为某些算法刚好能够运行，就简单使用这些算法。相反，我们严格要求自己使用另外的算法，这些算法足够有用。为了学习这些算法，以及修复其 BUG 锁付出的艰辛，都是值得的。</p>
+<p>抛开例外情况不谈，我们仍然必须对 “Mandelbrot 集”进行修整，这样我们的软件才有可维护性。</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T005_concurrency/ipph/ch17-future-confilict.html">CH17-未来的冲突</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T005_concurrency/ipph/ch16-easy-use.html#ch16-易于使用" class="header">CH16-易于使用</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/ch16-easy-use.html#简单是什么" class="header">简单是什么</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch16-easy-use.html#api-设计的-rusty-原则" class="header">API 设计的 Rusty 原则</a></li>
+    <li><a href="../../T005_concurrency/ipph/ch16-easy-use.html#修整-mandelbrot-集合" class="header">修整 Mandelbrot 集合</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH06-现代计算机最亲密的伙伴：局部性与乐观 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T001_os/index.html">操作系统</a></li>
+  <li><a href="../../T001_os/performance-issue/index.html">^性能之殇</a></li>
+  <li>CH06-现代计算机最亲密的伙伴：局部性与乐观</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch06-现代计算机最亲密的伙伴-局部性与乐观" name="ch06-现代计算机最亲密的伙伴-局部性与乐观" class="anchor"><span class="anchor-link"></span></a>CH06-现代计算机最亲密的伙伴：局部性与乐观</h1>
+<p>冯·诺依曼架构中，指令和数据均存储在内存中，彻底打开了计算机“通用”的大门。这个结构中，“线性数组”内存天生携带了一个涡轮：局部性。</p>
+<h2><a href="#局部性分类" name="局部性分类" class="anchor"><span class="anchor-link"></span></a>局部性分类</h2>
+<h3><a href="#空间局部性" name="空间局部性" class="anchor"><span class="anchor-link"></span></a>空间局部性</h3>
+<p>空间局部性是最容易理解的局部性：如果一段内存被使用，那么之后，离他最近的内存也最容易被使用，无论是数据还是指令都是这样。举一个浅显易懂的例子：</p>
+<p>循环处理一个 Array，当处理完了 [2] 之后，下一个访问的就是 [3]，他们在内存里是相邻的。</p>
+<h3><a href="#时间局部性" name="时间局部性" class="anchor"><span class="anchor-link"></span></a>时间局部性</h3>
+<p>如果一个变量所在的内存被访问过，那么接下来这一段内存很可能被再次访问，例子也非常简单：</p>
+<pre><code>$a = [];
+if ( !$b ) {
+	$a[] = $b;
+}
+</code></pre>
+<p>在一个 <code>function</code> 内，一个内存地址很可能被访问、修改多次。</p>
+<h2><a href="#乐观" name="乐观" class="anchor"><span class="anchor-link"></span></a>乐观</h2>
+<p>“乐观”作为一种思考问题的方式广泛存在于计算机中，从硬件设计、内存管理、应用软件到数据库均广泛运用了这种思考方式，并给我们带来了十分可观的性能收益。</p>
+<h3><a href="#乐观的-cpu" name="乐观的-cpu" class="anchor"><span class="anchor-link"></span></a>乐观的 CPU</h3>
+<p>第一篇文章中的三级缓存和第二篇文章中的分支预测与流水线，均是乐观思想的代表。</p>
+<h3><a href="#乐观的虚拟内存" name="乐观的虚拟内存" class="anchor"><span class="anchor-link"></span></a>乐观的虚拟内存</h3>
+<p>虚拟内存依据计算机内存的局部性，将磁盘作为内存的本体，将内存作为磁盘的缓存，用很小的性能代价带来了数十倍并发进程数，是乐观思想的集大成者。</p>
+<h3><a href="#乐观的缓存" name="乐观的缓存" class="anchor"><span class="anchor-link"></span></a>乐观的缓存</h3>
+<p>Java 经典面试题 LRU 缓存实现，也是乐观思想的一种表达。</p>
+<p>同样，鸟哥的 <a href="http://www.laruence.com/2013/03/18/2846.html">yac</a> 也是这一思想的强烈体现。</p>
+<p>设计 Yac 的经验假设：</p>
+<ol>
+  <li>对于一个应用来说, 同名的 Cache 键, 对应的 Value 大小几乎相当。</li>
+  <li>不同的键名的个数是有限的。</li>
+  <li>Cache 的读次数, 远远大于写的次数。</li>
+  <li>Cache 不是数据库, 即使 Cache 失效也不会带来致命错误。</li>
+</ol>
+<p>Yac 的限制：</p>
+<ol>
+  <li>key 的长度最大不能超过 48 个字符. (我想这个应该是能满足大家的需求的, 如果你非要用长 Key, 可以 MD5 以后再存)</li>
+  <li>Value 的最大长度不能超过 64M, 压缩后的长度不能超过 1M。</li>
+  <li>当内存不够的时候, Yac 会有比较明显的踢出率, 所以如果要使用 Yac, 那么尽量多给点内存吧。</li>
+</ol>
+<h3><a href="#乐观锁" name="乐观锁" class="anchor"><span class="anchor-link"></span></a>乐观锁</h3>
+<p>乐观锁在并发控制和数据库设计里都拥有重要地位，其本质就是在特定的需求下，假定不会冲突，冲突之后再浪费较长时间处理，比直接每次请求都浪费较短时间检测，总体的性能高。乐观锁在算法领域有着非常丰富而成熟的应用。</p>
+<h3><a href="#乐观的分布式计算" name="乐观的分布式计算" class="anchor"><span class="anchor-link"></span></a>乐观的分布式计算</h3>
+<p>分布式计算的核心思想就是乐观，由 95% 可靠的 PC 机组成的分布式系统，起可靠性也不会达到 99.99%，但是绝大多数场景下，99% 的可靠性就够了，毕竟拿 PC 机做分布式比小型机便宜得多嘛。下一篇文章我会详细介绍分布式计算的性能之殇，此处不再赘述。</p>
+<h3><a href="#乐观的代价" name="乐观的代价" class="anchor"><span class="anchor-link"></span></a>乐观的代价</h3>
+<p>乐观给了我们很多的好处，总结起来就是一句话：以微小的性能损失换来大幅的性能提升。但是，人在河边走，哪有不湿鞋。每一个 2015 年 6 月入 A 股的散户，都觉得大盘还能再翻一番，岂不知一周之后，就是股灾了。</p>
+<p>乐观的代价来自于“微小的性能损失”，就跟房贷市场中“微小的风险”一样，当大环境小幅波动的时候，他确实能承担压力，稳住系统，但是怕就怕突然雪崩：</p>
+<ul>
+  <li>虚拟内存中的内存的局部性突然大幅失效，磁盘读写速度成了内存读写速度，系统卡死。</li>
+  <li>分布式数据库的六台机器中的 master 挂了，系统在一秒内选举出了新的 master，你以为系统会稳定运行？master 挂掉的原因就是压力过大，这样就会导致新的 master 瞬间又被打挂，然后一台一台地继续，服务彻底失效。</li>
+</ul>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T001_os/performance-issue/ch07.html">CH07-分布式计算、超级计算机与神经网络共同的瓶颈</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/performance-issue/ch06.html#ch06-现代计算机最亲密的伙伴-局部性与乐观" class="header">CH06-现代计算机最亲密的伙伴：局部性与乐观</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/ch06.html#局部性分类" class="header">局部性分类</a></li>
+    <li><a href="../../T001_os/performance-issue/ch06.html#乐观" class="header">乐观</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

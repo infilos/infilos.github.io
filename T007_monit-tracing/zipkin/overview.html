@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>Overview · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T007_monit-tracing/index.html">监控&amp;追踪</a></li>
+  <li><a href="../../T007_monit-tracing/zipkin/index.html">Zipkin</a></li>
+  <li>Overview</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#overview" name="overview" class="anchor"><span class="anchor-link"></span></a>Overview</h1>
+<p>Zipkin是一款开源的分布式实时数据追踪系统(Distributed Tracking System)，基于 Google Dapper 的论文设计而来，由 Twitter 公司开发贡献。其主要功能是聚集来自各个异构系统的实时监控数据。</p>
+<h2><a href="#架构概览" name="架构概览" class="anchor"><span class="anchor-link"></span></a>架构概览</h2>
+<p>应用中的追踪器(Tracer)将会记录所发生的操作的时间(Timing)及元信息(Metadata)。这些追踪器通常是检测仪器类库，因此对于用户来说通常是透明的。比如，一个被装备了检测仪器类库的 Web 服务在接收到请求和返回响应时将会执行记录动作。被收集到的追踪数据则被称为一个 Span。</p>
+<p>检测仪器类库会以生产安全的方式被编写，并拥有很小的负载。因此它们仅在带内(in-band)传播一些 ID，以便告诉接收器正在进行的追踪。完成的 Span 将会被发送给带外(out-of-band) Zipkin，类似于应用异步的发送度量信息的方式。</p>
+<p>比如，当一个需要对外发起 HTTP 请求的操作被追踪，几个请求头会被添加到传播 ID。而请求头并不会携带其他细节，比如被追踪的操作名称。</p>
+<p>在被装置监控仪器的(Instrumented)应用中，向 Zipkin 发送数据的组件被称为 Reporter。Reporter 使用多种传输器中的一种将追踪数据发送给 Zipkin 的接收器，而接收器会将数据持久化到存储中。然后，API 会查询存储中的数据以在 UI 中展示。</p>
+<p>下图展示了整个流程：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180920225941.png" style="display:block;width:70%;" alt="NAME" align=center />
+</div>
+<h2><a href="#示例流程" name="示例流程" class="anchor"><span class="anchor-link"></span></a>示例流程</h2>
+<pre><code>┌─────────────┐ ┌───────────────────────┐  ┌─────────────┐  ┌──────────────────┐
+│ User Code   │ │ Trace Instrumentation │  │ Http Client │  │ Zipkin Collector │
+└─────────────┘ └───────────────────────┘  └─────────────┘  └──────────────────┘
+       │                 │                         │                 │
+           ┌─────────┐
+       │ ──┤GET /foo ├─▶ │ ────┐                   │                 │
+           └─────────┘         │ record tags
+       │                 │ ◀───┘                   │                 │
+                           ────┐
+       │                 │     │ add trace headers │                 │
+                           ◀───┘
+       │                 │ ────┐                   │                 │
+                               │ record timestamp
+       │                 │ ◀───┘                   │                 │
+                             ┌─────────────────┐
+       │                 │ ──┤GET /foo         ├─▶ │                 │
+                             │X-B3-TraceId: aa │     ────┐
+       │                 │   │X-B3-SpanId: 6b  │   │     │           │
+                             └─────────────────┘         │ invoke
+       │                 │                         │     │ request   │
+                                                         │
+       │                 │                         │     │           │
+                                 ┌────────┐          ◀───┘
+       │                 │ ◀─────┤200 OK  ├─────── │                 │
+                           ────┐ └────────┘
+       │                 │     │ record duration   │                 │
+            ┌────────┐     ◀───┘
+       │ ◀──┤200 OK  ├── │                         │                 │
+            └────────┘       ┌────────────────────────────────┐
+       │                 │ ──┤ asynchronously report span     ├────▶ │
+                             │                                │
+                             │{                               │
+                             │  &quot;traceId&quot;: &quot;aa&quot;,              │
+                             │  &quot;id&quot;: &quot;6b&quot;,                   │
+                             │  &quot;name&quot;: &quot;get&quot;,                │
+                             │  &quot;timestamp&quot;: 1483945573944000,│
+                             │  &quot;duration&quot;: 386000,           │
+                             │  &quot;annotations&quot;: [              │
+                             │--snip--                        │
+                             └────────────────────────────────┘
+</code></pre>
+<p>如上图，应用代码发起 Http Get 请求(请求路径/foo)，经过 Trace 框架拦截，并依次经过如下步骤，记录Trace 信息到 Zipkin 中：</p>
+<ol>
+  <li>记录 tags 信息</li>
+  <li>将当前调用链的 Trace 信息记录到 Http Headers 中</li>
+  <li>记录当前调用的时间戳(timestamp)</li>
+  <li>发送 HTTP 请求，并携带 Trace 相关的 Header，如 X-B3-TraceId:aa，X-B3-SpandId:6b</li>
+  <li>调用结束后，记录当次调用所花的时间(duration)</li>
+  <li>将步骤 1-5，汇总成一个Span(最小的Trace单元)，异步上报该 Span 信息给 Zipkin Collector</li>
+</ol>
+<h2><a href="#数据模型" name="数据模型" class="anchor"><span class="anchor-link"></span></a>数据模型</h2>
+<p>一个 Span 的示例数据：</p>
+<pre class="prettyprint"><code class="language-json">{
+    &quot;traceId&quot;: &quot;string&quot;,
+    &quot;name&quot;: &quot;string&quot;,
+    &quot;parentId&quot;: &quot;string&quot;,
+    &quot;id&quot;: &quot;string&quot;,
+    &quot;kind&quot;: &quot;CLIENT&quot;,
+    &quot;timestamp&quot;: 0,
+    &quot;duration&quot;: 0,
+    &quot;debug&quot;: true,
+    &quot;shared&quot;: true,
+    &quot;localEndpoint&quot;: {
+      &quot;serviceName&quot;: &quot;string&quot;,
+      &quot;ipv4&quot;: &quot;string&quot;,
+      &quot;ipv6&quot;: &quot;string&quot;,
+      &quot;port&quot;: 0
+    },
+    &quot;remoteEndpoint&quot;: {
+      &quot;serviceName&quot;: &quot;string&quot;,
+      &quot;ipv4&quot;: &quot;string&quot;,
+      &quot;ipv6&quot;: &quot;string&quot;,
+      &quot;port&quot;: 0
+    },
+    &quot;annotations&quot;: [
+      {
+        &quot;timestamp&quot;: 0,
+        &quot;value&quot;: &quot;string&quot;
+      }
+    ],
+    &quot;tags&quot;: {
+      &quot;additionalProp1&quot;: &quot;string&quot;,
+      &quot;additionalProp2&quot;: &quot;string&quot;,
+      &quot;additionalProp3&quot;: &quot;string&quot;
+    }
+  }
+</code></pre>
+<p>更多数据模型可以查看 Zipkin 的 <a href="https://zipkin.io/zipkin-api/#/">API 文档</a>。</p>
+<h2><a href="#数据传输" name="数据传输" class="anchor"><span class="anchor-link"></span></a>数据传输</h2>
+<p>被追踪器发送的 Span 必须在被追踪的服务上发送给 Zipkin 的收集器。有三种主要的传输器：HTTP、Kafka、Scribe。</p>
+<h2><a href="#基本组件" name="基本组件" class="anchor"><span class="anchor-link"></span></a>基本组件</h2>
+<h3><a href="#zipkin-collector" name="zipkin-collector" class="anchor"><span class="anchor-link"></span></a>Zipkin Collector</h3>
+<p>数据一旦抵达 Zipkin 的收集器程序，则会被收集器验证、存储、索引以便查询。</p>
+<h3><a href="#storage" name="storage" class="anchor"><span class="anchor-link"></span></a>Storage</h3>
+<p>Zipkin 最初构建于将数据存储到 Cassandra，因为其可扩展、拥有灵活的 Schema，并且在 Twitter 内大量使用。然而，我们将该组件实现为可插拔的形式。目前原生支持 ElasticSearch 和 MySQL，并能通过三方扩展实现对其他存储的支持。</p>
+<h3><a href="#zipkin-query-service" name="zipkin-query-service" class="anchor"><span class="anchor-link"></span></a>Zipkin Query Service</h3>
+<p>一旦数据被存储并索引，我们需要一种方式来检索它们。查询程序提供了一种简单的 JSON API 用于查找或检索追踪数据。该 API 的主要消费者则是用于展示追踪数据的 Web UI。</p>
+<h3><a href="#web-ui" name="web-ui" class="anchor"><span class="anchor-link"></span></a>Web UI</h3>
+<p>Web UI 提供了一种直观的方式来基于服务、时间、注解来展示追踪数据。</p>
+<h2><a href="#reference" name="reference" class="anchor"><span class="anchor-link"></span></a>Reference</h2>
+<ul>
+  <li><a href="https://zipkin.io/pages/architecture.html">zipkin.io</a></li>
+  <li><a href="https://github.com/openzipkin/zipkin">github</a></li>
+</ul>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T007_monit-tracing/zipkin/integration.html">Integration</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T007_monit-tracing/zipkin/overview.html#overview" class="header">Overview</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#架构概览" class="header">架构概览</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#示例流程" class="header">示例流程</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#数据模型" class="header">数据模型</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#数据传输" class="header">数据传输</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#基本组件" class="header">基本组件</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/overview.html#reference" class="header">Reference</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>

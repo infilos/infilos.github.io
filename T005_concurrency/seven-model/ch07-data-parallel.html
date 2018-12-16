@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+<head>
+<title>CH07-数据并行 · Infilos</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content='Infilos'/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100normal,100italic,300normal,300italic,400normal,400italic,500normal,500italic,700normal,700italic,900normal,900italicc" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/page.js"></script>
+<script type="text/javascript" src="../../js/warnOldVersion.js"></script>
+<script type="text/javascript" src="../../js/groups.js"></script>
+<link rel="stylesheet" type="text/css" href="../../lib/normalize.css/normalize.css"/>
+<link rel="stylesheet" type="text/css" href="../../lib/foundation/dist/foundation.min.css"/>
+<link rel="stylesheet" type="text/css" href="../../css/page.css"/>
+
+<!--
+<link rel="shortcut icon" href="../../images/favicon.ico" />
+-->
+</head>
+
+<body>
+<div class="off-canvas-wrapper">
+<div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
+
+<div class="off-canvas position-left" id="off-canvas-menu" data-off-canvas>
+<nav class="off-canvas-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="off-canvas-content" data-off-canvas-content>
+
+<header class="site-header expanded row">
+<div class="small-12 column">
+<a href="#" class="off-canvas-toggle hide-for-medium" data-toggle="off-canvas-menu"><svg class="svg-icon svg-icon-menu" version="1.1" id="Menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 20 20" enable-background="new 0 0 20 20" xml:space="preserve"> <path class="svg-icon-menu-path" fill="#53CDEC" d="M16.4,9H3.6C3.048,9,3,9.447,3,10c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,9.447,16.952,9,16.4,9z M16.4,13
+H3.6C3.048,13,3,13.447,3,14c0,0.553,0.048,1,0.6,1H16.4c0.552,0,0.6-0.447,0.6-1C17,13.447,16.952,13,16.4,13z M3.6,7H16.4
+C16.952,7,17,6.553,17,6c0-0.553-0.048-1-0.6-1H3.6C3.048,5,3,5.447,3,6C3,6.553,3.048,7,3.6,7z"/></svg>
+</a>
+<div class="title"><a href="../../index.html">Infilos</a></div>
+
+<!--
+<a href="https://www.example.com" class="logo show-for-medium">logo</a>
+-->
+</div>
+</header>
+
+<div class="expanded row">
+
+<div class="medium-3 large-2 show-for-medium column">
+<nav class="site-nav">
+<div class="nav-home">
+<a href="../../index.html" >
+<span class="home-icon">⌂</span>Infilos
+</a>
+<div class="version-number">
+1.0
+</div>
+</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T001_os/index.html" class="page">操作系统</a>
+  <ul>
+    <li><a href="../../T001_os/performance-issue/index.html" class="page">^性能之殇</a></li>
+  </ul></li>
+  <li><a href="../../T002_vm/index.html" class="page">虚拟机</a>
+  <ul>
+    <li><a href="../../T002_vm/java-vm/index.html" class="page">Java VM</a></li>
+  </ul></li>
+  <li><a href="../../T003_java-lang/index.html" class="page">Java Lang</a>
+  <ul>
+    <li><a href="../../T003_java-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T003_java-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T003_java-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T003_java-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T004_scala-lang/index.html" class="page">Scala Lang</a>
+  <ul>
+    <li><a href="../../T004_scala-lang/basics/index.html" class="page">Basics</a></li>
+    <li><a href="../../T004_scala-lang/effects/index.html" class="page">Effectives</a></li>
+    <li><a href="../../T004_scala-lang/profess/index.html" class="page">Professionals</a></li>
+    <li><a href="../../T004_scala-lang/puzzles/index.html" class="page">Puzzles</a></li>
+  </ul></li>
+  <li><a href="../../T005_concurrency/index.html" class="page">并发编程</a>
+  <ul>
+    <li><a href="../../T005_concurrency/ipph/index.html" class="page">深入并行编程</a></li>
+    <li><a href="../../T005_concurrency/seven-model/index.html" class="page">并发编程模型</a></li>
+    <li><a href="../../T005_concurrency/java-thread-model/index.html" class="page">Java 并发模型</a></li>
+    <li><a href="../../T005_concurrency/jc-practice/index.html" class="page">Java 并发实践</a></li>
+  </ul></li>
+  <li><a href="../../T006_networking/index.html" class="page">网络编程</a></li>
+  <li><a href="../../T007_monit-tracing/index.html" class="page">监控&amp;追踪</a>
+  <ul>
+    <li><a href="../../T007_monit-tracing/google-dapper-essentials.html" class="page">Google Dapper</a></li>
+    <li><a href="../../T007_monit-tracing/opentracing-spec.html" class="page">OpenTracing</a></li>
+    <li><a href="../../T007_monit-tracing/zipkin/index.html" class="page">Zipkin</a></li>
+    <li><a href="../../T007_monit-tracing/pinpoint.html" class="page">Pinpoint</a></li>
+  </ul></li>
+</ul>
+</div>
+
+</nav>
+</div>
+
+<div class="small-12 medium-9 large-10 column">
+<section class="site-content">
+
+<span id="version-warning"></span>
+
+<div class="page-header row">
+<div class="medium-12 show-for-medium column">
+<div class="nav-breadcrumbs">
+<ul>
+  <li><a href="../../index.html">Infilos</a></li>
+  <li><a href="../../T005_concurrency/index.html">并发编程</a></li>
+  <li><a href="../../T005_concurrency/seven-model/index.html">并发编程模型</a></li>
+  <li>CH07-数据并行</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="page-content row">
+<div class="small-12 large-9 column" id="docs">
+<h1><a href="#ch07-数据并行" name="ch07-数据并行" class="anchor"><span class="anchor-link"></span></a>CH07-数据并行</h1>
+<p>数据并行就像是八车道的高速公路，虽然每辆车的速度相对平缓，但由于多辆车可以同时行进，所以通过某一点的车流量可以很大。</p>
+<p>到目前为止，我们讨论的每一项技术都可以用于解决多种编程问题。相比之下，数据并行只适用于很窄的范围。顾名思义，数据并行是并行编程技术，而不是并发编程技术。</p>
+<h2><a href="#gpgpu" name="gpgpu" class="anchor"><span class="anchor-link"></span></a>GPGPU</h2>
+<p>图形处理单元(GPU)是隐藏在电脑中的超级计算机。现代 GPU 是一个强力的数据并行处理器，其用于数学计算时的性能超越 CPU，这种做法称为基于图形处理器的通用计算，即 GPGPU。</p>
+<h3><a href="#图形处理与数据并行" name="图形处理与数据并行" class="anchor"><span class="anchor-link"></span></a>图形处理与数据并行</h3>
+<p>计算机图形学主要研究如何处理数据、如何处理大量数据以及如何快速处理大量数据。3D 游戏的一个场景是由无数个小三角构成的，每个三角形都需根据与视点的透视关系计算出其在屏幕上的位置，并进行裁剪、光照处理、修饰纹理等，这些操作每秒钟都要进行 25 次以上。</p>
+<p>虽然需要处理的计算量是很大的，但它有一个非常好的特性：施加在数据上的操作都是相对姜丹的向量操作或矩阵操作。因此这种场景非常适合数据并行——多个计算资源会在不同的数据上并行施加相同的操作。</p>
+<p>现代 GPU 是十分复杂但非常强力的并行处理器，其 1 秒钟可以处理几十亿个三角形。虽然设计 GPU 的主要目的是为了满足图形计算的需要，但是 GPU 也可用于更广的领域。</p>
+<p>数据并行可以通过多种方式来实现，我们要学习其中两种：流水线和多 ALU。</p>
+<h4><a href="#流水线" name="流水线" class="anchor"><span class="anchor-link"></span></a>流水线</h4>
+<p>虽然看上去两数相乘是一个原子操作，但如果从芯片上的门电路角度看，这个操作实际上是分几步完成的。这些操作通常被排列成流水线型，如下图：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180928003718.png" style="display:block;width:50%;" alt="NAME" align=center />
+</div>
+<p>上图是一个拥有 5 个步骤的流水线，如果每一步需要一个时钟周期来完成，那将一组数(两个数)相乘就需要 5 个时钟周期。但如果有多组数相乘，就可以通过让流水线饱和来获得更好的性能，如下图：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180928003922.png" style="display:block;width:50%;" alt="NAME" align=center />
+</div>
+<p>如果需要将 1000 组数相乘，每组数需要 5 个时钟周期，看上去总共需要 5000 个时钟周期，而如上图所示，仅需要略多于 1000 个时钟周期即可完成。</p>
+<h4><a href="#多-alu" name="多-alu" class="anchor"><span class="anchor-link"></span></a>多 ALU</h4>
+<p>CPU 中负责进行乘法运算的组件称为算术逻辑单元，即 ALU，如下图：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180928005927.png" style="display:block;width:30%;" alt="NAME" align=center />
+</div>
+<p>只需要搭配足够多的内存总线，多个 ALU 就可以同时获取多个操作数，这样施加在大量数据上的运算就可以并行了，如下图：</p>
+<div  align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180928005954.png" style="display:block;width:60%;" alt="NAME" align=center />
+</div>
+<p>GPU 的内存总线通常有 256 位或更宽，也就是说一次可以获取 8 个或更多个 32 位的浮点数。</p>
+<h4><a href="#混乱的局面" name="混乱的局面" class="anchor"><span class="anchor-link"></span></a>混乱的局面</h4>
+<p>为了获得更好的性能，现实中的 GPU 会综合使用流水线、多 ALU 以及许多本书尚未提及的技术，这就进一步增加了理解 GPU 的难度。更遗憾的是，不同的 GPU 之间的共性很少，如果必须针对某个 GPU 架构开发代码，GPGPU 编程并非最佳选择。</p>
+<p>OpenCL 定义了一种类 C 的语言，可以针对多种架构抽象的进行编程。不过的 GPU 厂商会提供各自的编译器和驱动程序，使代码可以被编译并运行在对应的 GPU 上。</p>
+<h2><a href="#总结" name="总结" class="anchor"><span class="anchor-link"></span></a>总结</h2>
+<h3><a href="#优点" name="优点" class="anchor"><span class="anchor-link"></span></a>优点</h3>
+<p>数据并行非常适用于处理大量数值数据，尤其适合用于科学计算、工程计算及仿真领域，比如流体力学、有限元分析、N 体模型、模拟退火、蚁群优化、神经网络等。</p>
+<p>GPU 不仅是强大的数据并行处理器，在能耗方面也变现出众，比传统的 CPU 有更加优秀的 GFLOPS/watt 指标。世界上最快的超级计算机都广泛使用 GPU 或专用数据并行协处理器，其中能耗指标低是一个重要的原因。</p>
+<h3><a href="#缺点" name="缺点" class="anchor"><span class="anchor-link"></span></a>缺点</h3>
+<p>数据并行编程，更准确的说是 GPGPU 编程，在其适合领域内所向披靡。但并不适用于所有问题领域。值得一提的是，虽然用数据并行可以解决一些非数值问题(如自然语言处理)，但这样做并不容易——现今的工具集绝大多数关注的是数值处理。</p>
+<p>对 OpenCL 内核的调优是个技术活，理解底层架构的细节才能有效的进行调优。如果要写出高效的跨平台代码，就会变得异常复杂。在解决某些问题时，从主机往设备上复制数据会消耗大量时间，这会减弱甚至低效我们从事并行计算中获得的收益&hellip;..</p>
+<div class="nav-next">
+<p><strong>Next:</strong> <a href="../../T005_concurrency/seven-model/ch08-lambda.html">CH08-Lambda 架构</a></p>
+</div>
+</div>
+<div class="large-3 show-for-large column" data-sticky-container>
+<nav class="sidebar sticky" data-sticky data-anchor="docs" data-sticky-on="large">
+<div class="page-nav">
+<div class="nav-title">On this page:</div>
+<div class="nav-toc">
+<ul>
+  <li><a href="../../T005_concurrency/seven-model/ch07-data-parallel.html#ch07-数据并行" class="header">CH07-数据并行</a>
+  <ul>
+    <li><a href="../../T005_concurrency/seven-model/ch07-data-parallel.html#gpgpu" class="header">GPGPU</a></li>
+    <li><a href="../../T005_concurrency/seven-model/ch07-data-parallel.html#总结" class="header">总结</a></li>
+  </ul></li>
+</ul>
+</div>
+</div>
+</nav>
+</div>
+</div>
+
+</section>
+</div>
+
+</div>
+
+<footer class="site-footer">
+
+<section class="site-footer-nav">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 medium-4 large-3 text-center column">
+<div class="nav-links">
+<ul>
+<!-- <li><a href="https://www.example.com/products/">Products</a> -->
+</ul>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+
+<section class="site-footer-base">
+<div class="expanded row">
+<div class="small-12 large-offset-2 large-10 column">
+<div class="row site-footer-content">
+
+<div class="small-12 text-center large-9 column">
+
+<!--
+<div class="copyright">
+<span class="text">&copy; 2018</span>
+<a href="https://www.example.com" class="logo">logo</a>
+</div>
+-->
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</footer>
+
+</div>
+</div>
+</div>
+</body>
+
+<script type="text/javascript" src="../../lib/foundation/dist/foundation.min.js"></script>
+<script type="text/javascript">jQuery(document).foundation();</script>
+<script type="text/javascript" src="../../js/magellan.js"></script>
+
+<style type="text/css">@import "../../lib/prettify/prettify.css";</style>
+<script type="text/javascript" src="../../lib/prettify/prettify.js"></script>
+<script type="text/javascript" src="../../lib/prettify/lang-scala.js"></script>
+<script type="text/javascript">jQuery(function(){window.prettyPrint && prettyPrint()});</script>
+<script type="text/javascript">jQuery(function(jq){initOldVersionWarnings(jq, '1.0', '')});</script>
+
+
+</html>
