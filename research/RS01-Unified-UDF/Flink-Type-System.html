@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | Flink Type System </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"Flink Type System","path":"research/RS01-Unified-UDF/Flink-Type-System.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html"},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html"},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html"},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html"},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot=""><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class="">SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class="" href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <blockquote>
+<p><strong>为什么以及如何构建一个类型系统。</strong></p>
+</blockquote>
+<h1 id="Flink-Type-System"><a href="#Flink-Type-System" class="headerlink" title="Flink Type System"></a>Flink Type System</h1><p>Flink 在内部构建了一套自己的类型系统，因为 Flink 需要推导那些在分布式计算过程中被传输和存储的数据的相关类型信息。就像数据库对表结构的引用一样。在大多数情况下，Flink 均使用自己的这套类型系统来无缝的推导类型信息。基于丰富的类型类型信息，Flink 可以完成更多功能的实现，如：</p>
+<ul>
+<li>使用 POJO 类型，并通过对其字段名的引用来执行 grouping、joining、aggregating。类型信息能够帮助 Flink 在早期完成检查(拼写错误或类型兼容性)，而非在运行时导致失败。</li>
+<li>Flink 对类型信息了解越多，序列化和数据布局结构则会更好。这对于 Flink 中内存的应用范式是非常重要的(尽可能在堆内外处理序列化数据，以使得序列化过程变得廉价)。</li>
+<li>避免用户在大多数情况下对序列化框架的担心，同时避免对类型的手动注册过程。</li>
+</ul>
+<h2 id="类型层级"><a href="#类型层级" class="headerlink" title="类型层级"></a>类型层级</h2><ul>
+<li>Basic<ul>
+<li>Java Primitive Types</li>
+<li>void/String/Date/BigDecimal/BigInteger</li>
+</ul>
+</li>
+<li>Array<ul>
+<li>Array of Primitive</li>
+<li>Array of Object</li>
+</ul>
+</li>
+<li>Composite<ul>
+<li>Java Tuple, max 25 fields</li>
+<li>Scala case class/tuple, max 22 fields</li>
+<li>Row, tuples with any number fields</li>
+<li>POJO, bean-like class</li>
+</ul>
+</li>
+<li>Auxiliary<ul>
+<li>Option/Either/List/Map…</li>
+</ul>
+</li>
+<li>Generic<ul>
+<li>Using Kryo</li>
+</ul>
+</li>
+</ul>
+<h2 id="抽象结构"><a href="#抽象结构" class="headerlink" title="抽象结构"></a>抽象结构</h2><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/:Users:zhange:Downloads:FlowStateModeler.jpg" style="display:block;width:90%;" alt="NAME" align="center">
+</div>
+
+<p>可以看到，抽象结构与类型层级定义基本对应。<code>TypeInformation</code> 是所有类型的基类。</p>
+<blockquote>
+<p>module: flink-core</p>
+<p>package: org.apache.flink.api.common.typeinfo</p>
+<p>Comments on TypeInformation class:</p>
+<ul>
+<li>这是 Flink 类型系统的核心类。对于一个用户函数来说(UDF)，Flink 需要一个类型信息来作为该函数的输入输出类型。该类型信息类作为一个工具来生成对应类型的序列化器和比较器，并用于执行语义检查，比如当一些字段在作为 joing 或 grouping 的键时，检查这些字段是否在该类型中存在。</li>
+<li>该类型信息同时连接了编程语言对象模型和逻辑扁平模式(ligical flat schema)。它将类型的字段映射到扁平模式的列(字段)。</li>
+</ul>
+</blockquote>
+<h2 id="类型提取"><a href="#类型提取" class="headerlink" title="类型提取"></a>类型提取</h2><p><code>TypeExtractor</code> 类可以根据方法签名、子类信息等蛛丝马迹自动提取或恢复类型信息。</p>
+<blockquote>
+<p>module: flink-core</p>
+<p>package: org.apache.flink.api.java.typeutils
+s
+Comments on TypeExtractor class:</p>
+<p>一个对类进行反射分析的工具类，用于检测转换函数的返回类型。
+该类可以从 function、operator、Class、实例等对象中提取类型信息。</p>
+</blockquote>
+<p>由于 Java 中的类型擦除机制，自动提起并不是很有效，因此有些情况下(比如由 URLClassLoader 动态加载的类)仍然需要手动处理。比如下面的示例中使用 <code>returns</code> 方法来声明返回类型：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">inputDS</span><br><span class="line">  .groupBy(gourpKeys:_*)</span><br><span class="line">  .reduce(<span class="keyword">new</span> <span class="type">DistinctReduce</span>)</span><br><span class="line">  .setCombineHint(<span class="type">CombineHint</span>.<span class="type">HASH</span>)</span><br><span class="line">  .name(newName=<span class="string">"distinct"</span>)</span><br><span class="line">  .returns(inputDS.getType)</span><br></pre></td></tr></table></figure>
+<p><code>returns</code> 方法接收 3 种类型的参数：</p>
+<ol>
+<li>字符串描述的类名，如 “String”。</li>
+<li>用于泛型类型参数的 TypeHint。</li>
+<li>Java 原生 Class 对象。</li>
+</ol>
+<h2 id="类型注册"><a href="#类型注册" class="headerlink" title="类型注册"></a>类型注册</h2><p><code>ExecutionEnvironment</code> 提供的 <code>registerType</code> 方法可以用来向 Flink 注册子类信息(Flink 认识父类，但不一定认识子类的一些独特特性，因此需要注册)。以 Flink-ML 为例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">registerFlinkMLTypes</span></span>(env:<span class="type">ExecutionEnvironment</span>):<span class="type">Unit</span> = &#123;</span><br><span class="line">  <span class="comment">// Vector types</span></span><br><span class="line">  env.registerType(classOf[org.apache.flink.ml.math.<span class="type">DenseVector</span>])</span><br><span class="line">  env.registerType(classOf[org.apache.flink.ml.math.<span class="type">SparseVector</span>])</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Matrix types</span></span><br><span class="line">  env.registerType(classOf[org.apache.flink.ml.math.<span class="type">DenseVector</span>])</span><br><span class="line">  env.registerType(classOf[org.apache.flink.ml.math.<span class="type">SparseVector</span>])</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Breeze Vector types</span></span><br><span class="line">  env.registerType(classOf[breeze.linalg.<span class="type">DenseVector</span>[_]])</span><br><span class="line">  env.registerType(classOf[breeze.linalg.<span class="type">SparseVector</span>[_]])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在 <code>registerType</code> 方法内部，会使用 <code>TypeExtractor</code> 来提取类型信息。上面注册过程中调用的方法是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerType</span><span class="params">(Class&lt;?&gt; type)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(type == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NullPointException(...);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  TypeInformation&lt;?&gt; typeInfo = TypeExtractor.createTypeInfo(type);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>(typeInfo <span class="keyword">instanceof</span> PojoTypeInfo) &#123;</span><br><span class="line">    config.registerPojoType(type);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      config.registerKryoType(type);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以发现，获取到的类型信息属于 PojoTypeInfo 及其子类，那么将其注册到一起；否则统一交给 Kryo 去处理，Flink 并不过问(这种情况下性能会变差)。</p>
+<h2 id="类型声明"><a href="#类型声明" class="headerlink" title="类型声明"></a>类型声明</h2><p>通过 <code>TypeInformation.of()</code> 方法可以非常方便的创建类型信息对象。</p>
+<ol>
+<li><p>对于非泛型类，直接传入 Class 对象即可：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Outer o = <span class="keyword">new</span> Outer(a:<span class="number">10</span>, <span class="keyword">new</span> Inner(x:<span class="number">4L</span>), (<span class="keyword">short</span>) <span class="number">12</span>);</span><br><span class="line">PojoTypeInfo&lt;Outer&gt; typeInfo = (PojoTypeInfo&lt;Outer&gt;) TypeInformation.of(Outer.class);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于泛型类，需要借助 TypeHint 来保存泛型类型信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> TypeInfomation&lt;Tuple2&lt;Integer,Integer&gt;&gt; resultType = </span><br><span class="line">    TypeInformation.of(<span class="keyword">new</span> TypeHint&lt;Tuple2&lt;Integer,Integer&gt;&gt;()&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>TypeHint 的原理是创建一个匿名子类，运行时 TypeExtractor 可以通过 <code>getGenericSuperclass().getActuralTypeArguments()</code> 方法来回去保存的实际类型。</li>
+</ul>
+</li>
+<li><p>预定义常量。如 BasicTypeInfo 中定义了一系列常用原生类型的类型信息实例。或者直接使用更简单的 Types 类。</p>
+</li>
+<li>自定义 TypeInfo 和 TypeInfoFactory。<ul>
+<li>通过自定义 TypeInfo 为任意类提供 Flink 原生内存管理(而非 Kryo)，可令存储更紧凑，运行时也更高效。</li>
+<li>开发者在自定义类上使用 @TypeInfo 注解，随后创建相应的 TypeInfoFactory 并覆盖 createTypeInfo 方法。</li>
+<li>注意需要继承 TypeInformation 类，为每个字段定义类型，并覆盖元数据方法，例如 isBasicType、isTupleType、元数(对于一维的 Row 类型，等于字段的个数)等等，从而为 TypeExtractor 提供决策依据。</li>
+</ul>
+</li>
+</ol>
+<h2 id="类型序列化"><a href="#类型序列化" class="headerlink" title="类型序列化"></a>类型序列化</h2><p>Flink 自带了很多 TypeSerializer 子类，大多数情况下各种自定义类型都是常用类型的排列组合，因而可以直接复用。</p>
+<p>如果不能满足，可以继承 TypeSerializer 及其子类来实现自己的特定类型的序列化器。</p>
+<h3 id="Kryo-序列化"><a href="#Kryo-序列化" class="headerlink" title="Kryo 序列化"></a>Kryo 序列化</h3><h2 id="陷阱与缺陷"><a href="#陷阱与缺陷" class="headerlink" title="陷阱与缺陷"></a>陷阱与缺陷</h2><ul>
+<li>Lambda 函数的类型提取?</li>
+<li>Kryo 的 JavaSerializer 在 Flink 下存在 Bug?</li>
+</ul>
+<h2 id="类型机制与内存管理"><a href="#类型机制与内存管理" class="headerlink" title="类型机制与内存管理"></a>类型机制与内存管理</h2><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190130161127.png" style="display:block;width:40%;" alt="类型信息到内存块" align="center">
+</div>
+
+<p>下面以 StringSerializer 为例，来看下 Flink 是如何紧凑管理内存的。下面是 StringSerializer 的序列化方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">serialize</span><span class="params">(String record, DataOutputView target)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">    StringValue.writeString(record, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是具体的序列化过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">writeString</span><span class="params">(CharSequence cs, DataOutput out)</span> thorws IOException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(cs != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="comment">// the length we write is offset by one, because a length of zero indicates a null value</span></span><br><span class="line">    <span class="keyword">int</span> lenToWrite = cs.length() + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span>(lenToWrite &lt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// write the length, variable-length ecdoded</span></span><br><span class="line">    <span class="keyword">while</span>(lenToWrite &gt;= HIGH_BIT) &#123;</span><br><span class="line">      out.write(b:lenToWrite | HIGH_BIT);</span><br><span class="line">      lenToWrite &gt;&gt;&gt;= <span class="number">7</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    out.write(lenToWrite);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;cs.length(); i++) &#123;</span><br><span class="line">      <span class="keyword">int</span> c = cs.charAt(i);</span><br><span class="line">      </span><br><span class="line">      <span class="keyword">while</span>(c &gt;= HIGH_BIT) &#123;</span><br><span class="line">         out.write(b:c | HIGH_BIT);</span><br><span class="line">         c &gt;&gt;&gt;= <span class="number">7</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      out.write(c);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    out.write(b:<span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，Flink 对于内存管理是非常细致的，层次分明，代码也容易理解。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="https://ci.apache.org/projects/flink/flink-docs-release-1.7/dev/types_serialization.html" target="_blank" rel="noopener">Apache Flink Reference</a></li>
+<li><a href="https://www.cnblogs.com/fxjwind/p/6294237.html" target="_blank" rel="noopener">Flink - TypeInformation</a></li>
+<li><a href="https://segmentfault.com/a/1190000016350098" target="_blank" rel="noopener">Flink - Type System</a></li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>
