@@ -1,0 +1,118 @@
+logo:
+  text: Infilos
+  type: link
+  path: index.html
+main:
+- text: Welcome
+  type: link
+  path: index.html
+
+
+#*******************************************************************************#
+- text: READING
+  type: label
+- text: Operating System
+  type: link
+  path: reading/RD01-OS/index.html
+  children:
+    - text: 现代操作系统
+      type: link
+      path: reading/RD01-OS/Modern-Operating-Systems/contents.html
+
+#...............................................................................#
+- text: Virtual	Machine
+  type: link
+  path: reading/RD02-VM/index.html
+  children:
+    - text: 深入理解 JVM
+      type: link
+      path: reading/RD02-VM/Dive-Into-Jvm/contents.html
+
+#...............................................................................#
+- text: Compile System
+  type: link
+  path: reading/RD03-Compile/index.html
+
+#...............................................................................#
+- text: Java Language
+  type: link
+  path: reading/RD04-Java/index.html
+
+#...............................................................................#
+- text: Scala Language
+  type: link
+  path: reading/RD05-Scala/index.html
+
+#...............................................................................#
+- text: Concurrent
+  type: link
+  path: reading/RD06-Concurrent/index.html
+
+#...............................................................................#
+- text: Networking
+  type: link
+  path: reading/RD07-Networking/index.html
+
+#...............................................................................#
+- text: Distribute System
+  type: link
+  path: reading/RD08-Distribute/index.html
+
+#...............................................................................#
+- text: Storage System
+  type: link
+  path: reading/RD09-Storage/index.html
+
+#...............................................................................#
+- text: Message System
+  type: link
+  path: reading/RD10-Messages/index.html
+
+#...............................................................................#
+- text: Realtime Processing
+  type: link
+  path: reading/RD11-Realtime/index.html
+
+#...............................................................................#
+- text: Monitoring/Tracing
+  type: link
+  path: reading/RD12-Monitoring/index.html
+
+#...............................................................................#
+- text: Architecture Pattern
+  type: link
+  path: reading/RD13-Architecture/index.html
+
+#...............................................................................#
+- text: User Interface
+  type: link
+  path: reading/RD14-UI/index.html
+  
+#...............................................................................#
+- text: Dev Management
+  type: link
+  path: reading/RD15-Management/index.html
+
+#...............................................................................#
+- text: Resources
+  type: link
+  path: reading/RD99-Resources/index.html
+
+
+#*******************************************************************************#
+- text: RESEARCH
+  type: label
+- text: Unified UDF Modeling
+  type: link
+  path: research/RS01-Unified-UDF/index.html
+
+
+#*******************************************************************************#
+- text: REFERENCE
+  type: label
+- text: Infilow Reference
+  type: link
+  path: http://infilow.infilos.com/
+
+
+

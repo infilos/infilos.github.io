@@ -1,0 +1,11 @@
+.idea
+node_modules
+
+public
+db.json
+themes/doc
+tests_output
+.deploy_git
+
+*.log
+package-lock.json
