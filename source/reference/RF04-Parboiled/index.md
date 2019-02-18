@@ -1,5 +1,6 @@
 ---
 title: Parboiled
+search: only
 ---
 
 # Parboiled

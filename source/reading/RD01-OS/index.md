@@ -1,5 +1,6 @@
 ---
 title: Operating System
+search: only
 ---
 
 # Operating System

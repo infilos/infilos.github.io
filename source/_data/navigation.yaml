@@ -32,6 +32,10 @@ main:
 - text: Compile System
   type: link
   path: reading/RD03-Compile/index.html
+  children:
+    - text: 相关文章
+      type: link
+      path: reading/RD03-Compile/Recent-Articles/content.html
 
 #...............................................................................#
 - text: Java Language
@@ -42,11 +46,28 @@ main:
 - text: Scala Language
   type: link
   path: reading/RD05-Scala/index.html
+  children:
+    - text: 相关文章
+      type: link
+      path: reading/RD05-Scala/Recent-Articles/content.html
 
 #...............................................................................#
 - text: Concurrent
   type: link
   path: reading/RD06-Concurrent/index.html
+  children:
+    - text: 深入并行编程
+      type: link
+      path: reading/RD06-Concurrent/Parallel-Programming/content.html
+    - text: 七并发模型
+      type: link
+      path: reading/RD06-Concurrent/Concurrency-Model/content.html
+    - text: Java 内存模型
+      type: link
+      path: reading/RD06-Concurrent/Java-Memory-Model/content.html
+    - text: Java 并发实战
+      type: link
+      path: reading/RD06-Concurrent/Java-Con-Practice/content.html
 
 #...............................................................................#
 - text: Networking

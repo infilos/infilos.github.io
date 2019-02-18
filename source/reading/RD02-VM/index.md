@@ -1,5 +1,6 @@
 ---
 title: Virtual	Machine
+search: only
 ---
 
 # Virtual Machine
