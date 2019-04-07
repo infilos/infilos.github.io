@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH02-创建型-工厂方法 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH02-创建型-工厂方法","path":"reading/RD04-Java/Design-Patterns/CH02.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH02-创建型-工厂方法"><a href="#CH02-创建型-工厂方法" class="headerlink" title="CH02-创建型-工厂方法"></a>CH02-创建型-工厂方法</h1><h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><p>针对“1-简单工厂”中提到的系统进行修改，不再使用一个按钮工厂类来统一负责所有产品的创建，而是将具体按钮的创建过程交给专门的工厂子类去完成。首先定义一个抽象的按钮工厂类，再定义具体的工厂类来生成圆形、矩形、菱形按钮等，这些具体的工厂类会实现抽象工厂类中定义的方法。</p>
+<p>这种抽象化的结构可以在不修改具体工厂类的情况下引入新的产品，如果出现新的按钮类型，只需要为这种新的按钮类型创建对应的工厂类即可获得该新按钮的实例。因此，使得工厂方法模式具有超越简单工厂的优越性，更加符合<strong>开闭原则</strong>。</p>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p><strong>工厂方法模式(Factory Method Pattern)</strong>又称工厂模式，或虚拟构造器(Virtual Constructor)模式、多态工厂(Polymorphic Factory)，属于类创建型模式。该模式中，工厂父类负责负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪个具体产品类。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>工厂方法包含的角色：</p>
+<ol>
+<li>Product：抽象产品</li>
+<li>ConcreteProduct：具体产品</li>
+<li>Factory：抽象工厂</li>
+<li>ConcreteFactory：具体工厂</li>
+</ol>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134030.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134046.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ConcreteFactory.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ConcreteProduct.h"</span></span></span><br><span class="line"></span><br><span class="line">Product* ConcreteFactory::factoryMethod()&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span>  <span class="keyword">new</span> ConcreteProduct();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Factory.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"ConcreteFactory.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"Product.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Factory * fc = <span class="keyword">new</span> ConcreteFactory();</span><br><span class="line">	Product * prod = fc-&gt;factoryMethod();</span><br><span class="line">	prod-&gt;use();</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">delete</span> fc;</span><br><span class="line">	<span class="keyword">delete</span> prod;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h3><p>由于使用了面向对象的多态性，工厂方法模式保持了简单工厂模式的优点，而且克服了它的缺点。在该模式中，核心的工厂类不再负责所有产品的创建，而是将具体创建工作交给子类去做。这个核心类仅仅负责给出具体工厂必须实现的接口，而不负责哪一个产品类被实例化这个细节，使得工厂方法模式可以允许系统在不修改工厂角色的情况下引进新产品。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><h4 id="日志记录器"><a href="#日志记录器" class="headerlink" title="日志记录器"></a>日志记录器</h4><p>某系统日志记录器要求支持多种日志记录方式，如文件、数据库等。且用户可以根据要求动态选择日志记录方式，使用工厂方法进行设计：</p>
+<p>类图：</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134111.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<p>时序图：</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134127.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>该模式中，工厂方法用来创建用户所需要的产品，同时还向客户隐藏了哪种具体产品类将被实例化这一细节，用户只需要关心所需产品对应的工厂，无需关心创建细节，甚至无需知道具体产品类的类名。</li>
+<li>基于工厂角色和产品角色的多态性设计是工厂方法模式的关键。它能使工厂可以自主确定创建何种产品对象，而如何创建这个对象的细节则完全封装在具体工厂内部。</li>
+<li>在加入新产品时，无需修改抽象工厂和抽象产品提供的接口，无需修改客户端，也无需修改其他的具体工厂和具体产品，只需要添加一个具体工厂和具体产品就可以了。增加了扩展性，符合开闭原则。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在添加新产品时需要编写新的产品类，还要提供于此对应的具体工厂类，类的个数会成对增加，一定程度上增加了复杂性。</li>
+<li>引入了抽象层，客户端的代码均使用抽象层进行定义，增加了系统的抽象性和理解难度。</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>无需知道需要创建对象的类：该模式中，客户端不需要知道具体产品类的类名，只需要知道他对应的工厂即可，具体的产品对象由具体工厂类创建。</li>
+<li>通过子类来指定创建哪个对象：该模式中，对于抽象工厂类只需要提供一个创建产品的接口，由其子类来确定具体要创建的对象，利用面向对象的多态性和里氏替换原则，在程序运行时，子类对象将覆盖父类对象，从而使系统更易扩展。</li>
+<li>将创建对象的任务委托给多个工厂子类中的某一个，客户端在使用时无需关心是哪个工厂子类来创建产品子类，需要时再动态指定，可将具体工厂类的类名存储在配置文件或数据库中。</li>
+</ul>
+<h3 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h3><p>JDBC 中的工厂方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Connection conn=DriverManager.getConnection(<span class="string">"jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=DB;user=sa;password="</span>);</span><br><span class="line">Statement statement=conn.createStatement();</span><br><span class="line">ResultSet rs=statement.executeQuery(<span class="string">"select * from UserInfo"</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h3><ul>
+<li>使用多个工厂方法：才抽象工厂中可以定义多个工厂方法，从而使具体工厂角色实现这些不同的工厂方法，这些方法可以包含不同的业务逻辑，以满足不同的产品对象的需求。</li>
+<li>产品对象的重复使用：工厂对象将已创建过的产品保存到一个集合，然后根据客户端对产品的请求，对集合进行查询。</li>
+<li>多态性的丧失和模式的退化：如果工厂仅仅返回一个具体产品对象，便违背了工厂方法的用意，发生退化，此时就不再是工厂方法模式了。工厂对象应该有一个抽象的父类型，如果工厂等级结构中只有一个工厂类的话，抽象工厂可以省略，则发生退化；当只有一个具体工厂，在具体工厂中创建所有产品对象，并且工厂方法设计为静态方法时，该模式就退化成了简单工厂模式。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>工厂方法模式又称为工厂模式，属于类创建型模式。该模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，以将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。</li>
+<li>工厂方法模式包含四个角色：<ol>
+<li><strong>抽象产品</strong>是定义产品的接口，是工厂方法模式所创建对象的超类型，即产品对象的共同父类或接口；</li>
+<li><strong>具体产品</strong>实现了抽象产品接口，某种类型的具体具体产品由专门的具体工厂创建，他们之间往往<strong>一一对应</strong>；</li>
+<li><strong>抽象工厂</strong>中声明了工厂方法，用于返回一个产品，它是该模式的核心，任何在模式中创建对象的工厂类都必须实现该接口；</li>
+<li><strong>具体工厂</strong>是抽象工厂的子类，实现了抽象工厂中定义的方法，并可由客户调用，返回一个具体产品类的实例。</li>
+</ol>
+</li>
+<li>该模式是简单工厂模式的进一步抽象和推广。由于使用了面向对象的多态性，工厂方法模式保持了简单工厂模式的优点，同时克服了它的缺点。核心的工厂类不再负责创建所有类型的产品，而是将其创建交给具体子类去做。该核心类仅负责给出具体工厂必须实现的接口，而不负责产品类被实例化这种细节，这使得该模式可以允许系统在不修改工厂角色的情况下引进新产品。</li>
+<li>主要优点是增加新产品而无需修改现有系统，并封装了产品对象的创建细节，系统具有良好的灵活性和可扩展性；缺点在于增加新产品的同时需要增加对应的具体工厂，导致类的个数增长，一定程度上增加了系统的复杂性。</li>
+<li>该模式适合的情况包括：一个类不知道他所需要的对象的类；一个类通过其子类来指定创建哪个对象；将创建对象的任务委托给多个工厂子类中的某一个，客户端在使用时可以无需关心是哪一个工厂子类创建产品子类，需要时再动态绑定。</li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH14-行为型-观察者 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH14-行为型-观察者","path":"reading/RD04-Java/Design-Patterns/CH14.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH14-行为型-观察者"><a href="#CH14-行为型-观察者" class="headerlink" title="CH14-行为型-观察者"></a>CH14-行为型-观察者</h1><h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><p>建立一种对象与对象之间的依赖关系，一个对象改变时将自动通知其他对象，其他对象将作出相应反应。在此，发生改变的对象成为观察目标，被通知的对象成为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加或删除观察者，使得系统更易于扩展。这便是该模式的动机。</p>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p><strong>观察者模式(Observer Pattern)</strong>：定义对象的一种一对多关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。或称为<strong>发布-订阅(Publish/Subscribe)模式、模型-试图(Model/View)模式、源-监听(Source/Listener)模式、从属(Dependents)模式</strong>。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>包含 4 中角色：</p>
+<ul>
+<li>Subject：目标</li>
+<li>ConcreteSubject：具体目标</li>
+<li>Observer：观察者</li>
+<li>ConcreteObserver：具体观察者</li>
+</ul>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220135139.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220135151.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h3><ul>
+<li>管擦者模式描述了如何建立对象与对象之间的依赖关系，如何构造满足这种需求的系统。</li>
+<li>该模式中的关键对象是观察目标和管擦者，一个目标可以有任意数目的、与之相依赖的观察者，一旦目标的状态发生改变，所有的观察者都将得到通知。</li>
+<li>作为多这个通知的响应，每个观察者都将更新自己的状态，以与目标状态同步，这种交互也被称为发布-订阅。目标是通知的发布者，它发出通知时并不知道谁是它的观察者，可以有任意数量的观察者订阅它并接收通知。</li>
+</ul>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>该模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种不同的表示层作为具体观察者角色。</li>
+<li>该模式在观察目标和观察者之间建立了一个抽象的耦合。</li>
+<li>观察者模式支持广播通信。</li>
+<li>观察者模式符合“开闭原则”。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>如果一个目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到将会花费很多时间。</li>
+<li>如果在观察者和目标之间有循环依赖的话，目标会触发他们之间进行循环调用，导致系统崩溃。</li>
+<li>该模式没有相应的机制让观察者知道相应的观察目标是怎样发生变化的，而仅仅只是知道目标发生了变化。</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中，可以使他们各自独立的改变和复用。</li>
+<li>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少个对象发生改变，可以降低对象之间的耦合度。</li>
+<li>一个对象必须通知其他对象，而并不知道这些对象是谁。</li>
+<li>需要在系统中创建一个触发链，A 对象的行为将影响 B 对象， B 对象的行为将会影响 C 对象…等等，可以使用该模式创建一种链式触发机制。</li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

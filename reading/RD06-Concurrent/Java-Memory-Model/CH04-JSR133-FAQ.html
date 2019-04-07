@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH04-JSR133 FAQ </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH04-JSR133 FAQ","path":"reading/RD06-Concurrent/Java-Memory-Model/CH04-JSR133-FAQ.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH04-JSR133-FAQ"><a href="#CH04-JSR133-FAQ" class="headerlink" title="CH04-JSR133 FAQ"></a>CH04-JSR133 FAQ</h1><h2 id="什么是内存模型"><a href="#什么是内存模型" class="headerlink" title="什么是内存模型"></a>什么是内存模型</h2><p>在多核系统中，处理器一般拥有一层或多层缓存，这些缓存通过加速数据访问(因为数据距离处理器更近)和减少共享内存在总线上的通讯(因为通过本地缓存来满足许多内存操作)来提高 CPU 性能。缓存能够大大提升性能，但同时也带来了很多挑战。例如，当两个 CPU 同时检查相同的内存地址时会发生什么呢？在什么样的条件下它们能够看到相同的值？</p>
+<p>在处理器层面，内存模型定义了一个充要条件，“让当前的处理器可以看到其他处理器写入到内存的数据”，以及“其他处理器可以看到当前处理器写入到内存的数据”。有些处理器拥有很强的内存模型(strong memory model)，能够让所有处理器在任何时候从任何指定的内存地址上看到完全相同的值。而另外一些处理器则有较弱的内存模型(weaker memory model)，在这种处理器中，必须使用内存屏障(一种特殊的指令)来刷新本地处理器缓存并使本地处理器缓存无效，目的是为了让当前处理器能够看到其他处理器的写操作，或者让其他处理器看到当前处理器的写操作。这些内存屏障通常在 lock 和 unlock 操作的时候完成。内存屏障在高级语言中对开发者是不可见的。</p>
+<p>在强内存模型下，编写程序有时会很容易，因为减少了对内存屏障的依赖。但是即使在一些最强的内存模型下，内存屏障仍然是必须的。设置内存屏障往往与我们的直觉并不一致。近来处理器设计的趋势更偏向于弱的内存模型，因为弱内存模型削弱了缓存一致性，所以在多处理器平台和更大容量的内存下可以实现更好的可伸缩性。</p>
+<p>“一个线程的写操作对其他线程可见”，该问题是因为编译器对代码进行重排序导致的。例如，只要代码的移动不会改变程序的语义，当编译器认为向下移动一个写操作会更有效的时候，编译器就会对代码执行移动。如果编译器推迟执行一个操作，其他线程可以能在这个操作执行完成之前都不会看到该操作的结果，这反映了缓存的影响。</p>
+<p>此外，写入内存的操作能够被移动到程序中更靠前的位置。这种情况下，其他线程在程序中可能看到一个比实际发生更早的写操作。所有这些灵活性的设计都是为了通过给编译器、运行时或硬件提供灵活性以使其能够在最佳顺序的情况下来执行操作。在内存模型的限定下，我们能够获得更高的性能。</p>
+<p>考虑如下示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ClassReordering &#123;</span><br><span class="line">  <span class="keyword">int</span> x = <span class="number">0</span>, y = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    x = <span class="number">1</span>;</span><br><span class="line">    y = <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> r1 = y;</span><br><span class="line">    <span class="keyword">int</span> r2 = x;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设在两个并发线程中执行这段代码，读取变量 Y 将会得到 2。因为这个写入比写入到变量 X 的操作更晚一些，程序员可能认为读取变量 X 将一定会得到 1。但是，写入操作可能被重排序。如果发生了重排序，那么，就能发生对变量 Y 的写入操作，读取两个变量的操作紧随其后，而且写入到变量 X 的操作能够发生。程序的结果可能是 r1==2, r2==0。</p>
+<p><strong>Java 内存模型描述了在多线程中哪些行为是合法的，以及线程如果通过内存进行交互。它描述了“程序中的变量”与“从内存或寄存器获取或存储它们的底层细节”之间的关系。Java 内存模型通过使用各种硬件和编译器优化来正确实现以上能力。</strong></p>
+<p><strong>Java 包含了几个语言级别的关键字，包括：volatile、final、synchronized，目的是为了帮助开发者向编译器描述一个程序的并发需求。Java 内存模型定义了 volatile 和 synchronized 的行为，更重要的是，保证了通过的 Java 程序在所有测处理器架构下都能正确运行。</strong></p>
+<h2 id="其他语言有内存模型吗"><a href="#其他语言有内存模型吗" class="headerlink" title="其他语言有内存模型吗"></a>其他语言有内存模型吗</h2><p>大部分其他的语言，如 C/C++，都没有被设计成直接支持多线程。这些语言对于发生在编译器和处理器平台架构的重排序行为的保护机制会严重依赖于程序中使用的线程库(如 pthreads)、编译器，以及代码所运行的硬件平台所提供的保障，尤其是 CPU 架构。</p>
+<h2 id="JSR-133-是什么"><a href="#JSR-133-是什么" class="headerlink" title="JSR 133 是什么"></a>JSR 133 是什么</h2><p>从 1997 年以来，人们不断发现 Java 语言规范的第 17 章定义的 Java 内存模型中存在一些严重的缺陷。这些缺陷会导致一些使人迷惑的行为(如 final 字段会被观察到值的变化)和破坏编译器常见的优化功能。</p>
+<p>Java 内存模型是一个雄心勃勃的计划，它是编程语言规第一次尝试合并一个能够在各种处理器架构中为并发提供一致语义的内存模型。不过，定义一个既一致又直观的内存模型远比想象的要难。JSR 133 和 Java 语言定义了一个新的内存模型，它修复了早期内存模型中的缺陷。为了实现 JSR133，final 和 volatile 的语义需要被重新定义。</p>
+<p>完整的定义见<a href="http://www.cs.umd.edu/users/pugh/java/memoryModel/" target="_blank" rel="noopener">文档</a>，但是正式的语义不是小心翼翼的，它是令人惊讶的清醒的，目的是让人们意识到一些看似简单的概念(如同步)其实有多复杂。幸运的是，你不需要懂得这些正式定义的细节——JSR 133 的目的是创建一组正式语义，这些语义提供了描述 volatile、synchronized、final 如何正确工作的直观框架。</p>
+<p>JSR 133 的目标包括：</p>
+<ul>
+<li>保留已经存在的安全保证(如类型安全)并强化其他的安全保证。例如，变量值不能凭空创建：线程观察到的每个变量的值必须是被其他线程合理创建的。</li>
+<li>正确同步的程序的语义应该尽量简单和直观。</li>
+<li>应该定义未完成或为正确同步的程序的语义，主要是为了把潜在的安全危害降到最低。</li>
+<li>开发者应该能够自信的推断多线程如何与内存进行交互。</li>
+<li>能够在现在许多流行的硬件架构中设计正确且高性能的 JVM 实现。</li>
+<li>应该能够提供“安全初始化”保证。如果一个对象正确的进行了构建(指它的引用没有在构建时逸出)，那么所有能够看到该对象的引用的线程，在不进行同步的情况下，也将能够看到在构造方法中设置的 fianl 字段的值。</li>
+<li>应该尽量不影响现有的代码。</li>
+</ul>
+<h2 id="重排序意味着什么"><a href="#重排序意味着什么" class="headerlink" title="重排序意味着什么"></a>重排序意味着什么</h2><p>在很多情况下，访问一个程序变量(对象实例字段、类静态字段、数组元素)可能会使用不同的执行顺序，而不是程序语义所指定的顺序执行。编译器能够自由的以优化的名义去改变指令顺序。在特定环境下，处理器可能会次序颠倒的执行指令。数据可能在寄存器、缓冲区或主存中以不同的次序移动，而不是按照程序指定的顺序。</p>
+<p>例如，如果一个线程写入值到字段 a、然后写入值到字段 b，并且 b 的值不依赖于 a 的值，那么，处理器能够自由的调整它们的执行顺序，而且缓冲区能够在 a 之前刷新 b 的值到主内存。有许多潜在的重排序来源，例如编译器、JIT 及缓冲区。</p>
+<p>编译器、运行时和硬件被期望一起协力创建看似是按顺序执行的语义的假象，这意味着在单线程程序中，程序应该不能观察到重排序的影响。但是，重排序在没有正确同步的多线程程序中会产生作用，在这些多线程程序中，一个线程能够观察到其他线程的影响，也可能检测到其他线程将会以一种不同于程序语义所规定的执行顺序来访问变量。</p>
+<p>大部分情况下，一个线程不会关注到其他线程在做什么，但是当它需要关注的时候，就需要使用(正确的)同步了。</p>
+<h2 id="旧内存模型的缺陷有哪些？"><a href="#旧内存模型的缺陷有哪些？" class="headerlink" title="旧内存模型的缺陷有哪些？"></a>旧内存模型的缺陷有哪些？</h2><p>旧的内存模型中有几个严重的问题。这些问题很难理解，因此被广泛的违背。例如，旧的存储模型在许多情况下，不允许 JVM 发生各种重排序行为。旧的内存模型中让人产生困惑的因素造就了 JSR 133 的诞生。</p>
+<p>例如，一个被广泛认可的概念就是：如果使用 final 字段，那么就没有必要在多个线程间使用同步来保证其他线程能够看到这个字段的值。尽管这是一个合理的假设和明显的行为，也是我们所期待的结果。实际上，在旧的内存模型中，我们想让程序正确运行起来却是不行的。在旧的内存模型中，final 字段并没有同其他字段进行区别对待——这意味着同步是保证所有线程看到一个在构造方法中初始化为 final 字段的唯一方法。结果——如果没有正确进行同步，对一个线程来说，它可能看到一个(final)字段的默认值，然后在稍后的时间里，又能看到构造方法中设置的值。这意味着，一些不可变的对象，例如 String，能够改变它们的值——这是在是让人很郁闷。</p>
+<p>旧的内存模型允许 volatile 变量的写操作和非 volatile 变量的读写操作一起进行重排序，这和大多数的开发人员对于 volatile 变量的直观感受是不一致的，因此会造成迷惑。</p>
+<p>最后，我们将看到的是，开发者对于“程序没有被正确同步的情况下将会发生什么”的直观感受通常是错误的。JSR 133 的目的之一就是要引起这方面的注意。</p>
+<h2 id="没有正确同步的含义是什么"><a href="#没有正确同步的含义是什么" class="headerlink" title="没有正确同步的含义是什么"></a>没有正确同步的含义是什么</h2><p>没有正确同步的代码对于不同的人来说可能会有不同的理解。在 Java 内存模型这个语义环境下，我们谈到“没有正确同步”时指的是：</p>
+<ul>
+<li>一个线程中存在对一个变量的写操作。</li>
+<li>另外一个线程存在对该变量的读操作。</li>
+<li>而且写操作和读操作之间没有通过同步来保证顺序。</li>
+</ul>
+<p>当违反这些规则时，我们就说在这个变量上有一个“数据竞争”。一个拥有数据竞争的程序就是一个没有正确同步的程序。</p>
+<h2 id="同步会做些什么"><a href="#同步会做些什么" class="headerlink" title="同步会做些什么"></a>同步会做些什么</h2><p>同步有几个方面的作用。最广为人知的就是“互斥”——一次只有一个线程能够获得一个监视器，因此，在一个监视器上同步意味着一旦一个线程进入到该监视器保护的同步块中，其他的线程都不能进入到同一个监视器保护的块中间，除非第一个线程退出了同步块。</p>
+<p>但是同步的含义比互斥更广。同步保证了一个线程在同步块之前或之中的一个内存写入操作以可预知的方式对其他拥有相同监视器的线程可见。当我们退出了同步块，我们就释放了这个监视器，该监视器拥有刷新缓冲区到主内存的效果，因此该线程的写入操作能够为其他线程所见。在我们进入一个同步块之前，我们需要获取监视器，监视器拥有使本地处理器缓存失效的功能，因此变量会从主存重新加载，于是其他线程对共享变量的修改对当前线程来说就变得可见了。</p>
+<p>基于缓存来讨论同步，可能听起来这些观点仅仅会影响到多处理器的系统。但是，重排序效果能够在单一处理器上很容易的观察到。对于编译器来说，在获取之前或者释放之后移动你的代码是不可能的。当我们谈到在缓冲区上面进行的获取和释放操作时，我们使用了简述的方式来描述大量可能的影响。</p>
+<p>新的内存模型语义在内存操作(读写字段、加解锁)以及其他线程的操作(start/join)中创建了一个部分(partial，相对于整个程序的语义顺序)排序，在这些操作中，一些操作被称为 happens before 其他操作。当一个操作在另一个操作之前发生，第一个操作保证能够被排到前面并且对第二个操作可见。这些排序的规则如下：</p>
+<ul>
+<li>线程中的每个操作 happenns before 该线程中在程序顺序上后续的每个操作。</li>
+<li>解锁一个监视器的操作 happens before 随后对相同监视器进行的解锁操作。</li>
+<li>对 volatile 字段的写操作 happens before 后续对相同 volatile 字段的读取操作。</li>
+<li>在线程上调用 start 方法 happens before 这个线程启动后的任何操作。</li>
+<li>一个线程中的所有操作都 happens before 从这个线程的 join 方法成功返回的任何其他线程。(即其他线程等待一个线程的 join 方法完成，那么，这个线程中的所有操作 happens before 其他线程中的所有操作)</li>
+</ul>
+<p>这意味着：对于任何内存操作，该内存操作在退出一个同步块之前对一个线程是可见的，对任何线程在它进入一个被相同的监视器保护的同步块之后都是可见的，因为所有内存操作 happens before 释放监视器、(当前线程)释放监视器 happens before (其他线程)获取监视器。</p>
+<p>其他类似如下模式的实现，被一些人用来强迫实现一个内存屏障，不会生效：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">synchronized (new Object()) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码其实不会执行任何操作，编译器会将其完全移除，因为编译器知道没有其他线程会使用相同监视器进行同步。要看到其他线程的结果，你必须为一个线程建立 happens before 关系。</p>
+<p>@@@ note</p>
+<p>对两个线程来说，为了正确建立 happens before 关系而在相同监视器上面进行同步是非常重要的。以下观点是错误的：当线程 A 在对象 X 上面同步的时候，所有东西对线程 A 可见，线程 B 在对象 Y 上面进行同步的时候，所有东西对线程 B 也是可见的。释放监视器和获取监视器必须匹配(即要在相同监视器上面完成这两个操作)，否则，代码就会存在数据竞争。</p>
+<p>@@@</p>
+<h2 id="final-字段是如何改变其值的"><a href="#final-字段是如何改变其值的" class="headerlink" title="final 字段是如何改变其值的"></a>final 字段是如何改变其值的</h2><p>我们可以通过分析 String 类的实现细节来展示一个 final 变量是如何可以改变的。</p>
+<p>String 对象包含 3 个字段：一个 character 数组、一个数据的 offset、一个 length。实现 String 类的基本原理是：它不仅仅拥有 character 数组，而且为了避免多余的对象分配和拷贝，多个 String 和 StringBuffer 对象都会共享相同的 character 数组。因此，String.substring 方法能够通过改变 length 和 offset，通过共享原始的 character 数组来创建一个新的 String 对象。对于一个 String 来说，这些字段都是 final 型的字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String s1 = &quot;/usr/tmp&quot;;</span><br><span class="line">String s2 = s1.substring(4);</span><br></pre></td></tr></table></figure>
+<p>s2 的 offset 值为 4，length 的值为 4。但是，在旧的内存模型下，对于其他线程来说，有机会看到 offset 拥有默认的值 0，而且，在稍后一点时间会看到正确的值 4，好像字符串的值从 “/usr” 变成了 “/tmp” 一样。</p>
+<p>旧的 Java 内存模型允许这些行为，部分 JVM 已经展现出这样的行为了。而在新的 Java 内存模型中，这是非法的。</p>
+<h2 id="在新的-JMM-下-final-是如何工作的"><a href="#在新的-JMM-下-final-是如何工作的" class="headerlink" title="在新的 JMM 下 final 是如何工作的"></a>在新的 JMM 下 final 是如何工作的</h2><p>一个对象的 final 字段值是在对象的构造方法中设置的。假设对象被正确的构造了，一旦对象被构造，在构造方法里面设置 final 字段的值在没有同步的情况下会对所有其他线程可见。另外，引用这些 final 字段的对象或数组都会看到其最新值。</p>
+<p>对于一个对象来说，被正确构造又是什么意思？简单来说，它意味着这个正在构造的对象的引用在构造期间没有被允许逸出(参见<a href="https://www.ibm.com/developerworks/java/library/j-jtp0618/index.html" target="_blank" rel="noopener">安全构造技术</a>)。换句话说，不要让其他线程在其他地方能够看见一个处于构造期的对象引用。不要指派给一个静态字段，不要作为一个 listener 注册给其他对象等。这些操作应该在构造方法完成之后进行，而不是构造方法中进行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FinalFieldExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">final</span> <span class="keyword">int</span> x;</span><br><span class="line">  <span class="keyword">int</span> y;</span><br><span class="line">  <span class="keyword">static</span> FinalFieldExample f;</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">FinalFieldExample</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    x = <span class="number">3</span>;</span><br><span class="line">    y = <span class="number">4</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    f = <span class="keyword">new</span> FinalFieldExample();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (f != <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">int</span> i = f.x;</span><br><span class="line">      <span class="keyword">int</span> j = f.y;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的类展示了 fianl 字段应该如何使用。一个正在执行 reader 方法的线程保证看到 f.x 的值为 3，因为它是 final 字段。它不保证看到 f.y 的值为 4，因为 f.y 不是 final 字段。如果 FinalFieldExample 的构造方法是如下这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public FinalFieldExample() &#123; // bad!</span><br><span class="line">  x = 3;</span><br><span class="line">  y = 4;</span><br><span class="line">  // bad construction - allowing this to escape</span><br><span class="line">  global.obj = this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么从 global.obj 中读取 this 引用线程不会保证读取到的 x 的值 3。</p>
+<p>能够看到字段的正确构造的值固然不错，但是，如果字段本身就是一个引用，那么，你还是希望你的代码能够看到引用所指向的这个对象(或数组)的最新值。如果你的字段是 final 字段，那就就是能够保证的。因此，当一个 final 指针指向一个数组，你无需担心线程能够看到引用的最新值却看不到引用所指向的数组的最新值。重复一下，这里的“正确的”是指“对象构造方法结尾的最新的值”而不是“最新可用的值”。</p>
+<p>现在，在讲了如上的片段之后，如果在一个线程构造了一个不可变对象之后(对象仅包含 final 字段)，你希望保证该对象被其他线程正确的查看，你仍然需要使用同步才行。例如，没有其他的方式可以保证不可变对象的引用将被第二个线程看到。使用 final 字段的程序应该仔细调试，这需要深入而且仔细的理解并发在你的代码中是如被被管理的。</p>
+<p>如果你使用 JNI 来改变你的 final 字段，这方面的行为是没有定义的。</p>
+<h2 id="volatile-的作用"><a href="#volatile-的作用" class="headerlink" title="volatile 的作用"></a>volatile 的作用</h2><p>Volatile 字段是用于线程间通讯的特殊字段。每次读 volatile 字段都会看到其他线程写入该字段的最新值；实际上，开发者之所以要定义 volatile 字段是因为在某些情况下由于缓存和重排序所看到的陈旧的变量值是不可接受的，编译器和运行时禁止在寄存器里分配它们。它们还必须保证，在它们被写好之后，它们被从缓冲区刷新到主存中，因此，它们能够对其他线程立即可见。同样，在读取一个 volatile 字段之前，缓冲区必须失效，因为值是存在于主存中而不是本地处理器的缓冲区。在重排序访问 volatile 变量的时候还有其他的限制。</p>
+<p>在旧的内存模型下，访问 volatile 变量不能被重排序，但是，它们可能和访问非 volatile 变量一起被重排序。这破坏了 volatile 字段从一个线程到另一个线程作为一个信号条件的手段。</p>
+<p>下新的内存模型下，volatile 变量仍然不能彼此重排序。和旧模型不同的是，volatile 周围的普通字段也不再能随便的重排序了。写入一个 volatile 字段和释放监视器拥有相同的内存影响，而且读取 volatile 字段和获取监视器也有相同的内存影响。事实上，因为新的内存模型在重排序 volatile 字段访问上面和其他字段(volatile 或非 volatile)访问上面拥有更加严格的约束。当线程 A 写入一个 volatile 字段 f 的时候，如果这时线程 B 读取 f 的值，那么对线程 A 可见的任何东西都变得对线程 B 可见了。</p>
+<p>下面的例子展示了应该如何使用 volatile 字段：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">VolatileExample</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">volatile</span> <span class="keyword">boolean</span> v = <span class="keyword">false</span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writer</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    x = <span class="number">42</span>;</span><br><span class="line">    v = <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (v == <span class="keyword">true</span>) &#123;</span><br><span class="line">      <span class="comment">//uses x - guaranteed to see 42.</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设一个名为 “writer” 的线程和一个名为 “reader” 的线程。对变量 v 的写操作会等到变量 x 被写入到内存之后，然后读线程才能看到 v 的值。因此，如果 reader 线程看到了 v 的值为 true，那么，这也保证能够看到之前发生的“向 x 写入 42”这个操作。而在旧的内存模型中未必如此。如果 v 不是 volatile 变量，那么，编译器可以在 writer 线程中重排序写入操作，然后 reader 线程中读取 x 变量的操作可能会看到其值为 0。</p>
+<p>实际上，volatile 的语义已经被加强了，已经块达到同步的级别了。为了可见性的原因，每次读取和写入一个 volatile 字段已经像是半个同步操作了。</p>
+<p>@@@ note</p>
+<p>对于两个线程来说，为了正确的设置 happens before 关系，访问相同的 volatile 变量是很重要的。以下结论是不正确的：当线程 A 写 volatile 字段 f 的时候，线程 A 可见的所有东西，在线程 B 读取字段 g 的时候，都变得对线程 B 可见了。释放操作和获取操作必须匹配(也就是在同一个 volatile 字段上完成)。</p>
+<p>@@@</p>
+<h2 id="新的-JMM-是否修复了双重锁检查问题"><a href="#新的-JMM-是否修复了双重锁检查问题" class="headerlink" title="新的 JMM 是否修复了双重锁检查问题"></a>新的 JMM 是否修复了双重锁检查问题</h2><p>臭名昭著的双重锁检查(也称多线程单例模式)是一个骗人的把戏，它用来支持 lazy 初始化，同时避免过度使用同步。在非常早的 JVM 中，同步非常慢，开发人员非常系统删掉它。双重锁检查代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// double-checked-locking - don&apos;t do this!</span><br><span class="line"></span><br><span class="line">private static Something instance = null;</span><br><span class="line"></span><br><span class="line">public Something getInstance() &#123;</span><br><span class="line">  if (instance == null) &#123;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">      if (instance == null)</span><br><span class="line">        instance = new Something();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return instance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这看起来好像非常聪明——在公用代码中避免了同步。这段代码只有一个问题——它不能正常工作。为什么呢？最明显的原因是，初始化实例的写入操作和实例字段的写入操作能够被编译器或缓冲区重排序，重排序可能会导致返回部分构造的一些东西。就是我们会读取到一个没有被初始化的对象。这段代码还有很多其他的错误，以及为什么对这段代码的算法修正是错误的。在旧的内存模型下无法将其修复。更多深入的信息参见：<a href="http://www.javaworld.com/jw-02-2001/jw-0209-double.html" target="_blank" rel="noopener">Double-checkedlocking: Clever but broken</a> 和 <a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html" target="_blank" rel="noopener">The “Double-Checked Locking is Broken” Declaration</a>。</p>
+<p>很多人认为使用 volatile 关键字能够消除双重锁检查模式的问题。在 1.5 的 JVM 之前，volatile 并不能保证这段代码能够正常工作(因环境而定)。在新的内存模型中，实例字段使用 volatile 可以解决双重锁检查问题，因为在构造线程来初始化一些东西和读取线程返回它的值之间有 happens before 关系。</p>
+<p>然后，对于喜欢使用双重锁检查的人来说(我们真的希望没有人喜欢这么用)，仍然不是好消息。双重锁检查的重点是为了避免过度使用同步导致性能问题。从 Java 1.0 开始，同步不仅会有昂贵的性能开销，而在新的内存模型下，使用 volatile 的性能开销也有所上升，几乎达到了和同步一样的性能开销。因此，使用双重锁检查来实现单例模式仍然不是一个好的选择(注意这里需要修正，在大多数平台下，volatile 的性能开销还是比较低的)。</p>
+<p>使用 IODH 来实现多线程模式下的单例会更加易读：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">private static class LazySomethingHolder &#123;</span><br><span class="line">  public static Something something = new Something();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static Something getInstance() &#123;</span><br><span class="line">  return LazySomethingHolder.something;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码是正确的，因为初始化由 static 字段来保证。如果一个子弹设置在 static 舒适化中，对其他访问这个类的线程来说是能够正确的保证其可见性的。</p>
+<h2 id="如何实现一个-VM"><a href="#如何实现一个-VM" class="headerlink" title="如何实现一个 VM"></a>如何实现一个 VM</h2><p>参考 <a href="http://gee.cs.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="noopener">The JSR-133 Cookbook for Compiler Writers</a>。</p>
+<h2 id="为什么要关注-JMM"><a href="#为什么要关注-JMM" class="headerlink" title="为什么要关注 JMM"></a>为什么要关注 JMM</h2><p>为什么你需要关注java内存模型？并发程序的bug非常难找。它们经常不会在测试中发生，而是直到你的程序运行在高负荷的情况下才发生，非常难于重现和跟踪。你需要花费更多的努力提前保证你的程序是正确同步的。这不容易，但是它比调试一个没有正确同步的程序要容易的多。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html" target="_blank" rel="noopener">JSR 133 (Java Memory Model) FAQ</a></li>
+<li><a href="http://ifeve.com/jmm-faq/" target="_blank" rel="noopener">Java 内存模型 FAQ</a></li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH11-结构型-代理 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH11-结构型-代理","path":"reading/RD04-Java/Design-Patterns/CH11.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH11-结构型-代理"><a href="#CH11-结构型-代理" class="headerlink" title="CH11-结构型-代理"></a>CH11-结构型-代理</h1><h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><p>某些情况下，一个客户不想或者不能直接引用一个对象，此时可以使用一个称为<strong>代理</strong>的第三者来实现间接引用。代理对象可以在客户端和目标对象之间起到中介作用，并且可以通过代理对象来去掉客户不能看到的内容、服务或资源，或添加额外的功能。</p>
+<p>通过引入一个新的对象(小图片、远程代理 对象)来实现对真实对象的操作，或者将新的对象作为真实对象的一个替身，这种实现机制即为代理模式，<strong>通过引入代理对象来间接访问一个对象</strong>。</p>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p><strong>代理模式(Proxy Pattern)</strong>，给某一个对象提供一个代理，并由代理对象控制对源对象的引用。或称为 <strong>Surrogate</strong> 。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>共包含三种角色：</p>
+<ul>
+<li>Subject：抽象主题角色</li>
+<li>Proxy：代理主题角色</li>
+<li>RealSubject：真实主题角色</li>
+</ul>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134937.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134951.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>能够协调调用者和被调用者，一定程度上降低了系统耦合度。</li>
+<li>远程代理使得客户端可以访问在远程机器上的对象，远程机器可能具有更好的计算性能与处理速度，可以快速响应并处理客户端请求。</li>
+<li>虚拟代理通过使用一个小对象来代表一个大对象，可以减少系统资源的消耗，优化系统以提升速度。</li>
+<li>保护代理可以控制真是对象的使用权限。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>由于在客户端和真实对象之间增加了代理，因此，有些类型的代理模式(如远程)可能会造成请求的处理速度过慢。</li>
+<li>实现代理模式需要额外的工作，有些实现则比较复杂。</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>远程代理(Remote)：为一个处于不同地址空间的对象提供一个本地代理对象。</li>
+<li>虚拟代理(Virtual)：如果需要创建一个资源消耗过大的对象，先创建一个消耗相对较小的对象来表示，真实对象只在需要时在会被真正创建。</li>
+<li>Copy-To-Write 代理：是虚拟代理的一种，把复制(克隆)操作 延迟到只有在客户端真正需要时才执行。对象的深克隆是一个开销较大的工作，此方式可以使该操作延迟，需要时才执行。</li>
+<li>保护代理(Protect or Access)：控制一个对象的访问，可以给不同的用户提供不同级别的使用权限。</li>
+<li>缓冲代理(Cache)：为某一个目标操作的结果提供临时的存储空间，以使多个客户端可以共享这些结果。</li>
+<li>防火墙代理(Firewall)：保护目标不让恶意用户接触。</li>
+<li>同步化代理(Synchronizaiton)：使几个用户能够同时使用一个对象而没有冲突。</li>
+<li>智能引用代理(Smart Reference)：当一个对象被引用时，提供一些额外操作，比如记录对象的调用次数。</li>
+</ul>
+<h3 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h3><p>EJB、Web Service等分布式技术都是代理模式的应用。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

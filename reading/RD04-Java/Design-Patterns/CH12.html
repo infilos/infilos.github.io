@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH12-行为型-命令 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH12-行为型-命令","path":"reading/RD04-Java/Design-Patterns/CH12.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH12-行为型-命令"><a href="#CH12-行为型-命令" class="headerlink" title="CH12-行为型-命令"></a>CH12-行为型-命令</h1><h2 id="行为型模式概述"><a href="#行为型模式概述" class="headerlink" title="行为型模式概述"></a>行为型模式概述</h2><p><strong>行为型模式(Behavioral Pattern)</strong>是对在不同的对象之间<strong>划分职责和算法</strong>的抽象。</p>
+<p>该模式不仅仅关注<strong>类和对象的结构</strong>，而且关注他们之间的<strong>相互作用</strong>。</p>
+<p>通过该模式，可以更加清晰地划分类与对象的职责，并研究系统在运行时实例对象之间的交互。在系统运行时，对象并不孤立，他们可以通过相互通信与协作完成某些复杂功能，一个对象在运行时也将影响到其他对象的运行。</p>
+<p>该类模式又分为<strong>类行为模式</strong>和<strong>对象行为模式</strong>：</p>
+<ul>
+<li>类行为模式：使用继承关系在几个子类之间分配行为，通过<strong>多态</strong>方式分配父类与子类的职责。</li>
+<li>对象行为模式：使用对象的聚合关联关系来分分配行为，主要是通过<strong>对象关联</strong>等方式类分配两个或多个类的职责。根据<strong>合成复用原则</strong>，系统中要尽量通过关联关系来取代继承关系，因此绝大多数的行为设计模式都属于对象行为型模式。</li>
+</ul>
+<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><p> 软件设计中，经常要向对象发送请求，但是并不知道对象的接收者是谁，也不知道被请求的操作是哪个，只需要在运行时指定具体的请求接收者即可，此时，可以使用命令模式来进行设计，使得请求发送者和接收者之间接触耦合，增加对象调用之间的灵活性。</p>
+<p>命令模式可以对发送者和接收者完全解耦，发送者与接收者之间没有直接引用关系，发送请求的对象只需要知道如何发送请求，而不必知道如何完成请求。这就是命令模式的模式动机。</p>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p><strong>命令模式(Command Pattern)</strong>：将一个请求封装为一个对象，从而使我们可以用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。属于对象行为型模式，别名为<strong>动作模式(Action)</strong>或<strong>事务模式(Transaction)</strong>。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>包含五种角色：</p>
+<ul>
+<li>Command：抽象命令类</li>
+<li>ConcreteCommand：具体命令类</li>
+<li>Invoker：调用者</li>
+<li>Reciver：接收者</li>
+<li>Client：客户端</li>
+</ul>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220135025.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220135038.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><h3 id="模式分析"><a href="#模式分析" class="headerlink" title="模式分析"></a>模式分析</h3><p><strong>命令模式的本质是对命令进行封装，将发送命令的责任和执行命令的责任分隔开。</strong></p>
+<ul>
+<li>每一个命令都是一个操作：请求方发出请求，要求执行一个操作；接收方收到请求，并执行操作。</li>
+<li>命令模式运行请求方和接收方独立开来，使得请求方不必知道接收方的接口，更不必知道请求是如何被接收的，以及操作是否被执行、合适被执行，以及如何执行。</li>
+<li>命令模式使请求本身称为一个对象，这个对象和其他对象一样可以被存储和传递。</li>
+<li>命令模式的关键在于<strong>引入了抽象命令接口</strong>，并且发送者针对抽象命令接口编程，只有实现了抽象命令接口的具体命令才能与接收者相互关联。</li>
+</ul>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>降低系统的耦合度</li>
+<li>新的命令可以很容易地加入到系统</li>
+<li>可以比较容易的设计一个命令队列和宏命令(组合命令)</li>
+<li>可以方便的实现对请求的 Undo 和 Redo 操作</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>可能会导致某些系统有过多的具体命令类。因为针对每一个命令都需要设计一个具体命令类，因此某些系统可能会需要大量命令类，这将影响命令模式的使用。</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>系统需要将请求调用者和接收者解耦，使得调用者和接收者不直接交互</li>
+<li>需要在不同的时间指定请求、将请求排队、执行</li>
+<li>系统需要支持命令的撤销和恢复操作</li>
+<li>系统需要将一组操作组合在一起，即自持宏命令</li>
+</ul>
+<h3 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h3><ul>
+<li>宏命令又称组合命令，它是命令模式和组合模式联用的产物。</li>
+<li>宏命令也是一个具体命令，不过他包含了对其他命令对象的引用。在调用宏命令的<code>execute()</code>方法时，将会递归调用它所包含的每个成员命令的<code>execute()</code>方法。</li>
+<li>一个宏命令的成员对象可以是一个简单命令也可以是另外一个宏命令。</li>
+<li>执行一个宏命令将执行多个具体命令，从而实现对命令的批处理。</li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

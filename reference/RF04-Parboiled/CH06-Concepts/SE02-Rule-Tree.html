@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | SE02-Rule Tree </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"SE02-Rule Tree","path":"reference/RF04-Parboiled/CH06-Concepts/SE02-Rule-Tree.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <p>像大多数解析相关的程序一样，Parboiled 严重依赖于图和树结构。第一个这样的结构会在解析过程中创建，即规则“树”。该规则树这时尚未与实际的输入产生依赖。解析输入会在解析执行的过程中被解析器消费并被应用到规则树上，该过程可以以可选的方式生成一个解析树。</p>
+<p>假设以下示例语法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a ← b ‘a’ c</span><br><span class="line">b ← ‘b’ d</span><br><span class="line">c ← ‘c’ d</span><br><span class="line">d ← ‘d’ c?</span><br></pre></td></tr></table></figure>
+<p>如果你将该语法转换为一个图，仅将规则作为图的节点，规则引用作为有向边，这时该语法可以用以下结构来表示：</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190212174806.png" style="display:block;width:20%;" alt="NAME" align="center">
+</div>
+
+<p>你会发现该图存在一个环，同时节点 d 拥有两个父亲，这也就是为什么该图不是一个树而仅仅是一个有向图。很多真实世界的语法的大多部分都像是一个树，带有非常清晰的规则到子规则层级引用。虽然回环(递归)并不十分罕见，但与“常规”分层引用相比，它们的数量确实很少。</p>
+<p>因此这样的原因(以及对许多人而言，“树”是一种更常见的心理图景)，你可能会选择将这样的规则图看做是带有两个特殊异常的规则树：多父亲、回环。</p>
+<p>顺便提一下，PEG 语法的这种有向图特性几乎与方法调用在 JVM 中的工作方式一致：方法调用其他方法，可能包括调用堆栈祖先。这也是为什么 Parboiled 会或多或少的将规则声明映射到 Java/Scala 的方法调用。你的每个解析器规则方法都会构造一个规则对象，并在构造过程中潜在的调用其他规则构造方法。</p>
+<p>然而这里还有两个问题：</p>
+<ul>
+<li>Java/Scala 方法递归到方法自身或其祖先时需要一种方式来终止递归。通常这是通过一些逻辑实现的，可以在逻辑中通过一些条件来退出递归。然而规则声明无法做到这一点，只有解析的输入文本(是有限的)将会终止任何规则递归。因此为了防止用于构造规则的 Java/Scala 方法出现无限递归，需要采取一些技巧。</li>
+<li>当一个规则构造方法被调用多次时(可能被多起其他规则构造方法调用)，通常会为每次调用创建结构相同的全新的规则实例。虽然这不是什么问题，但在规模较大的语法中则会比较低效，这时一个大型的规则树中会包含很多重复的规则实例。</li>
+</ul>
+<p>Parboiled 在 Java 中通过重写解析类的规则方法来、并注入开发者不可见的代码来解决这两个问题。这些代码会确保每个方法仅会被调用一次，即背个规则仅被创建一次，后续的调用则会返回已创建的相同规则实例。如果规则的创建过程递归会自身，则插入代理规则以防止无限递归。所有这些事情都在幕后透明地发生，开发者无需关心。</p>
+<p>Parboiled 在 Scala 中则不需要重写实际的字节码，而是将实际的规则创建代码封装到一个函数块，并作为主规则构建方法的参数。</p>
+<p>最后，当你调用你的顶级规则方法并传给所选的 ParseRunner 时，则会得到一个规则树，没有重复节点，正确的链接关系，甚至还有递归。</p>
+<h2 id="Mathcers"><a href="#Mathcers" class="headerlink" title="Mathcers"></a>Mathcers</h2><p>你可能已经在 Javadoc API 文档中看到 Rule 接口仅仅是一个外观接口，带有很少的方法以指定特殊的规则属性。所有实现该接口的类被定义在 <code>org.parboiled.matchers</code> 中。有一个用于所有规则原语的 Matcher 实现，它实现了实际规则类型的逻辑。因此规则树实际上是一个 Matcher 树。然而，大多时候你不必了解这些内部细节，仅需关注于解析器规则和值栈。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

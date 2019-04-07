@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH03-创建型-抽象工厂 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH03-创建型-抽象工厂","path":"reading/RD04-Java/Design-Patterns/CH03.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH03-创建型-抽象工厂"><a href="#CH03-创建型-抽象工厂" class="headerlink" title="CH03-创建型-抽象工厂"></a>CH03-创建型-抽象工厂</h1><h3 id="模式动机"><a href="#模式动机" class="headerlink" title="模式动机"></a>模式动机</h3><ul>
+<li><p>在工厂方法模式中，具体工厂负责生成具体的产品，每个具体工厂对应一个具体产品，工厂方法也具有唯一性，一般情况下，一个具体工厂中只有一个工厂方法或一组重载的工厂方法。但是有些时候我们需要一个工厂能够提供多个产品对象，而不是一个单一的产品对象。</p>
+<p>为了清晰理解工厂方法模式，需要知道两个概念：</p>
+<ol>
+<li><strong>产品等级结构</strong>：产品等级结构即产品的继承结构（如一个抽象类是电视机，其子类有：海尔、海信、TCL等，抽象电视机与对应品牌的电视机即构成了产品等级结构）。</li>
+<li><strong>产品族</strong>：在抽象工厂模式中，产品族是指<strong>由一个工厂生产的，位于不同产品等级结构中的一组产品</strong>。如海尔电器工厂生产的电视机、电冰箱，海尔电视机位于电视机产品等级结构中，海尔电冰箱位于电冰箱产品等级结构中。</li>
+</ol>
+</li>
+<li><p>当系统提供的工厂需要生产的具体产品并不是一个简单的对象，而是多个位于不同产品等级结构中、属于不同类型的具体产品时，需要使用抽象工厂模式。</p>
+</li>
+<li><p>该模式是所有形式的工厂模式中最为抽象和最具一般性的形态。</p>
+</li>
+<li><p>抽象工厂模式与工厂方法模式最大的区别在于：工厂方法模式针对的是一个产品等级结构，而抽象工厂模式需要面对多个产品等级结构，一个工厂等级结构，可以负责多个不同产品等级结构中的产品对象的创建。当一个工厂等级结构(海尔电器工厂)，可以创建出分属不同产品等级结构的 一个产品族中的所有对象(电视机、电冰箱)时，抽象工厂模式比工厂方法模式更有效率。</p>
+</li>
+</ul>
+<h3 id="模式定义"><a href="#模式定义" class="headerlink" title="模式定义"></a>模式定义</h3><p>抽象工厂模式(Abstract Factory Pattern)：提供一个 创建一系列相关或相互依赖对象 的接口，而无需指定他们的具体类。又称为 Kit 模式。</p>
+<h3 id="模式结构"><a href="#模式结构" class="headerlink" title="模式结构"></a>模式结构</h3><p>包含如下角色：</p>
+<ul>
+<li>AbstractFactory：抽象工厂</li>
+<li>ConcreteFactory：具体工厂</li>
+<li>AbstractProduct：抽象产品</li>
+<li>Product：具体产品</li>
+</ul>
+<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134229.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<p>解释：</p>
+<ul>
+<li>AbstractFactory 可以理解为 电器工厂；</li>
+<li>ConcreteFactory1 可以理解为 海尔电器工厂；</li>
+<li>ConcreteFactory2 可以理解为 格力电器工厂；</li>
+<li>AbstractProductA 理解为产品 电视机；</li>
+<li>AbstractProductB 理解为产品 电冰箱；</li>
+<li>ProductA1 则为 海尔牌电视机；</li>
+<li>ProductA2 则为 格力牌电视机；</li>
+<li>ProductB1 则为 海尔牌电冰箱；</li>
+<li>ProductB2 则为 格力牌电视机；</li>
+</ul>
+<p>因此，海尔电器工厂 可以生产 海尔牌的电视机和电冰箱，同理格力电器工厂。这样，产品等级结构(电视机、电冰箱)和产品族(海尔牌、格力牌)通过两种维度实现对产品的建模。</p>
+<h3 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h3><div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190220134250.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>抽象工厂模式隔离了具体类的生产，使得客户端并不知道什么被创建。由于这种隔离，更换一个具体工厂就变得相对容易。所有的具体工厂都实现了抽象工厂中定义的那些公共接口，因此只需改变具体工厂的实例，就可以从某种程度上改变整个系统的行为。同时该模式可以实现<strong>高内聚低耦合</strong>的实际目的，因此该模式被广泛应用。</li>
+<li>当一个产品族中的多个对象被设计成一起工作时，它能够保证客户端始终只使用一个产品族中的对象。这对一些需要根据当前环境来决定其行为的软件系统来说，是一种非常实用的设计模式。</li>
+<li>增加新的具体工厂和产品族非常方便，无需修改已有系统，符合<strong>开闭原则</strong>。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>在添加新的产品对象时，难以扩展抽象工厂来生产新种类的产品，这是因为在抽象工厂角色中规定了所有可能被创建的产品集合，要支持新种类的产品就要对该接口进行扩展，这会涉及到对抽象工厂角色及其所有子类进行修改，会带来较大不便。</li>
+<li>开闭原则的倾斜性，增加新的工厂和产品族容易，增加新的产品等级结构麻烦。</li>
+</ul>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>当一个系统不需要依赖于产品类实例如何被创建、组合、表达的细节，这对于所有形式的工厂模式都是重要的。</li>
+<li>系统中有多于一个的产品族，而每次只适用其中一个产品族。</li>
+<li>属于同一个产品族的产品将在一起使用，这一约束必须在系统的设计中体现出来。</li>
+<li>系统提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于实现。</li>
+</ul>
+<h3 id="模式应用"><a href="#模式应用" class="headerlink" title="模式应用"></a>模式应用</h3><p>比如一些软件系统中需要更换系统主题，要求界面中的按钮、文本框、背景等一起发生改变时，就可以使用该模式。比如：按钮元素的不同形式构成一个产品等级结构，不同元素的同一主题形式构成一个产品族。</p>
+<h3 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h3><p><strong>开闭原则</strong>的倾斜性：</p>
+<ul>
+<li>开闭原则要求对系统扩展开发，对修改关闭，通过扩展达到增强其功能的目的。对于涉及到多个产品族与多个产品等级结构的系统，其功能增强则包括两方面：<ol>
+<li>增加产品族：对于增加新的产品族，本模式很好的支持了开闭原则，只需要增加一个新的具体工厂即可，对已有代码无需做任何修改；</li>
+<li>增加产品等级结构：对于增加新的产品等级结构，需要修改所有的工厂角色，包括抽象工厂类，在所有的工厂类中都需要增加生成新产品的方法，不能很好的支持开闭原则。</li>
+</ol>
+</li>
+<li>抽象工厂模式的这种性质称为<strong>开闭原则的倾斜性</strong>，该模式以一种倾斜的方式来支持增加新的产品，为新产品族的增加提供方便，但不能为新的产品等级结构增加提供方便。</li>
+</ul>
+<p>工厂模式退化：</p>
+<ul>
+<li>当抽象工厂模式中每一个具体工厂类只创建一个产品对象，也就是只存在一个产品等级结构时，该模式也就退化成了工厂方法模式；</li>
+<li>当工厂方法模式中抽象工厂与具体工厂合并，提供一个统一的工厂来创建产品对象，并将创建产品的方法设计为静态方法时，工厂方法模式退化成简单工厂模式。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>该模式提供了一个创建一系列相关或相互依赖对象的接口，而无需指定他们的具体类。</li>
+<li>包含四种角色。</li>
+<li>是所有形式的工厂模式中最为抽象和最具一般性的一种形态。</li>
+<li>主要优点是隔离了具体类的生成，使得客户端不知道什么被创建。</li>
+<li>。。。</li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

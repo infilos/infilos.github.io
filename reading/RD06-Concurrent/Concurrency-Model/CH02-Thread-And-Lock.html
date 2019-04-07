@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH02-线程与锁 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH02-线程与锁","path":"reading/RD06-Concurrent/Concurrency-Model/CH02-Thread-And-Lock.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH02-线程与锁"><a href="#CH02-线程与锁" class="headerlink" title="CH02-线程与锁"></a>CH02-线程与锁</h1><p>虽然该模型稍显原始且难以驾驭、不够可靠还有点危险，但仍然是并发编程的首选项，也是其他并发模型的基石。</p>
+<h2 id="对硬件运行过程形式化"><a href="#对硬件运行过程形式化" class="headerlink" title="对硬件运行过程形式化"></a>对硬件运行过程形式化</h2><p>该模型其实是对底层硬件运行过程的形式化。这种形式化既是该模型的最大优点、也是其最大的缺点。</p>
+<p>该模型非常简单直接，几乎所有编程语言都提供了对该模型的支持，且不对其使用方式加以限制。</p>
+<h2 id="互斥与内存模型"><a href="#互斥与内存模型" class="headerlink" title="互斥与内存模型"></a>互斥与内存模型</h2><p>互斥：使用锁来保证某一时间仅有一个线程可以访问数据。它会带来竟态条件和死锁。</p>
+<p>乱序执行的来源：</p>
+<ul>
+<li>编译器和静态优化</li>
+<li>JVM 动态优化</li>
+<li>底层硬件优化</li>
+</ul>
+<p>从直觉上来说，编译器、JVM、硬件都不应该修改原有的代码逻辑，但是近几年的运行效率提升，尤其是共享内存架构的运行效率提升，均基于此类代码的优化。</p>
+<p>Java 内存模型为这类优化提供了标准。</p>
+<h3 id="内存可见性"><a href="#内存可见性" class="headerlink" title="内存可见性"></a>内存可见性</h3><p>Java 内存模型定义了一个线程对内存的修改何时对另一个线程可见。基本原则是，如果读线程和写线程不进行同步，就不能保证可见性。</p>
+<h3 id="多把锁"><a href="#多把锁" class="headerlink" title="多把锁"></a>多把锁</h3><p>很容易得出一个结论：让多线程代码安全运行的方法只能是让所有的代码都同步。但是这么做有两个缺点：</p>
+<ul>
+<li>效率低下：如果每个方法都同步，大多数线程会频繁阻塞，也就失去了并发的意义。</li>
+<li>死锁：哲学家就餐问题。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>对共享变量的所有访问都需要同步化。</li>
+<li>读线程、写线程都需要同步化。</li>
+<li>按照约定的全局顺序来获取多把锁。</li>
+<li>当持有锁时避免调用外部方法(无法确保线程安全性)。</li>
+<li>持有锁的时间尽可能的短。</li>
+</ul>
+<h2 id="更多同步机制"><a href="#更多同步机制" class="headerlink" title="更多同步机制"></a>更多同步机制</h2><h3 id="内置锁的限制"><a href="#内置锁的限制" class="headerlink" title="内置锁的限制"></a>内置锁的限制</h3><ul>
+<li>一个线程因为等待内置锁而进入阻塞之后，就无法中断该线程了。</li>
+<li>尝试获得内置锁时无法设置超时。</li>
+<li>必须通过 synchronized 块来获取内置锁。</li>
+</ul>
+<h3 id="可中断的锁"><a href="#可中断的锁" class="headerlink" title="可中断的锁"></a>可中断的锁</h3><p>ReentrantLock 提供了显式的加解锁方法，可以在代码的不同位置来实现加解锁逻辑，这是 synchronized 块无法做到的。</p>
+<p>同时，ReentrantLock 提供的 lockInterruptibly 方法可以用于终止死锁线程。</p>
+<h3 id="超时设置"><a href="#超时设置" class="headerlink" title="超时设置"></a>超时设置</h3><p>ReentrantLock 还可以为获取锁的超时设置超时时间。</p>
+<h3 id="交替锁"><a href="#交替锁" class="headerlink" title="交替锁"></a>交替锁</h3><p>设想我们要在链表插入一个节点，一种做法是用锁保护整个链表，但链表加锁时其他使用者无法访问该链表。而交替锁可以做到仅锁住链表的一部分，允许不涉及被锁部分的其他线程继续自由的访问链表。同样可以由 ReentrantLock 实现。</p>
+<h3 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h3><p>并发编程经常需要等待某个事件发生。比如从队列删除元素前需要等待队列非空、向缓存添加数据前需要等待缓存拥有足够的空间。这时就需要条件变量 Condition。</p>
+<p>一个条件变量需要与一把锁关联，线程在开始等待条件之前必须先获取这把锁。获取锁后，线程检查所有等待的条件是否为真。如果条件为真，线程将解锁并继续执行。</p>
+<p>如果条件不为真，线程会调优 await 方法，它将原子的解锁并阻塞等待该条件。</p>
+<p>当另一个线程调用了 signal 或 signalAll，意味着对应的条件可能已变为真，await 方法将原子的恢复运行并重新加锁。</p>
+<h3 id="原子变量"><a href="#原子变量" class="headerlink" title="原子变量"></a>原子变量</h3><p>比如 AtomicInteger。与锁相比，原子变量有很多好处。首先，我们不会忘记在正确的时候获取锁；其次，由于没有锁的参与，对原子变量的操作不会引发死锁；最后，原子变量是无锁(lock-free)非阻塞(non-blocking)算法的基础，这种算法可以不使用锁和阻塞来达到同步的目的。</p>
+<p>无锁代码比起有锁代码更加复杂，JUC 中的类都尽量使用了无锁代码。</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>ReentrantLock 和 JUC.atomic 突破了使用内置锁的限制，可以利用它们做到：</p>
+<ol>
+<li>在线程获取锁时将其中断。</li>
+<li>设置线程获取锁时的超时时间。</li>
+<li>按任意顺序获取和释放锁。</li>
+<li>用条件变量来等待某个条件变为真。</li>
+<li>使用原子变量来避免使用锁。</li>
+</ol>
+<h2 id="利用已有工具"><a href="#利用已有工具" class="headerlink" title="利用已有工具"></a>利用已有工具</h2><h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>比如，编写服务端应用时为每个连接请求创建一个线程，这样存在两个隐患：</p>
+<ol>
+<li>创建线程是有代价的。</li>
+<li>连接数的增长会使得线程数不断增长，而系统资源(如内存)是有限的。</li>
+</ol>
+<p>可以使用线程池来对线程进行复用，JUC 提供了各种类型的线程池。</p>
+<h3 id="写时复制"><a href="#写时复制" class="headerlink" title="写时复制"></a>写时复制</h3><p>比如 CopyOnWriteArrayList，它使用了保护性复制策略。它并非在遍历链表前进行复制，而是在链表被修改时复制，已经投入使用的迭代器会使用当时的旧副本。</p>
+<h3 id="其他概念"><a href="#其他概念" class="headerlink" title="其他概念"></a>其他概念</h3><ul>
+<li>使用线程构建“生产者——消费者模型”。</li>
+<li>毒丸(Poison Pill) 是一个特殊对象，告诉消费者“数据已取完，你可以退出了”。</li>
+<li>使用线程构建“单生产者——多消费者模型”。</li>
+<li>使用并发集合汇总多个消费者并发生成的结果。</li>
+<li>使用线程池来优化线程的使用。</li>
+<li>使用 ConcurrentHashMap 的分段锁优势，避免过多线程对单个资源的过度竞争。</li>
+<li>为各个消费者提供各自的结构缓存，最后再汇总这些缓存，以避免没有必要的数据竞争。</li>
+</ul>
+<h3 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>使用线程池，而不是直接创建线程。</li>
+<li>使用写时复制让监听器先关的代码更简单高效。</li>
+<li>使用同步队列构建生产者消费者模型。</li>
+<li>ConcurrentHashMap 提供了更好的并发访问。</li>
+</ul>
+<h2 id="本章总结"><a href="#本章总结" class="headerlink" title="本章总结"></a>本章总结</h2><h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><ul>
+<li>适用面广，是许多其他技术的基础，更加接近于本质——近似对硬件工作方式的形式化，真确应用可以得到很高的效率。能够解决从小达到不同粒度的问题。</li>
+<li>该模型可以被集成到大多数编程语言中。语言设计者可以轻易让一门指令式语言或 OO 语言支持该模型。</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>该模型没有为并行提供直接的支持。</li>
+<li>该模型仅支持共享内存模型。如果要支持分布式内存模型则需要借助其他工具。</li>
+<li>最大的缺点在于“无助”，应用开发者在编程语言层面没有得到足够的帮助。</li>
+</ul>
+<h3 id="隐性错误"><a href="#隐性错误" class="headerlink" title="隐性错误"></a>隐性错误</h3><p>应用多线程的难点不在编程，而在于难以测试。而测试中的一个大问题是难以复现。</p>
+<p>随着项目的迭代和时间的流式，复杂的多线程代码会变得难以维护。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

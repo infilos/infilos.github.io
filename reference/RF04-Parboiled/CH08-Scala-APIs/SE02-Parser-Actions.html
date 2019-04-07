@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | SE02-Parser Actions </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"SE02-Parser Actions","path":"reference/RF04-Parboiled/CH08-Scala-APIs/SE02-Parser-Actions.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="SE02-Parser-Actions"><a href="#SE02-Parser-Actions" class="headerlink" title="SE02-Parser Actions"></a>SE02-Parser Actions</h1><p>在 Parboiled Java 中需要以布尔表达式的形式设置解析器动作，然后再被自动转换为解析器动作规则。没有进一步的动作类型来支持 Parboiled Java 对值栈操作元素数量进行区分。这意味着 Java 开发者不能依赖编译器来检测解析器动作对值栈操作的一致性(主要是元素数量)。因此在动作的设计期间需要更多对人的规范约束。</p>
+<p>在 Parboiled Scala 中，Scala 的类型推断能力使得解析器动作支持比 Java 中更高级别的抽象。在 Scala 解析器动作中，无需对值栈进行操作，而是将其指定为函数。因此，它们不仅仅是简单的代码块，其本身就是类型。</p>
+<p>根据规则中包含的解析器动作，规则的实际类型会发生变化。对值栈没有任何影响的规则类型为 Rule0。将类型为 A 的值对象推送到值栈的规则具有类型 <code>Rule1[A]</code>。导致类型分别为 A 和 B 的两个值对象被推送到值栈的规则类型为 <code>Rule2[A,B]</code>。导致类型为 Z 的一个值对象从堆栈中弹出的规则具有类型 <code>PopRule1[Z]</code>。目前共 15 种具体的规则类型。</p>
+<p>这种稍微复杂的类结构允许 Scala 在规则类型中进行编码，以确定规则如何影响解析器值堆栈，并确保所有解析器操作正确地协同工作以生成解析器最终结果值。请注意，这不会对值对象的类型施加任何限制！</p>
+<p>支持 3 种形式的解析器动作：</p>
+<ol>
+<li>动作操作符</li>
+<li>push/test/run 方法</li>
+<li>独立动作</li>
+</ol>
+<h2 id="Action-Operators"><a href="#Action-Operators" class="headerlink" title="Action Operators"></a>Action Operators</h2><p>共定义了 9 种动作操作符。每种都会链接一个动作函数到语法规则结构，但与它们的动作函数参数的类型和语义不同。下表是一个概览：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Action Result</th>
+<th style="text-align:left">Action Argument(String)</th>
+<th>Action Argument(Value Object Pop)</th>
+<th>Action Argument(Value Object Peek)</th>
+<th>Action Argument(Char)</th>
+<th>Action Argument(IndexRange)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Value Object</td>
+<td style="text-align:left">~&gt;</td>
+<td>~~&gt;</td>
+<td>~~~&gt;</td>
+<td>~:&gt;</td>
+<td>~&gt;&gt;</td>
+</tr>
+<tr>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">~?</td>
+<td>~~?</td>
+<td>~~~?</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">Unit</td>
+<td style="text-align:left">~%</td>
+<td>~~%</td>
+<td><code>~~~%</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>以单个 <code>~</code> 字符起始的操作符通常是解析器动作接收已匹配输入文本的方式。其参数是一个类型为 <code>String =&gt; ...</code> 的函数。该操作符内部会创建一个新的动作规则，在运行时，将与紧邻的规则匹配的输入文本作为参数传递给该函数。</p>
+<p>以 <code>~~</code> 和 <code>~~~</code> 字符起始的操作符接收一个或多个值对象作为参数。</p>
+<p>以 <code>&gt;</code> 字符结尾的操作符创建一个或多个新的值对象，在动作函数运行之后推送到值栈。这些动作结构值的类型会被编码到操作符的返回类型。</p>
+<p>以 <code>?</code> 字符结尾的操作符接收一个返回布尔值的函数作为语义判定。如果动作函数返回 false 则停止当前规则序列的求值，即为匹配，然后强制解析器回退并查找其他匹配可能。</p>
+<p>以 <code>%</code> 字符结尾的操作符支持你运行任意逻辑而不会对处理过程产生影响。其动作函数返回 Unit，一旦解析器经过，它们就会被运行。</p>
+<h2 id="push-test-run-方法"><a href="#push-test-run-方法" class="headerlink" title="push/test/run 方法"></a>push/test/run 方法</h2><p>上述讨论的动作操作符均为将你的动作链接到当前的解析处理过程，要么是接收已匹配的输入文本作为参数，要么是生成新的栈值元素。但有时你的动作并不需要任何输入，因为其在规则结构中的位置就是其需要的所有上下文。这时你可以使用 push/test/run 方法来实现与上述讨论的操作符相同的功能，这些方法由 Parser 特质提供。</p>
+<p>由这些方法构造的动作规则可以通过被链接在一起。如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">JsonTrue</span> </span>= rule &#123; <span class="string">"true"</span> ~ push(<span class="type">True</span>) &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="独立动作"><a href="#独立动作" class="headerlink" title="独立动作"></a>独立动作</h2><p>独立动作是以 Context 对象作为参数的独立函数。它们可以像普通规则一样被使用，因为 Parser 特质提供了以下两种隐式转换：</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Semantics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>toRunAction(f:(Context[Any]) =&gt; Unit):Rule0</td>
+<td>通用非判断动作</td>
+</tr>
+<tr>
+<td>toTestAction(f:(Context[Any]) =&gt; Boolean):Rule0</td>
+<td>通用语义判定动作</td>
+</tr>
+</tbody>
+</table>
+<p>当前解析的 Context 为通用动作提供了对解析器的所有状态访问能力。它们可以通过 getValueStack 方法来修改解析器的值栈。但并不推荐这种用法，因为这将导致 Scala 编译器无法有效的验证值栈操作的一致性。</p>
+<h2 id="“withContext”-动作"><a href="#“withContext”-动作" class="headerlink" title="“withContext” 动作"></a>“withContext” 动作</h2><p>Parser 特质提供的另一个便利的工具是 withContext 方法，通过该方法，你可以包装一个动作函数然后再将其传递给动作操作符。该方法支持你的动作函数除了其常规的参数之外还能接收当前解析器的 Context。</p>
+<p>withContext 的签名类似如下定义：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">withContext</span></span>[<span class="type">A</span>, <span class="type">B</span>, <span class="type">R</span>](f: (<span class="type">A</span>, <span class="type">B</span>, <span class="type">Context</span>[_]) =&gt; <span class="type">R</span>): ((<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">R</span>)</span><br></pre></td></tr></table></figure>
+<p>因此，被该方法包装的动作函数在外部会显示为一个函数，比如，弹出值栈的两个对象并生成一个新的值。但是，在内部你的动作同样也可以接受到当前上下文的实例，比如可以查看当前输入位置以及行号。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

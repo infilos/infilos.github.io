@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH04-并行工具 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH04-并行工具","path":"reading/RD06-Concurrent/Parallel-Programming/CH04-Tools.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH04-并行工具"><a href="#CH04-并行工具" class="headerlink" title="CH04-并行工具"></a>CH04-并行工具</h1><p>本章主要介绍一些并行编程领域的基本工具，主要是类 Linux 系统上可以供应用程序使用的工具。</p>
+<h2 id="脚本语言"><a href="#脚本语言" class="headerlink" title="脚本语言"></a>脚本语言</h2><p>Shell 脚本提供了一种简单有效的并行化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1 compute_it 1 &gt; compute_it.1.out &amp; </span><br><span class="line">2 compute_it 2 &gt; compute_it.2.out &amp; </span><br><span class="line">3 <span class="built_in">wait</span> </span><br><span class="line">4 cat compute_it.1.out</span><br><span class="line">5 cat compute_it.2.out</span><br></pre></td></tr></table></figure>
+<p>第 1、2 行分别启动了两个实例，通过 <code>&amp;</code> 符号使这两个程序在后台运行，并分别将程序的输出重定向到一个文件。第 3 行等待两个实例执行完毕，第 4、5 行显示程序的输出。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922142852.png" style="display:block;width:50%;" alt="NAME" align="center">
+</div>
+
+<p>另外，例如 <code>make</code> 脚本语言提供了一个 <code>-j</code> 选项来指定编译过程中同时执行多少个并行任务，<code>make -j4</code> 则表示同时执行 4 个并行编译过程。</p>
+<p>既然基于脚本的并行编程这么简单，为什么还需要其他工具呢？</p>
+<h2 id="POSIX-多进程"><a href="#POSIX-多进程" class="headerlink" title="POSIX 多进程"></a>POSIX 多进程</h2><h3 id="POSIX-进程的创建与销毁"><a href="#POSIX-进程的创建与销毁" class="headerlink" title="POSIX 进程的创建与销毁"></a>POSIX 进程的创建与销毁</h3><p>进程通过 <code>fork()</code> 原语创建，通过 <code>kill()</code> 原语销毁，也可以通过 <code>exit()</code> 原语实现自我销毁。执行 <code>fork()</code> 原语的进程被称为新创建进程的父进程，父进程可以功能通过 <code>wait()</code> 原语等待子进程执行完毕。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> pid = fork(); </span><br><span class="line"><span class="number">2</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123; </span><br><span class="line"><span class="number">3</span> 	/ * child * / </span><br><span class="line"><span class="number">4</span> &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid &lt; <span class="number">0</span>) &#123; </span><br><span class="line"><span class="number">5</span> 	/ * parent, upon error * / </span><br><span class="line"><span class="number">6</span> 	perror(<span class="string">"fork"</span>); </span><br><span class="line"><span class="number">7</span> 	<span class="built_in">exit</span>(<span class="number">-1</span>); </span><br><span class="line"><span class="number">8</span> &#125; <span class="keyword">else</span> &#123; </span><br><span class="line"><span class="number">9</span> 	/ * parent, pid == child ID * / </span><br><span class="line"><span class="number">10</span> &#125;</span><br></pre></td></tr></table></figure>
+<p><code>fork()</code> 的返回值表示了其执行状态，即上面片段中的 pid。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="function"><span class="keyword">void</span> <span class="title">waitall</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">2 </span>&#123; </span><br><span class="line"><span class="number">3</span> 	<span class="keyword">int</span> pid; </span><br><span class="line"><span class="number">4</span> 	<span class="keyword">int</span> status; </span><br><span class="line"><span class="number">5</span> </span><br><span class="line"><span class="number">6</span> 	<span class="keyword">for</span> (;;) &#123; </span><br><span class="line"><span class="number">7</span> 		pid = wait(&amp;status); </span><br><span class="line"><span class="number">8</span> 		<span class="keyword">if</span> (pid == <span class="number">-1</span>) &#123; </span><br><span class="line"><span class="number">9</span> 			<span class="keyword">if</span> (errno == ECHILD) </span><br><span class="line"><span class="number">10</span> 			<span class="keyword">break</span>; </span><br><span class="line"><span class="number">11</span> 			perror(<span class="string">"wait"</span>); </span><br><span class="line"><span class="number">12</span> 			<span class="built_in">exit</span>(<span class="number">-1</span>); </span><br><span class="line"><span class="number">13</span> 		&#125; </span><br><span class="line"><span class="number">14</span> 	&#125; </span><br><span class="line"><span class="number">15</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>父进程使用 <code>wait()</code> 原语来等待子进程时，<code>wait()</code> 只能等待一个子进程。我们将 <code>wait()</code> 原语封装成一个 <code>waitall()</code> 函数，该函数与 shell 中的 <code>wait</code> 意义一样：<code>for(;;)</code> 将会一直循环，每次循环等待一个子进程，阻塞直到该子进程退出，并返回子进程的进程 ID 号，如果该进程号为 -1，则表示 <code>wait()</code> 无法等待子进程执行完毕。如果检查错误码为 <code>ECHILD</code> 则表示没有其他子进程了，这时退出循环。</p>
+<p><code>wait()</code> 原语的复杂性在于，父进程与子进程之间不共享内存，而最细粒度的并行化需要共享内存，这时则要比不共享内存式的并行化复杂很多。</p>
+<p>这种 <code>fork-waitall</code> 的形式被称为 <strong>fork-join</strong>。</p>
+<h3 id="POSIX-线程创建与销毁"><a href="#POSIX-线程创建与销毁" class="headerlink" title="POSIX 线程创建与销毁"></a>POSIX 线程创建与销毁</h3><p>在一个已有的进程中创建线程，需要调用 <code>pthread_create()</code> 原语，它的第一个参数指向 <code>pthread_t</code> 类型的指针，第二个 NULL 参数是一个可选的指向 <code>pthread_attr_t</code> 结构的指针，第三个参数是新线程要调用的函数(下面的例子中是 <code>mythread()</code>)，最后一个 NULL 参数是传递给 <code>mythread()</code> 的参数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">int</span> x = <span class="number">0</span>; </span><br><span class="line"><span class="number">2</span> </span><br><span class="line"><span class="number">3</span> <span class="function"><span class="keyword">void</span> * <span class="title">mythread</span><span class="params">(<span class="keyword">void</span> * arg)</span> </span></span><br><span class="line"><span class="function">4 </span>&#123; </span><br><span class="line"><span class="number">5</span>   x = <span class="number">1</span>; </span><br><span class="line"><span class="number">6</span>   <span class="built_in">printf</span>(<span class="string">"Child process set x=1\n"</span>); </span><br><span class="line"><span class="number">7</span>   <span class="keyword">return</span> <span class="literal">NULL</span>; </span><br><span class="line"><span class="number">8</span> &#125; </span><br><span class="line"><span class="number">9</span> </span><br><span class="line"><span class="number">10</span> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> * argv[])</span> </span></span><br><span class="line"><span class="function">11 </span>&#123; </span><br><span class="line"><span class="number">12</span>   <span class="keyword">pthread_t</span> tid; </span><br><span class="line"><span class="number">13</span>   <span class="keyword">void</span> * vp; </span><br><span class="line"><span class="number">14</span> </span><br><span class="line"><span class="number">15</span>   <span class="keyword">if</span> (pthread_create(&amp;tid, <span class="literal">NULL</span>, </span><br><span class="line"><span class="number">16</span> 				        mythread, <span class="literal">NULL</span>) != <span class="number">0</span>) &#123; </span><br><span class="line"><span class="number">17</span>     perror(<span class="string">"pthread_create"</span>); </span><br><span class="line"><span class="number">18</span>     <span class="built_in">exit</span>(<span class="number">-1</span>); </span><br><span class="line"><span class="number">19</span>   &#125; </span><br><span class="line"><span class="number">20</span>   <span class="keyword">if</span> (pthread_join(tid, &amp;vp) != <span class="number">0</span>) &#123; </span><br><span class="line"><span class="number">21</span>     perror(<span class="string">"pthread_join"</span>); </span><br><span class="line"><span class="number">22</span>     <span class="built_in">exit</span>(<span class="number">-1</span>); </span><br><span class="line"><span class="number">23</span>   &#125; </span><br><span class="line"><span class="number">24</span>   <span class="built_in">printf</span>(<span class="string">"Parent process sees x=%d\n"</span>, x); </span><br><span class="line"><span class="number">25</span>   <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line"><span class="number">26</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第 7 行中，<code>mythread</code> 直接选择了返回，也可以使用 <code>pthread_exist()</code> 结束。</li>
+<li>第 20 行的 <code>pthread_join()</code> 原语是对 fork-join 中 <code>wait()</code> 的模仿，它一直阻塞到 tid 变量指向的线程返回。线程的返回值要么是传给 <code>pthread_exit()</code> 的返回值，要么是线程调用函数的返回值，这取决于线程退出的方式。</li>
+</ul>
+<p>上面代码的执行结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Child process set x=1 </span><br><span class="line">Parent process sees x=1</span><br></pre></td></tr></table></figure>
+<p>上面的代码中小心构造了一次只有一个线程为变量赋值的场景。任何一个线程为某变量赋值而另一线程读取变量值的场景，都会产生数据竞争(data-race)。因此我们需要一些手段来安全的并发读取数据，即下面的加锁原语。</p>
+<h3 id="POSIX-锁"><a href="#POSIX-锁" class="headerlink" title="POSIX 锁"></a>POSIX 锁</h3><p>POSIX 规范支持开发者使用 POSIX 锁来避免数据竞争。POSIX 锁包括几个原语，其中最基础的是 <code>pthread_mutex_lock()</code> 和 <code>pthread_mutex_unlock()</code>。这些原语将会操作 <code>pthread_mutex_t</code> 类型的锁。该锁的静态声明和初始化由 <code>PTHREAD_MUTEX_INITIALIZER</code> 完成，或者由 <code>pthread_mutex_init()</code> 来动态分配并初始化。</p>
+<p>因为这些加锁、解锁原语是互相排斥的，所以一次只能有一个线程在一个特定的时刻持有一把特定的锁。比如，如果两个线程尝试同时获取一把锁，那么其中一个线程会首先获准持有该锁，另一线程只能等待第一个线程释放该锁。</p>
+<h3 id="POSIX-读写锁"><a href="#POSIX-读写锁" class="headerlink" title="POSIX 读写锁"></a>POSIX 读写锁</h3><p>POSIX API 提供了一种读写锁，用 <code>pthread_rwlock_t</code> 类型来表示，与 <code>pthread_mutex_t</code> 的初始化方式类似。<code>pthread_rwlock_wrlock()</code> 获取写锁，<code>pthread_rwlock_rdlock()</code> 获取读锁，<code>pthread_rwlock_unlock()</code> 用于释放锁。</p>
+<p>读写锁是专门为大多数读的情况设计的。该锁能够提供比互斥锁更多的扩展性，因为互斥锁从定义上已经限制了任意时刻只能有一个线程持有锁，而读写锁运行任意多的线程同时持有读锁。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922143317.png" style="display:block;width:50%;" alt="读写锁的扩展性" align="center">
+</div>
+
+<p>读写锁的可扩展性不甚理想，尤其是临界区较小时。为什么读锁的获取这么慢呢？应该是由于所有想获取读锁的线程都要更新 <code>pthread_rwlock_t</code> 的数据结构，因此一旦 128 个线程同时尝试获取读写锁的读锁时，那么这些线程必须逐个更新读锁中的 <code>pthread_rwlock_t</code> 结构。最幸运的线程几乎立即就获得了读锁，而最倒霉的线程则必须在前 127 的线程完成对该结构的更新后再能获得读锁。而增加 CPU 则会让性能变得更糟。</p>
+<p>但是在临界区较大，比如开发者进行高延迟的文件或网络 IO 操纵时，读写锁仍然值得使用。</p>
+<h3 id="原子操作-GCC"><a href="#原子操作-GCC" class="headerlink" title="原子操作(GCC)"></a>原子操作(GCC)</h3><p>读写锁在临界区最小时开销最大，因此需要其他手段来保护极其短小的临界区。GCC 编译器提供了许多附加的原子操作：</p>
+<ul>
+<li>返回参数原值<ul>
+<li><code>__sync_fetch_and_sub()</code></li>
+<li><code>__sync_fetch_and_or()</code></li>
+<li><code>__sync_fetch_and_and()</code></li>
+<li><code>__sync_fetch_and_xor()</code></li>
+<li><code>__sync_fetch_and_nand()</code></li>
+</ul>
+</li>
+<li>返回变量新值<ul>
+<li><code>__sync_add_and_fetch()</code></li>
+<li><code>__sync_sub_and_fetch()</code></li>
+<li><code>__sync_or_ and_fetch()</code></li>
+<li><code>__sync_and_and_fetch()</code></li>
+<li><code>__sync_xor_and_fetch()</code></li>
+<li><code>__sync_nand_ and_fetch()</code></li>
+</ul>
+</li>
+</ul>
+<p>经典的比较并交换(CAS)是由一对原语 <code>__sync_bool_compare_and_swap()</code> 和 <code>__sync_val_compare_and_swap()</code> 提供的，当变量的原值与指定的参数值相等时，这两个原语会自动将新值写到指定变量。第一个原语在操作成功时返回 1，或在变量原值不等于指定值时返回 0；第二个原语在变量值等于指定的参数值时返回变量的原值，表示操作成功。任何对单一变量进行的原子操作都可以用 CAS 方式实现，上述两个原语是通用的，虽然第一个原语在适用的场景中效率更高。CAS 操作通常作为其他原子操作的基础。</p>
+<p><code>__sync_synchronize()</code> 原语是一个内存屏障，它限制编译器和 CPU 对指令乱序执行的优化。有些时候只限制编译器对指令的优化就够了，CPU 的优化可以保留，这时则需要 <code>barrier()</code> 原语。有时只需要让编译器不优化某个内存访问就够了，这时可以使用 <code>ACCESS_ONCE()</code> 原语。后两个原语并非由 GCC 直接提供，可以按如下方式实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACCESS_ONCE(x) (*(volatile typeof(x) *)&amp;(x))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> barrier() __asm____volatile__(<span class="meta-string">""</span>: : :<span class="meta-string">"memory"</span>)</span></span><br></pre></td></tr></table></figure>
+<h2 id="POSIX-的操作的替代选择"><a href="#POSIX-的操作的替代选择" class="headerlink" title="POSIX 的操作的替代选择"></a>POSIX 的操作的替代选择</h2><p>线程操作、加解锁原语、原子操作的出现早于各种标准委员会，因此这些操作存在多种变体。直接使用汇编实现这些操作也十分常见，不仅因为历史原因，还可以在某些特定场景下获得更好的性能。</p>
+<h2 id="如何选择"><a href="#如何选择" class="headerlink" title="如何选择"></a>如何选择</h2><p>基于经验法则，应该在能够胜任工作的工具中选择最简单的一个。</p>
+<ol>
+<li>尽量保持串行。</li>
+<li>Shell 脚本。</li>
+<li>C 中的 fork-join。</li>
+<li>POSIX 线程库原语。</li>
+<li>第几章将要介绍的原语。</li>
+</ol>
+<p>除此之外，不要忘记除了共享内存多线程执行之外，还可以选择进程间通信和消息传递。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

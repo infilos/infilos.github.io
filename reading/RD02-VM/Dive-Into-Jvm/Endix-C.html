@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | Endix-C-虚拟机参数 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"Endix-C-虚拟机参数","path":"reading/RD02-VM/Dive-Into-Jvm/Endix-C.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="Endix-C-虚拟机参数"><a href="#Endix-C-虚拟机参数" class="headerlink" title="Endix-C-虚拟机参数"></a>Endix-C-虚拟机参数</h1><p>使用 <code>-XX:+PrintFlagsFinal</code> 可以输出所有参数的名称和默认值。应用参数的方式有以下 3 种：</p>
+<ol>
+<li><code>-XX:+＜option＞开启option参数</code></li>
+<li><code>-XX:-＜option＞关闭option参数</code></li>
+<li><code>-XX:＜option＞=＜value＞将option参数的值设置为value</code></li>
+</ol>
+<p>以下是 JDK6 中常用的参数。</p>
+<h2 id="内存管理参数"><a href="#内存管理参数" class="headerlink" title="内存管理参数"></a>内存管理参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DisableExplicitGC</td>
+<td>默认关闭</td>
+<td>忽略来自 System.gc() 方法触发的垃圾回收</td>
+</tr>
+<tr>
+<td>ExplicitGCInvokesConcurrent</td>
+<td>默认关闭</td>
+<td>当收到 System.gc() 方法提交的垃圾回收申请时，使用 CMS 收集器进行收集</td>
+</tr>
+<tr>
+<td>UseSerialGC</td>
+<td>Client 模式 的虚拟机默认开启，其他模式默认关闭</td>
+<td>虚拟机运行在 Client 模式下的默认值，打开此开关后，使用 Serial+Serial Old 的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>UseParNewGC</td>
+<td>默认关闭</td>
+<td>打开此开关后，使用 ParNew+Serial Old 的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>UserConcMarkSweepGC</td>
+<td>默认关闭</td>
+<td>打开此开关后，使用 ParNew+CMS+Serial Old 的收集器组合进行内存回收。如果 CMS 收集器出现 Concurrent Mode Failure，则 Serial Old 收集器将作为后备收集器</td>
+</tr>
+<tr>
+<td>UserParallelGC</td>
+<td>Server 模式的虚拟机默认开启，其他模式默认关闭</td>
+<td>虚拟机运行在 Server 模式下的默认值，打开此开关后，使用 Parallel Scavenge+Serial Old 的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>UseParallelOldGC</td>
+<td>默认关闭</td>
+<td>打开此开关后，使用 Parallel Scavenge+Parallel Old 的收集器组合进行内存回收</td>
+</tr>
+<tr>
+<td>ServivorRatio</td>
+<td>默认为 8</td>
+<td>新生代中 Eden 区域与 Survivor 区域的容量比值</td>
+</tr>
+<tr>
+<td>PretenureSizeThreshold</td>
+<td>无默认值</td>
+<td>直接晋升到老年代的对象大小，设置该参数后，大于这个参数的对象将直接在老年代分配</td>
+</tr>
+<tr>
+<td>MaxTenuringThreshold</td>
+<td>默认为 15</td>
+<td>晋升到老年代的对象年龄。每个对象在坚持过一次 Mirror GC 之后，年龄就加 1，当超过该参数值时进入老年代</td>
+</tr>
+<tr>
+<td>UseAdaptiveSizePolicy</td>
+<td>默认开启</td>
+<td>动态调整 Java 堆中各个区域的大小及进入老年代的年龄</td>
+</tr>
+<tr>
+<td>HandlePromotionFailure</td>
+<td>JDK 1.5 及之前的版本默认关闭，JDK 1.6 之后默认开启</td>
+<td>是否允许分配担保失败，即老年代的剩余空间不足以应付新生代的整个 Eden 和 Survivor 区的所有对象都存活的极端情况</td>
+</tr>
+<tr>
+<td>ParallelGCThreads</td>
+<td>少于或等于 8 个 CPU 时默认为 CPU 的数量值，多余 8 个 CPU 时比 CPU 的数量之小</td>
+<td>设置并行 GC 时进行内存回收的线程数</td>
+</tr>
+<tr>
+<td>GCTimeRatio</td>
+<td>默认为 99</td>
+<td>GC 时间占总时间的比例，默认允许 1% 的 GC 时间。仅在使用 Parallel Scavenge 收集器时生效</td>
+</tr>
+<tr>
+<td>MaxGCPauseMillis</td>
+<td>无默认值</td>
+<td>设置 GC 的最大停顿时间。仅在使用 Parallel Scavenge 收集器时生效</td>
+</tr>
+<tr>
+<td>CMSInitiatingOccupancyFraction</td>
+<td>默认 68</td>
+<td>设置 CMS 收集器在老年代空间被使用多少后触发垃圾回收，仅在使用 CMS 收集器时生效</td>
+</tr>
+<tr>
+<td>UseCMSCompactAtFullCollection</td>
+<td>默认开启</td>
+<td>设置 CMS 收集器在完成垃圾收集后是否需要进行一次内存碎片整理。仅在使用 CMS 收集器时生效</td>
+</tr>
+<tr>
+<td>CMSFullGCsBeforeCompaction</td>
+<td>无默认值</td>
+<td>设置 CMS 收集器在进行若干次垃圾收集后在启动一次内存碎片整理。仅在使用 CMS 收集器时生效</td>
+</tr>
+<tr>
+<td>ScavengeBeforeFullGC</td>
+<td>默认开启</td>
+<td>在 Full GC 发生之前触发一次 Mirror GC</td>
+</tr>
+<tr>
+<td>UseGCOverheadLimit</td>
+<td>默认开启</td>
+<td>禁止 GC 过程无限制的执行，如果过于频繁，就直接发生 OutOfMemory 异常</td>
+</tr>
+<tr>
+<td>UseTLAB</td>
+<td>Server 模式默认开启</td>
+<td>优先在本地线程缓冲区中分配对象，避免分配内存时的锁定过程</td>
+</tr>
+<tr>
+<td>MaxHeapFreeRatio</td>
+<td>默认为 70</td>
+<td>当 Xmx 比 Xms 值大时，堆可以动态收缩和扩展，该参数控制当堆空闲大于指定比例时自动收缩</td>
+</tr>
+<tr>
+<td>MinHeapFreeRatio</td>
+<td>默认为 70</td>
+<td>当 Xmx 比 Xms 值小时，对可以动态收缩或扩展，该参数控制当对空闲小于指定比率时自动扩展</td>
+</tr>
+<tr>
+<td>MaxPermSize</td>
+<td>大部分情况下默认为 64MB</td>
+<td>永久代的最大值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="即时编译参数"><a href="#即时编译参数" class="headerlink" title="即时编译参数"></a>即时编译参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CompileThreshold</td>
+<td>Client 模式下默认为 1500，Server 模式下为 1000</td>
+<td>触发方法即时编译的阈值</td>
+</tr>
+<tr>
+<td>OnStackReplaceRercentage</td>
+<td>Client 模式下为 933，Server 模式下为 140</td>
+<td>OSR 比率，它是 OSR 即时编译阈值计算公式的一个参数，用于代替 BckEdgeThreshold 参数控制回边计数器的实际溢出阈值</td>
+</tr>
+<tr>
+<td>ReversedCodeCacheSize</td>
+<td>大部分情况下是 32MB</td>
+<td>即时编译器编译的代码缓存的最大值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="类型加载参数"><a href="#类型加载参数" class="headerlink" title="类型加载参数"></a>类型加载参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UseSplitVerifer</td>
+<td>默认开启</td>
+<td>使用依赖 StackMapTable 信息的类型检查代替数据流分析，以加快字节码校验速度</td>
+</tr>
+<tr>
+<td>FailOverToOldVerifier</td>
+<td>默认开启</td>
+<td>当类型校验失败时，是否允许回到老的类型推导校验方式重新校验，如果开启则允许</td>
+</tr>
+<tr>
+<td>RelaxAccessControlCheck</td>
+<td>默认关闭</td>
+<td>在检验阶段放松对类型访问性的限制</td>
+</tr>
+</tbody>
+</table>
+<h2 id="多线程相关参数"><a href="#多线程相关参数" class="headerlink" title="多线程相关参数"></a>多线程相关参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UseSpinning</td>
+<td>JDK 1.6 默认开启，JDK 1.5 默认关闭</td>
+<td>开启自旋锁以避免线程频繁挂起和唤醒</td>
+</tr>
+<tr>
+<td>PreBlockSpin</td>
+<td>默认为 10</td>
+<td>使用自旋锁时默认的自旋次数</td>
+</tr>
+<tr>
+<td>UseThreadPriorities</td>
+<td>默认开启</td>
+<td>使用本地线程优先级</td>
+</tr>
+<tr>
+<td>UseBiasedLocking</td>
+<td>默认开启</td>
+<td>使用使用偏向锁</td>
+</tr>
+<tr>
+<td>UseFastAccessorMethods</td>
+<td>默认开启</td>
+<td>当频繁反射执行某个方法时，生成字节码来加快反射的执行速度</td>
+</tr>
+</tbody>
+</table>
+<h2 id="性能参数"><a href="#性能参数" class="headerlink" title="性能参数"></a>性能参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AggressiveOpts</td>
+<td>JDK 1.6 默认开启，JDK 1.5 默认关闭</td>
+<td>使用激进的优化特性，这些特性一般是具备正面和负面双重影响的，需要根据具体应用特点来分析才能判定是否对性能有益</td>
+</tr>
+<tr>
+<td>UseLargePages</td>
+<td>默认开启</td>
+<td>如果可能，使用大内存分页，该特性需要操作系统的支持</td>
+</tr>
+<tr>
+<td>LargePageSizeInBytes</td>
+<td>默认为 4MB</td>
+<td>使用指定大小的内存分页，该特性需要操作系统的支持</td>
+</tr>
+<tr>
+<td>StringCache</td>
+<td>默认开启</td>
+<td>使用使用字符串缓存</td>
+</tr>
+</tbody>
+</table>
+<h2 id="调试参数"><a href="#调试参数" class="headerlink" title="调试参数"></a>调试参数</h2><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>使用介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HeapDumpOnOutOfMemoryError</td>
+<td>默认关闭</td>
+<td>在发生内存溢出时是否生成堆转储快照</td>
+</tr>
+<tr>
+<td>OnOutOfMemoryError</td>
+<td>无默认值</td>
+<td>当虚拟机抛出内存溢出异常时，执行指定的命令</td>
+</tr>
+<tr>
+<td>OnError</td>
+<td>无默认值</td>
+<td>当虚拟机抛出 ERROR 异常时，执行指定的命令</td>
+</tr>
+<tr>
+<td>PrintClassHistogram</td>
+<td>默认关闭</td>
+<td>使用 <code>[ctrl]-[break]</code> 快捷键输出类统计状态，相当于 jmap-histo 的功能</td>
+</tr>
+<tr>
+<td>PrintConcurrentLocks</td>
+<td>默认关闭</td>
+<td>打印 JUC 中锁的状态</td>
+</tr>
+<tr>
+<td>PrintCommandLineFlags</td>
+<td>默认关闭</td>
+<td>打印启动虚拟机时输入的非稳定参数</td>
+</tr>
+<tr>
+<td>PrintCompilation</td>
+<td>默认关闭</td>
+<td>打印方法的即时编译信息</td>
+</tr>
+<tr>
+<td>PrintGC</td>
+<td>默认关闭</td>
+<td>打印 GC 信息</td>
+</tr>
+<tr>
+<td>PrintGCDetails</td>
+<td>默认关闭</td>
+<td>打印 GC 详细信息</td>
+</tr>
+<tr>
+<td>PrintGCtimeStamps</td>
+<td>默认关闭</td>
+<td>打印 GC 停顿耗时</td>
+</tr>
+<tr>
+<td>PrintTenuringDistribution</td>
+<td>默认关闭</td>
+<td>打印 GC 后新生代各个年龄对象的大小</td>
+</tr>
+<tr>
+<td>TracClassLoading</td>
+<td>默认关闭</td>
+<td>打印类加载信息</td>
+</tr>
+<tr>
+<td>TraceClassUnloading</td>
+<td>默认关闭</td>
+<td>打印类卸载信息</td>
+</tr>
+<tr>
+<td>PringInlining</td>
+<td>默认关闭</td>
+<td>打印方法的内联信息</td>
+</tr>
+<tr>
+<td>PrintCFGToFile</td>
+<td>默认关闭</td>
+<td>将 CFG 图信息输出到文件，只有 DEBUG 版虚拟机才支持该参数</td>
+</tr>
+<tr>
+<td>PrintIdealGraphFile</td>
+<td>默认关闭</td>
+<td>将 Ideal 图信息输出到文件，只有 DEBUG 版虚拟机才支持该参数</td>
+</tr>
+<tr>
+<td>UnlockDiagnosticVM Options</td>
+<td>默认关闭</td>
+<td>让虚拟机进入诊断模式，一些参数(如 PrintAssembly)需要在诊断模式下才能使用</td>
+</tr>
+<tr>
+<td>PrintAssembly</td>
+<td>默认关闭</td>
+<td>打印即时编译后的二进制信息</td>
+</tr>
+</tbody>
+</table>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

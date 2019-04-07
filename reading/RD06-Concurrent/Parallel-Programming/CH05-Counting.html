@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH05-计数 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH05-计数","path":"reading/RD06-Concurrent/Parallel-Programming/CH05-Counting.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH05-计数"><a href="#CH05-计数" class="headerlink" title="CH05-计数"></a>CH05-计数</h1><p>计数概念的简单性让我们在探索并发中的基本问题时，无需被繁复的数据结构或复杂的同步原语干扰，因此可以作为并行编程的极佳切入对象。</p>
+<h2 id="并发计数并不简单"><a href="#并发计数并不简单" class="headerlink" title="并发计数并不简单"></a>并发计数并不简单</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">long</span> counter = <span class="number">0</span>; </span><br><span class="line"><span class="number">2</span> </span><br><span class="line"><span class="number">3</span> <span class="function"><span class="keyword">void</span> <span class="title">inc_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">4 </span>&#123; </span><br><span class="line"><span class="number">5</span>   counter++; </span><br><span class="line"><span class="number">6</span> &#125; </span><br><span class="line"><span class="number">7</span> </span><br><span class="line"><span class="number">8</span> <span class="function"><span class="keyword">long</span> <span class="title">read_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">9 </span>&#123; </span><br><span class="line"><span class="number">10</span>   <span class="keyword">return</span> counter; </span><br><span class="line"><span class="number">11</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1，声明一个计数器</li>
+<li>5，将计数器加 1</li>
+<li>10，读取计数器的值</li>
+</ul>
+<p>当计数器不停读取计数但又几乎不增加计数时，计算性能非常好。但存在计数丢失。精确计数的最简单方式是使用原子操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">atomic_t</span> counter = ATOMIC_INIT(<span class="number">0</span>); </span><br><span class="line"><span class="number">2</span> </span><br><span class="line"><span class="number">3</span> <span class="function"><span class="keyword">void</span> <span class="title">inc_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">4 </span>&#123; </span><br><span class="line"><span class="number">5</span>   atomic_inc(&amp;counter); </span><br><span class="line"><span class="number">6</span> &#125; </span><br><span class="line"><span class="number">7</span> </span><br><span class="line"><span class="number">8</span> <span class="function"><span class="keyword">long</span> <span class="title">read_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">9 </span>&#123; </span><br><span class="line"><span class="number">10</span>   <span class="keyword">return</span> atomic_read(&amp;counter); </span><br><span class="line"><span class="number">11</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1，声明一个原子计数器</li>
+<li>5，将计数器原子加 1</li>
+<li>10，原子读取计数器的值</li>
+</ul>
+<p>以上都是原子操作，因此非常精确，单线程时速度是非原子方式的 1/6，两个线程时速度是非原子方式的 1/10，即原子计数的性能随着 CPU 和线程数的增加而下降。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922150120.png" style="display:block;width:50%;" alt="NAME" align="center">
+</div>
+
+<p>下图以 CPU 视角展示了原子操作带来的性能损耗，为了让每个 CPU 得到机会来增加一个全局变量，包含变量的缓存行需要在所有 CPU 间传播，沿下图中箭头所示的方向。这种传播相当耗时，从而导致了上图中糟糕的性能。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922150152.png" style="display:block;width:50%;" alt="NAME" align="center">
+</div>
+
+<h2 id="统计计数器"><a href="#统计计数器" class="headerlink" title="统计计数器"></a>统计计数器</h2><p>常见的统计计数器场景中，计数器更新频繁但很少被读，或者甚至完全不读。</p>
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>统计计数器一般以每个线程一个计数器的方式实现(或者在内核运行时以每个 CPU 一个)，所以每个线程仅更更新自己的计数。而总的计数值就是所有线程计数值的和。</p>
+<h3 id="基于数组的实现"><a href="#基于数组的实现" class="headerlink" title="基于数组的实现"></a>基于数组的实现</h3><p>分配一个数组，数组每个元素对应一个线程(假设数组已经按缓存行对其并且被填充，以防止出现假共享)。</p>
+<p>该数组可以用一个“每线程”原语来表示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> DEFINE_PER_THREAD(<span class="keyword">long</span>, counter); </span><br><span class="line"><span class="number">2</span> </span><br><span class="line"><span class="number">3</span> <span class="function"><span class="keyword">void</span> <span class="title">inc_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">4 </span>&#123; </span><br><span class="line"><span class="number">5</span>   __get_thread_var(counter)++; </span><br><span class="line"><span class="number">6</span> &#125; </span><br><span class="line"><span class="number">7</span> </span><br><span class="line"><span class="number">8</span> <span class="function"><span class="keyword">long</span> <span class="title">read_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">9 </span>&#123; </span><br><span class="line"><span class="number">10</span>   <span class="keyword">int</span> t; </span><br><span class="line"><span class="number">11</span>   <span class="keyword">long</span> sum = <span class="number">0</span>; </span><br><span class="line"><span class="number">12</span> </span><br><span class="line"><span class="number">13</span>   for_each_thread(t) </span><br><span class="line"><span class="number">14</span>   sum += per_thread(counter, t); </span><br><span class="line"><span class="number">15</span>   <span class="keyword">return</span> sum; </span><br><span class="line"><span class="number">16</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1，定义了一个数组，包含一套类型为 long 的每线程计数器 counter。</li>
+<li>3~6，增加计数的函数，使用 <code>__get_thread_var()</code> 原语来定位当前运行线程对应 counter 数组的元素。因为该元素仅能由对应的线程修改，因此使用非原子自增即可。</li>
+<li>8~16，读取总计数的函数，使用 <code>for_each_thread()</code> 原语遍历当前运行的所有线程，使用 <code>per_thread()</code> 原语获取指定线程的计数。因为<strong>硬件可以原子地存取正确对齐的 long 型数据</strong>，并且 GCC 充分利用了这一点，所以使用非原子读取操作即可。</li>
+</ul>
+<p>该方法随着 <code>inc_count()</code> 函数的更新者线程增加而线性扩展，原因是每个 CPU 可以快速的增加自己线程的变量值，不再需要代价高昂的、跨越整个计算机系统的通信，如下图所示：</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20180922150519.png" style="display:block;width:50%;" alt="NAME" align="center">
+</div>
+
+<p>但这种在“更新端”扩展极佳的方式在存在大量线程时会给“读取端”带来极大代价。接下来将介绍另一种方式，能在保留更新端扩展性的同时，减少读取端产生的代价。</p>
+<h3 id="最终结果一致的实现"><a href="#最终结果一致的实现" class="headerlink" title="最终结果一致的实现"></a>最终结果一致的实现</h3><p>一种保留更新端扩展性的同时又能提升读取端性能的方式是：削弱一致性要求。</p>
+<p>前面介绍的计数算法要求保证返回的值在 <code>read_count()</code> 执行前一刻的理想计数值和 <code>read_count()</code> 执行完毕时的理想计数值之间。最终一致性方式提供了弱一些的保证：当不调用 <code>inc_count()</code> 时，调用 <code>read_count()</code> 最终会返回正确的值。</p>
+<p>我们维护一个全局计数来利用”最终结果一致性“。但是因为写者只操作自己线程的每线程计数，我们需要一个单独的线程负责将每线程计数的计数值传递给全局计数，而读者仅需访问全局计数值。如果写者正在更新计数，读者读取的全局计数值将不是最新的，不过一旦写者更新完毕，全局计数最终会回归正确的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> DEFINE_PER_THREAD(<span class="keyword">unsigned</span> <span class="keyword">long</span>, counter); </span><br><span class="line"><span class="number">2</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> global_count; </span><br><span class="line"><span class="number">3</span> <span class="keyword">int</span> stopflag; </span><br><span class="line"><span class="number">4</span> </span><br><span class="line"><span class="number">5</span> <span class="function"><span class="keyword">void</span> <span class="title">inc_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">6 </span>&#123; </span><br><span class="line"><span class="number">7</span>   ACCESS_ONCE(__get_thread_var(counter))++; </span><br><span class="line"><span class="number">8</span> &#125; </span><br><span class="line"><span class="number">9</span> </span><br><span class="line"><span class="number">10</span> <span class="function"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="title">read_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">11 </span>&#123; </span><br><span class="line"><span class="number">12</span>   <span class="keyword">return</span> ACCESS_ONCE(global_count); </span><br><span class="line"><span class="number">13</span> &#125; </span><br><span class="line"><span class="number">14</span> </span><br><span class="line"><span class="number">15</span> <span class="function"><span class="keyword">void</span> * <span class="title">eventual</span><span class="params">(<span class="keyword">void</span> * arg)</span> </span></span><br><span class="line"><span class="function">16 </span>&#123; </span><br><span class="line"><span class="number">17</span>   <span class="keyword">int</span> t; </span><br><span class="line"><span class="number">18</span>   <span class="keyword">int</span> sum; </span><br><span class="line"><span class="number">19</span> </span><br><span class="line"><span class="number">20</span>   <span class="keyword">while</span> (stopflag &lt; <span class="number">3</span>) &#123; </span><br><span class="line"><span class="number">21</span>     sum = <span class="number">0</span>; </span><br><span class="line"><span class="number">22</span>     for_each_thread(t) </span><br><span class="line"><span class="number">23</span>       sum += ACCESS_ONCE(per_thread(counter, t)); </span><br><span class="line"><span class="number">24</span>     ACCESS_ONCE(global_count) = sum; </span><br><span class="line"><span class="number">25</span>     poll(<span class="literal">NULL</span>, <span class="number">0</span>, <span class="number">1</span>); </span><br><span class="line"><span class="number">26</span>     <span class="keyword">if</span> (stopflag) &#123; </span><br><span class="line"><span class="number">27</span>       smp_mb(); </span><br><span class="line"><span class="number">28</span>       stopflag++; </span><br><span class="line"><span class="number">29</span>     &#125; </span><br><span class="line"><span class="number">30</span>   &#125; </span><br><span class="line"><span class="number">31</span>   <span class="keyword">return</span> <span class="literal">NULL</span>; </span><br><span class="line"><span class="number">32</span> &#125; </span><br><span class="line"><span class="number">33</span> </span><br><span class="line"><span class="number">34</span> <span class="function"><span class="keyword">void</span> <span class="title">count_init</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">35 </span>&#123; </span><br><span class="line"><span class="number">36</span>   <span class="keyword">thread_id_t</span> tid; </span><br><span class="line"><span class="number">37</span> </span><br><span class="line"><span class="number">38</span>   <span class="keyword">if</span> (pthread_create(&amp;tid, <span class="literal">NULL</span>, eventual, <span class="literal">NULL</span>)) &#123; </span><br><span class="line"><span class="number">39</span>     perror(<span class="string">"count_init:pthread_create"</span>); </span><br><span class="line"><span class="number">40</span>     <span class="built_in">exit</span>(<span class="number">-1</span>); </span><br><span class="line"><span class="number">41</span>   &#125; </span><br><span class="line"><span class="number">42</span> &#125; </span><br><span class="line"><span class="number">43</span> </span><br><span class="line"><span class="number">44</span> <span class="function"><span class="keyword">void</span> <span class="title">count_cleanup</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">45 </span>&#123; </span><br><span class="line"><span class="number">46</span>   stopflag = <span class="number">1</span>; </span><br><span class="line"><span class="number">47</span>   <span class="keyword">while</span> (stopflag &lt; <span class="number">3</span>) </span><br><span class="line"><span class="number">48</span>     poll(<span class="literal">NULL</span>, <span class="number">0</span>, <span class="number">1</span>); </span><br><span class="line"><span class="number">49</span>   smp_mb(); </span><br><span class="line"><span class="number">50</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1~2，定义了跟踪计数值的没线程变量和全局变量。</li>
+<li>3，定义了 stopflag，用于控制程序结束。</li>
+<li>5~8，增加计数函数</li>
+<li>10~13，读取计数函数</li>
+<li>34~42，<code>count_init()</code> 函数创建了位于 15~32 行的 <code>eventual()</code> 线程，该线程将遍历所有线程，对每个线程的本地计算 counter 进行累加，将结果放入 global_count。<code>eventual</code> 线程在每次循环之间等待 1ms(随便选择的值)。</li>
+<li>44~50，<code>count_cleanup()</code> 函数用来控制程序结束。</li>
+</ul>
+<p>本方法在提供极快的读取端计数性能的同时，仍然保持线性的更新端计数性能曲线。但也带来额额外的开销，即 <code>eventual</code> 线程。</p>
+<h3 id="基于每线程变量的实现"><a href="#基于每线程变量的实现" class="headerlink" title="基于每线程变量的实现"></a>基于每线程变量的实现</h3><p>GCC 提供了一个用于每线程存储的 <code>_thread</code> 存储类。下面使用该类来实现统计计数器，该实现不仅能扩展，而且相对于简单的非原子自增来说几乎没有性能损失。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> <span class="keyword">long</span> __thread counter = <span class="number">0</span>; </span><br><span class="line"><span class="number">2</span> <span class="keyword">long</span> * counterp[NR_THREADS] = &#123; <span class="literal">NULL</span> &#125;; </span><br><span class="line"><span class="number">3</span> <span class="keyword">long</span> finalcount = <span class="number">0</span>; </span><br><span class="line"><span class="number">4</span> DEFINE_SPINLOCK(final_mutex); </span><br><span class="line"><span class="number">5</span> </span><br><span class="line"><span class="number">6</span> <span class="function"><span class="keyword">void</span> <span class="title">inc_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">7 </span>&#123; </span><br><span class="line"><span class="number">8</span>   counter++; </span><br><span class="line"><span class="number">9</span> &#125; </span><br><span class="line"><span class="number">10</span> </span><br><span class="line"><span class="number">11</span> <span class="function"><span class="keyword">long</span> <span class="title">read_count</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">12 </span>&#123; </span><br><span class="line"><span class="number">13</span>   <span class="keyword">int</span> t; </span><br><span class="line"><span class="number">14</span>   <span class="keyword">long</span> sum; </span><br><span class="line"><span class="number">15</span> </span><br><span class="line"><span class="number">16</span> spin_lock(&amp;final_mutex); </span><br><span class="line"><span class="number">17</span> sum = finalcount; </span><br><span class="line"><span class="number">18</span> for_each_thread(t) </span><br><span class="line"><span class="number">19</span>   <span class="keyword">if</span> (counterp[t] != <span class="literal">NULL</span>) </span><br><span class="line"><span class="number">20</span>     sum += * counterp[t]; </span><br><span class="line"><span class="number">21</span> spin_unlock(&amp;final_mutex); </span><br><span class="line"><span class="number">22</span> <span class="keyword">return</span> sum; </span><br><span class="line"><span class="number">23</span> &#125; </span><br><span class="line"><span class="number">24</span> </span><br><span class="line"><span class="number">25</span> <span class="function"><span class="keyword">void</span> <span class="title">count_register_thread</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function">26 </span>&#123; </span><br><span class="line"><span class="number">27</span>   <span class="keyword">int</span> idx = smp_thread_id(); </span><br><span class="line"><span class="number">28</span> </span><br><span class="line"><span class="number">29</span>   spin_lock(&amp;final_mutex); </span><br><span class="line"><span class="number">30</span>   counterp[idx] = &amp;counter; </span><br><span class="line"><span class="number">31</span>   spin_unlock(&amp;final_mutex); </span><br><span class="line"><span class="number">32</span> &#125; </span><br><span class="line"><span class="number">33</span> </span><br><span class="line"><span class="number">34</span> <span class="function"><span class="keyword">void</span> <span class="title">count_unregister_thread</span><span class="params">(<span class="keyword">int</span> nthreadsexpected)</span> </span></span><br><span class="line"><span class="function">35 </span>&#123; </span><br><span class="line"><span class="number">36</span> <span class="keyword">int</span> idx = smp_thread_id(); </span><br><span class="line"><span class="number">37</span> </span><br><span class="line"><span class="number">38</span>   spin_lock(&amp;final_mutex); </span><br><span class="line"><span class="number">39</span>   finalcount += counter; </span><br><span class="line"><span class="number">40</span>   counterp[idx] = <span class="literal">NULL</span>; </span><br><span class="line"><span class="number">41</span>   spin_unlock(&amp;final_mutex); </span><br><span class="line"><span class="number">42</span> &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>1~4，定义所需变量，<code>counter</code> 是每线程计数变量，<code>counterp[]</code> 数组允许线程访问彼此的计数，<code>finalcount</code> 在各个线程退出时将计数值累加到综合，<code>final_mutex</code> 协调累加计数总和值的线程和退出的线程。</li>
+<li>更新者调用 <code>inc_count()</code> 函数，见 6~9 行。</li>
+<li>写者调用 <code>read_count()</code> 函数，首先在 16 行获取与正在退出线程互斥的锁，21 行释放锁。17 行初始化已退出线程的每线程计数总和，18~20 将还在运行的线程的每线程计数累加进总和，最后，22 行返回总和。</li>
+<li>25~32，<code>count_register_thread()</code> 函数，每个线程在访问自己的计数前都要调用它，将本线程对应 <code>countp[]</code> 数组中的元素指向线程的每线程变量 counter。</li>
+<li>34~42，<code>count_unregister_thread()</code> 函数，每个之前调用过 <code>count_register_thread()</code> 函数的线程在退出时都要调用该函数。38 行获取锁，41 行释放锁，因此排除了有线程正在调用 <code>read_count()</code> 同时又有线程调用 <code>count_unregister_thread()</code> 函数的情况。39 行将本线程的每线程计数添加到全局 finalcount 中，然后将 <code>countp[]</code> 数组的对应元素设置为 NULL。随后 <code>read_count()</code> 调用可以在全局变量 finalcount 里找到已退出线程的计数值，并且顺序访问 <code>countp[]</code> 数组时可以跳过已退出线程，从而获得正确的总计数结果。</li>
+</ul>
+<p>该方式让更新者的性能几乎和非原子计数一样，并且也能线性扩展。另外，并发的读者竞争一个全局锁，因此性能不佳，扩展性差。但是这不是统计计数器要面对的问题，因为统计计数器总是在增加计数，很少读取计数。</p>
+<h2 id="近似上限计数器"><a href="#近似上限计数器" class="headerlink" title="近似上限计数器"></a>近似上限计数器</h2><p>另一种计数的场景是上限检查，比如需要维护一个已分配数据结构数目的计数器，来防止分配超过一个上限。我们假设这些结构的生命周期很短，数目也极少能超出上限。对近似值上限来说，偶尔超出少许是可以接受的。</p>
+<h3 id="设计-1"><a href="#设计-1" class="headerlink" title="设计"></a>设计</h3><p>一种可能的实现是将近似总数值(10000)平均分配给每个线程，然后每个线程一个固定个数的资源池。假如有 100 个线程，每个线程管理一个有 100 个结构的资源池。这种方式简单，在有些情况下有效，但是无法处理一种常见情况：某个结构由一个结构创建，但由另一个线程释放。一方面，如果线程释放一个结构就得一分的话，那么一直在分配结构的线程很快就会分配光资源池，而一直在释放结构的线程积攒了大量分数却无法使用。另一方面，如果每个被释放的结构都能让分配它的 CPU 加一分，CPU 就需要操纵其他 CPU 的计数，这会带来昂贵的原子操作或其他跨线程通信手段。</p>
+<p>因此，在很多重要的情况下我们不能讲计数问题完全分割。对于上限计数，我们可以采用一种分割计数方法的变体，部分地分割计数。比如在四个线程中，每个线程拥有一份每线程变量 counter，但同时每个线程也持有一份每线程的最大值 countermax。</p>
+<p>如果某个线程需要增加其 counter，可是此时 counter 等于 countermax，这时该如何处理呢？此时可以把此线程 counter 值的一半转移给 globalcount，然后在增加 counter。举个例子，加入某线程的 counter 和 countermax 都为 10，我们可以执行如下操作：</p>
+<ol>
+<li>获取全局锁</li>
+<li>给 globalcount 增加 5</li>
+<li>当前线程的 couter 减少 5，以抵消全局的增加</li>
+<li>释放全局锁</li>
+<li>递增当前线程的 counter，编程 6</li>
+</ol>
+<p>虽然该操作中需要全局锁，但是该锁只有在每 5 次增加操作后才获取一次，从而降低了竞争程度，如果我们增大了 countermax 的值，竞争程度还会进一步降低。但是增大 countermax 值的副作用是 globalcount 精确度的降低。假设一台 4 CPU 系统，此时 countermax 值为 10，global 和真实计数值的误差最高可达 40，如果把 countermax 增加到 100，那么 globalcount 和真实计数值的误差可达 400。</p>
+<p>因此问题成了我们到底有多在意 globalcount 和真实计数值的偏差。真实计数值由 globalcount 和所有每线程 counter 相加得出。误差取决于真实计数值和计数上限的差值有多大，差值越大，countermax 就越不容易超过 globalcountmax 的上限。这就代表着任何一个线程的 countermax 变量可以根据当前的差值计算取值。当离上限还比较远时，可以给每线程变量 countermax 赋值一个较大的数，这样对性能和扩展性都有好处。当靠近上限时，可以给这些 countermax 赋值一个比较小的数，这样可以降低超过统计上限 globalcountmax 的风险，从而减少误差。</p>
+<p>这种设计就是一个<strong>并行快速路径</strong>的例子，这是一种重要的设计模式，适用于下面的情况：<strong>在多数情况下没有线程间的通信和交互开销，对偶尔进行的跨线程通信又使用了静心设计的(但是开销仍然很大的)全局算法。</strong></p>
+<h2 id="精确上限计数器"><a href="#精确上限计数器" class="headerlink" title="精确上限计数器"></a>精确上限计数器</h2><p>一种实现精确计数的方式是允许线程放弃自己的计数，另一种是采用原子操作。当然，原子操作会减慢快速路径。</p>
+<h3 id="原子上限计数"><a href="#原子上限计数" class="headerlink" title="原子上限计数"></a>原子上限计数</h3><p>如果想要一个线程减少另一个线程上的计数，需要自动的操作两个线程的 counter 和 countermax 变量。通常的做法是将这两个变量合并成一个变量，比如一个 32 位的变量，高 16 位代表 counter，低 16 位代表 countermax。</p>
+<p>这种方式运行计数一直增长直到上限，但是也带来了快速路径上原子操作的开销，让快速路径明显变慢了。虽然在某些场合这种变慢是允许的，但是仍然值得我们去探索让读取端性能更好的算法。而使用信号处理函数从其他线程窃取计数就是一种算法。因为信号处理函数可以运行在收到信号线程的上下文，所以就不需要原子操作了。</p>
+<h3 id="Signal-Theft-上限计数"><a href="#Signal-Theft-上限计数" class="headerlink" title="Signal-Theft 上限计数"></a>Signal-Theft 上限计数</h3><p>虽然每线程状态只由对应线程修改，但是信号处理函数仍然有必要进行同步。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20190214115133.png" style="display:block;width:50%;" alt="NAME" align="center">
+</div>
+
+<p>上图中的状态机展示了这种同步机制。Signal-Threft 状态机从”空闲“状态开始，当 <code>add_count()</code> 和 <code>sub_count()</code> 发现线程的本地计数和全局计数之和已经不足以容纳请求的大小时，对应的慢速路径将每线程的 threft 状态设置为”请求”(除非线程没有计数值，这样它就直接转换为“准备完毕”)。只有在慢速路径获得 gblcnt_mutex_lock 之后，才允许从“空闲”状态转换为其他状态。然后慢速路径向每个线程发送一个信号，对应的信号处理函数检查本地线程的 threft 和 counting 状态。如果 threft 状态不为“请求”，则信号处理函数就不能改变其状态，只能直接返回。而 threft 状态为“请求”时，如果设置了 counting 变量，表名当前线程正处于快速路径，信号处理函数将 threft 状态设置为“确认”，而不是“准备完毕”。</p>
+<p>如果 threft 状态为“确认”，那么只有快速路径才有权改变 threft 的状态。当快速路径完成时，会将 threft 状态设置为“准备完毕”。</p>
+<p>一旦慢速路径发现某个线程的 threft 状态为“准备完毕”，这时慢速路径有权窃取此线程的计数。然后慢速路径将线程的 threft 状态设置为“空闲”。</p>
+<p>在一般笔记本电脑上，使用 signal-threft 的实现比原子操作的实现快两倍。由于原子操作的相对缓慢，signal-threft 实现在 Pentium-4 处理器上比原子操作好的多，但是后来，老式的 8086 对称处理器系统在原子操作实现的路径深度更短，原子操作的性能也随之提升。可是，更新端的性能提升是以读取端的高昂开销为代价的，POSIX 信号不是没有开销的。如果考虑最终的性能，则需要在实际部署应用的系统上测试这两种方式。</p>
+<h2 id="特殊场合的并行计数"><a href="#特殊场合的并行计数" class="headerlink" title="特殊场合的并行计数"></a>特殊场合的并行计数</h2><p>即便如此，如果计数的值总是在 0 附近变动，精确计数就没什么用了，正如统计对 IO 设备的访问计数一样。如果我们并不关心当前有多少计数，这种统计值总是在 0 附近变动的计数开销很大。比如在可移除 IO 设备的访问计数问题，除非有人想移除设备，否则访问次数完全不重要，而移除设备这种情况本身又很少见。</p>
+<p>一种简单的解决办法是，为计数增加一个很大的“偏差值”(比如 10 亿)，确保计数的值远离 0，让计数可以有效工作。当有人想拔出设备时，计数又减去偏差值。计数最后几次的增长将是非常低效的，但是对之前的所有计数去可以全速运行。</p>
+<p>虽然带偏差的计数有用且有效，但这只是可插拔 IO 设备访问计数问题的部分解决办法。当尝试移除设备时，我们不仅需要当前精确的 IO 访问计数，还需要从现在开始阻止未来的访问请求。一种方式是在更新计数时使用读写锁的读锁，在读取计数时使用同一把读写锁的写锁。</p>
+<h2 id="并行计数讨论"><a href="#并行计数讨论" class="headerlink" title="并行计数讨论"></a>并行计数讨论</h2><p>本章展示了传统计数原语会遇见的问题：可靠性、性能、扩展性。C 语言的 ++ 操作符不能在多线程代码中保证函数的可靠性，对单个变量的原子操作性能不好，可扩展性也差。</p>
+<h3 id="并行计数性能"><a href="#并行计数性能" class="headerlink" title="并行计数性能"></a>并行计数性能</h3><p>统计计数算法性能：</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>写延迟</th>
+<th>延迟(1核)</th>
+<th>读延迟(32核)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数组快速通道</td>
+<td>11.5ns</td>
+<td>308ns</td>
+<td>409ns</td>
+</tr>
+<tr>
+<td>最终一致</td>
+<td>11.6ns</td>
+<td>1ns</td>
+<td>1ns</td>
+</tr>
+<tr>
+<td>每线程变量</td>
+<td>6.3ns</td>
+<td>389ns</td>
+<td>51,200ns</td>
+</tr>
+<tr>
+<td>RCU</td>
+<td>5.7ns</td>
+<td>354ns</td>
+<td>501ns</td>
+</tr>
+</tbody>
+</table>
+<p>上限计数算法性能：</p>
+<table>
+<thead>
+<tr>
+<th>算法</th>
+<th>是否精确</th>
+<th>写延迟</th>
+<th>读延迟(1核)</th>
+<th>读延迟(32核)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每线程变量-1</td>
+<td>否</td>
+<td>3.6ns</td>
+<td>375ns</td>
+<td>50,700ns</td>
+</tr>
+<tr>
+<td>每线程变量-2</td>
+<td>否</td>
+<td>11.7ns</td>
+<td>369ns</td>
+<td>51,000ns</td>
+</tr>
+<tr>
+<td>原子方式</td>
+<td>是</td>
+<td>51.4ns</td>
+<td>427ns</td>
+<td>49,400ns</td>
+</tr>
+<tr>
+<td>信号方式</td>
+<td>是</td>
+<td>10.2ns</td>
+<td>370ns</td>
+<td>54,000ns</td>
+</tr>
+</tbody>
+</table>
+<h3 id="并行计算的专门化"><a href="#并行计算的专门化" class="headerlink" title="并行计算的专门化"></a>并行计算的专门化</h3><p>上述算法仅在各自的问题领域性能出色，这可以说是并行计算的一个主要问题。毕竟 C 语言的 ++ 操作符在所有单线程程序中性能都不错，不仅仅是个别领域。</p>
+<p>我们提到的问题不仅是并行性，更是扩展性。我们提到的问题也不专属于算术问题，假设你还要存储和查询数据库，是不是还会用 ASCII 文件、XML、关系型数据库、链表、紧凑数组、B 树、基树或其他什么数据结构和环境来存取数据，这取决于你需要做什么、做多快、数据集有多大。</p>
+<p>同样，如果需要计数，合适的方案取决于统计的数有多大、有多少个 CPU 并发操纵计数、如何使用计数，以及需要的性能和可扩展性程度。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本章的例子显示，分割是提升可扩展性和性能的重要工具。计数有时可以被完全分割，或者被部分分割。</p>
+<ul>
+<li>分割能够提升性能和可扩展性。</li>
+<li>部分分割，也就是仅分割主要情况的代码路径，性能也很出色。</li>
+<li>部分分割可以应用在代码上，但是也可以应用在时间空间上。</li>
+<li>读取端的代码路径应该保持只读，对共享内存的“伪同步写”严重降低性能和扩展性。</li>
+<li>经过审慎思考的延迟处理能够提升性能和扩展性。</li>
+<li>并行性能和扩展性通常是跷跷板的两端，达到某种程度后，对代码的优化反而会降低另一方的表现。</li>
+<li>对性能和可扩展性的不同需求及其他很多因素，会影响算法、数据结构的设计。</li>
+</ul>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

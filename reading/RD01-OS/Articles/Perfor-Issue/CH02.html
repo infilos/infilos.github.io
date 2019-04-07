@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH02-CPU 实现 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH02-CPU 实现","path":"reading/RD01-OS/Articles/Perfor-Issue/CH02.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH02-CPU-实现"><a href="#CH02-CPU-实现" class="headerlink" title="CH02-CPU 实现"></a>CH02-CPU 实现</h1><p>CPU 硬件为了提高性能，逐步发展出了指令流水线(分支预测)和多核 CPU，本文我们将简单的探讨它们的原理和效果。</p>
+<h2 id="指令流水线"><a href="#指令流水线" class="headerlink" title="指令流水线"></a>指令流水线</h2><p>在一台纯粹的图灵机中，指令是一个接一个顺序执行的。而现实世界中的通用计算机所用的很多基础算法都是可以并行的，如加法器和乘法器，它们可以很容易的被切分成能够同时运行的多个指令，这样就可以大大提升性能。</p>
+<blockquote>
+<p>指令流水线，说白了是就是 CPU 电路层面的编发。</p>
+<p>Intel Core i7 自 Sandy Bridge（2010）架构以来一直都是 14 级流水线设计。基于 Cedar Mill 架构的最后一代奔腾 4，在 2006 年就拥有 3.8GHz 的超高频率，却因为其长达 31 级的流水线而成了为样子货，被 AMD 1GHz 的芯片按在地上摩擦。</p>
+</blockquote>
+<p>流水线是现代 RISC(精简指令集) 核心的一个重要设计，它极大地提高了性能。</p>
+<p>对于一条指令的执行过程，通常分为：取指令、指令译码、取操作数、运算、写结果。前面三步由控制器完成，后面两步由运算器完成。按照传统的做法，当控制器工作的时候运算器在休息，在运算器工作的时候控制器在休息。流水线的做法就是当控制器完成第一条指令的操作后，直接开始开始第二条指令的操作，同时运算器开始第一条指令的操作。这样就形成了流水线系统，这是一条2级流水线。</p>
+<h3 id="RISC-机器的五层流水线示意图"><a href="#RISC-机器的五层流水线示意图" class="headerlink" title="RISC 机器的五层流水线示意图"></a>RISC 机器的五层流水线示意图</h3><p>下图形象的展示了流水线是如何提高性能的。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181125165946.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>指令流水线通过硬件层面的并发来提高性能，却也带来了一些无法避免的缺点。</p>
+<ul>
+<li>设计难度高，一步小心就成了高频低能的奔腾 4。</li>
+<li>并发导致每条指令的执行时间变长。</li>
+<li>优化难度大，有时候两行代码的顺序变动可能导致数倍的性能差异，这对编译器提出了更高的要求。</li>
+<li>如果多次分支预测失败，将会导致严重的性能损失。</li>
+</ul>
+<h2 id="分支预测"><a href="#分支预测" class="headerlink" title="分支预测"></a>分支预测</h2><p>指令形成流水线以后，就需要一种高效的调控来保证硬件层面的并发效果：最佳情况是每条流水线里的十几个指令都是正确的，这样完全不浪费时钟周期。而分支预测就是干这个的。</p>
+<p>分支预测器猜测条件表达式两路分支中那一路最优可能发生，然后推测执行这一路的指令，来避免流水线停顿造成时间的浪费。但是，如果后来发现分支预测错误，那么流水线中推测执行的那些中间结果就要全部被放弃，重新获取正确的分支路线上的指令开始执行，这就带来了是一个时钟周期的延迟，这个时候，该 CPU 核心就是完全在浪费时间。</p>
+<blockquote>
+<p>幸运的是，当下主流的 CPU 在现代编译器的配合下，能够越来越高的完成这项工作。</p>
+<p>还记得那个让 Intel CPU 性能跌 30% 的漏洞补丁吗，那个漏洞就是 CPU 设计的时候，分支预测设计的不完善导致的。</p>
+</blockquote>
+<h2 id="多核-CPU"><a href="#多核-CPU" class="headerlink" title="多核 CPU"></a>多核 CPU</h2><p>多核 CPU 的每个核心拥有自己独立的运算单元、寄存器、一二级缓存，所有核心共用同一条内存总线，同一段内存。</p>
+<p>多核 CPU 的出现，标志着人类的集成电路工艺遇到了一个严酷的瓶颈，无法再大规模提升单核性能，只能通过多核类聊以自慰。实际上，多核 CPU 性能的提升极其有限，还不如增加一点点单核频率所能提升的性能多。</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>多核 CPU 的优势很明显，就是可以并行地执行多个图灵机，可以显而易见地提升性能。只不过由于使用同一条内存总线，实际带来的效果有限，并且需要操作系统和编译器的密切配合才行。</p>
+<blockquote>
+<p>题外话： AMD64 技术可以运行 32 位的操作系统和应用程序，所用的方法是依旧使用 32 位宽的内存总线，每计算一次要取两次内存，性能提升也非常有限，不过好处就是可以使用大于 4GB 的内存了。大家应该都没忘记第一篇文章中提到的冯·诺依曼架构拥有 CPU 和内存通信带宽不足的弱点。（注：AMD64 技术是和 Intel 交叉授权的专利，i7 也是这么设计的）</p>
+</blockquote>
+<h3 id="劣势"><a href="#劣势" class="headerlink" title="劣势"></a>劣势</h3><p>多核 CPU 劣势其实更加明显，但是人类也没有办法，谁不想用 20GHz 的 CPU 呢，谁想用这八核的 i7 呀。</p>
+<ol>
+<li>内存读写效率不变，甚至有降低的风险。</li>
+<li>操作系统复杂度提升很多倍，计算资源的管理变得非常复杂。</li>
+<li>依赖操作系统的进步：微软以肉眼可见的速度，在这十几年间大幅提升了 Windows 的多核效率和安全性：XP 只是能利用，7 可以自动调配一个进程在多个核心上游走，2008R2 解决了依赖 CPU0 调度导致司机的 BUG，8 可以利用多核心启动，10 优化了杀死进程依赖 CPU0 的问题。</li>
+</ol>
+<blockquote>
+<p>超线程技术：Intel 的超线程技术是将 CPU 核心内部再分出两个逻辑核心，只增加了 5% 的裸面积，就带来了 15%~30% 的性能提升。</p>
+</blockquote>
+<h2 id="怀念过去"><a href="#怀念过去" class="headerlink" title="怀念过去"></a>怀念过去</h2><p>Intel 肯定怀念摩尔定律提出时候的黄金年代，只依靠工艺的进步，就能一两年就性能翻番。AMD 肯定怀念 K8 的黄金一代，1G 战 4G，靠的就是把内存控制器从北桥芯片移到 CPU 内部，提升了 CPU 和内存的通信效率，自然性能倍增。而今天，人类的技术已经到达了一个瓶颈，只能通过不断的提升 CPU 和操作系统的复杂度来获得微弱的性能提升，呜呼哀哉。</p>
+<p>不过我们也不能放弃希望，AMD RX VAGA64 显卡拥有 2048 位的显存位宽，理论极限还是很恐怖的，这可能就是未来内存的发展方向。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

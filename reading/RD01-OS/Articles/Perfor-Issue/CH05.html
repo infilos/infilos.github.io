@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | CH05-DPDK/SDN/大页内存 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"CH05-DPDK/SDN/大页内存","path":"reading/RD01-OS/Articles/Perfor-Issue/CH05.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="CH05-DPDK-SDN-大页内存"><a href="#CH05-DPDK-SDN-大页内存" class="headerlink" title="CH05-DPDK/SDN/大页内存"></a>CH05-DPDK/SDN/大页内存</h1><p>上文我们说到，当今的 x86 通用微处理器已经拥有了十分强大的性能，得益于其庞大的销量，其价格与专用 CPU 相比也有着巨大的优势，于是，软件定义一切诞生了！</p>
+<h2 id="软路由"><a href="#软路由" class="headerlink" title="软路由"></a>软路由</h2><p>说到软路由，很多人都露出了会心的微笑，因为其拥有低廉的价格、超多的功能、够用的性能和科学上网能力。现在网上能买到的软路由，其本质就是一个 x86 PC 加上多个网口，大多是基于 Linux 或 BSD 内核，使用 Intel 低端被动散热 CPU 打造出的千兆路由器，几百块就能实现千兆的性能，最重要的是拥有 QOS、多路拨号、负载均衡、防火墙、VPN 组网、科学上网等强大功能，传统路由器抛开科学上网不谈，其他功能也不是几百块就搞得定的。</p>
+<h3 id="软路由的弱点"><a href="#软路由的弱点" class="headerlink" title="软路由的弱点"></a>软路由的弱点</h3><p>软路由便宜，功能强大，但是也有弱点。它最大的弱点其实是性能：传统 *UNIX 网络栈的性能实在是不高。</p>
+<p>软路由的 NAT 延迟比硬路由明显更大，而且几百块的软路由 NAT 性能也不够，跑到千兆都难，而几百块的硬路由跑到千兆很容易。那怎么办呢？改操作系统啊。</p>
+<h2 id="SDN"><a href="#SDN" class="headerlink" title="SDN"></a>SDN</h2><p>软件定义网络，其本质就是使用计算机科学中最常用的“虚拟机”构想，将传统由硬件实现的 交换、网关、路由、NAT 等网络流量控制流程交由软件来统一管理：可以实现硬件不动，网络结构瞬间变化，避免了传统的停机维护调试的烦恼，也为大规模公有云计算铺平了道路。</p>
+<h3 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h3><p>虚拟机的思想自底向上完整地贯穿了计算机的每一个部分，硬件层有三个场效应管虚拟出的 SRAM、多个内存芯片虚拟出的一个“线性数组内存”，软件层有 jvm 虚拟机，PHP 虚拟机（解释器）。自然而然的，当网络成为了更大规模计算的瓶颈的时候，人们就会想，为什么网络不能虚拟呢？</p>
+<h3 id="OpenFlow"><a href="#OpenFlow" class="headerlink" title="OpenFlow"></a>OpenFlow</h3><p>最开始，SDN 还是基于硬件来实施的。Facebook 和 Google 使用的都是 OpenFlow 协议，作用在数据链路层（使用 MAC 地址通信的那一层，也就是普通交换机工作的那一层），它可以统一管理所有网关、交换等设备，让网络架构实时地做出改变，这对这种规模的公司所拥有的巨大的数据中心非常重要。</p>
+<h2 id="DPDK"><a href="#DPDK" class="headerlink" title="DPDK"></a>DPDK</h2><p>DPDK 是 SDN 更前沿的方向：使用 x86 通用 CPU 实现 10Gbps 甚至 40Gbps 的超高速网关（路由器）。</p>
+<h3 id="DPDK-是什么"><a href="#DPDK-是什么" class="headerlink" title="DPDK 是什么"></a>DPDK 是什么</h3><p>Intel DPDK 全称为 Intel Data Plane Development Kit，直译为“英特尔数据平面开发工具集”，它可以摆脱类 UNIX 网络数据包处理机制的局限，实现超高速的网络包处理。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181125193348.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<h3 id="DPDK-的价值"><a href="#DPDK-的价值" class="headerlink" title="DPDK 的价值"></a>DPDK 的价值</h3><p>当下，一台 40G 核心网管路由器动辄数十万，而 40G 网卡也不会超过一万块，而一颗性能足够的 Intel CPU 也只需要几万块，软路由的性价比优势是巨大的。</p>
+<p>实际上，阿里云和腾讯云也已经基于 DPDK 研发出了自用的 SDN，已经创造了很大的经济价值。</p>
+<h2 id="怎么做到的？"><a href="#怎么做到的？" class="headerlink" title="怎么做到的？"></a>怎么做到的？</h2><p>DPDK 使用自研的数据链路层（MAC地址）和网络层（ip地址）处理功能（协议栈），抛弃操作系统（Linux，BSD 等）提供的网络处理功能（协议栈），直接接管物理网卡，在用户态处理数据包，并且配合大页内存和 NUMA 等技术，大幅提升了网络性能。有论文做过实测，10G 网卡使用 Linux 网络协议栈只能跑到 2G 多，而 DPDK 分分钟跑满。</p>
+<h3 id="用户态网络栈"><a href="#用户态网络栈" class="headerlink" title="用户态网络栈"></a>用户态网络栈</h3><p>上篇文章我们已经说到，Unix 进程在网络数据包过来的时候，要进行一次上下文切换，需要分别读写一次内存，当系统网络栈处理完数据把数据交给用户态的进程如 Nginx 去处理还会出现一次上下文切换，还要分别读写一次内存。夭寿啦，一共 1200 个 CPU 周期呀，太浪费了。</p>
+<p>而用户态协议栈的意思就是把这块网卡完全交给一个位于用户态的进程去处理，CPU 看待这个网卡就像一个假肢一样，这个网卡数据包过来的时候也不会引发系统中断了，不会有上下文切换，一切都如丝般顺滑。当然，实现起来难度不小，因为 Linux 还是分时系统，一不小心就把 CPU 时间占完了，所以需要小心地处理阻塞和缓存问题。</p>
+<h3 id="NUMA"><a href="#NUMA" class="headerlink" title="NUMA"></a>NUMA</h3><p>NUMA 来源于 AMD Opteron 微架构，其特点是将 CPU 直接和某几根内存使用总线电路连接在一起，这样 CPU 在读取自己拥有的内存的时候就会很快，代价就是读取别 U 的内存的时候就会比较慢。这个技术伴随着服务器 CPU 核心数越来越多，内存总量越来越大的趋势下诞生的，因为传统的模型中不仅带宽不足，而且极易被抢占，效率下降的厉害。</p>
+<div align="center">
+<img src="https://infi-img.oss-cn-hangzhou.aliyuncs.com/img/20181125193711.png" style="display:block;width:70%;" alt="NAME" align="center">
+</div>
+
+<blockquote>
+<p>NUMA 利用的就是电子计算机（图灵机 + 冯·诺依曼架构）天生就带的涡轮：局部性。 </p>
+</blockquote>
+<h2 id="细说大页内存"><a href="#细说大页内存" class="headerlink" title="细说大页内存"></a>细说大页内存</h2><h3 id="内存分页"><a href="#内存分页" class="headerlink" title="内存分页"></a>内存分页</h3><p>为了实现虚拟内存管理机制，前人们发明了内存分页机制。这个技术诞生的时候，内存分页的默认大小是 4KB，而到了今天，绝大多数操作系统还是用的这个数字，但是内存的容量已经增长了不知道多少倍了。</p>
+<h3 id="TLB-miss"><a href="#TLB-miss" class="headerlink" title="TLB miss"></a>TLB miss</h3><p>TLB（Translation Lookaside Buffers）转换检测缓冲区，是内存控制器中为增加虚拟地址到物理地址的翻译速度而设立的一组电子元件，最近十几年已经随着内存控制器被集成到了 CPU 内部，每颗 CPU 的 TLB 都有固定的长度。</p>
+<p>如果缓存未命中（TLB miss），则要付出 20-30 个 CPU 周期的带价。假设应用程序需要 2MB 的内存，如果操作系统以 4KB 作为分页的单位，则需要 512 个页面，进而在 TLB 中需要 512 个表项，同时也需要 512 个页表项，操作系统需要经历至少 512 次 TLB Miss 和 512 次缺页中断才能将 2MB 应用程序空间全部映射到物理内存；然而，当操作系统采用 2MB 作为分页的基本单位时，只需要一次 TLB Miss 和一次缺页中断，就可以为 2MB 的应用程序空间建立虚实映射，并在运行过程中无需再经历 TLB Miss 和缺页中断。</p>
+<h3 id="大页内存"><a href="#大页内存" class="headerlink" title="大页内存"></a>大页内存</h3><p>大页内存 HugePage 是一种非常有效的减少 TLB miss 的方式，让我们来进行一个简单的计算。</p>
+<p>2013 年发布的 Intel Haswell i7-4770 是当年的民用旗舰 CPU，其在使用 64 位 Windows 系统时，可以提供 1024 长度的 TLB，如果内存页的大小是 4KB，那么总缓存内存容量为 4MB，如果内存页的大小是 2MB，那么总缓存内存容量为 2GB。显然后者的 TLB miss 概率会低得多。</p>
+<p>DPDK 支持 1G 的内存分页配置，这种模式下，一次性缓存的内存容量高达 1TB，绝对够用了。</p>
+<p>不过大页内存的效果没有理论上那么惊人，DPDK 实测有 10%~15% 的性能提升，原因依旧是那个天生就带的涡轮：局部性。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

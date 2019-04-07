@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | Monoid </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"Monoid","path":"reading/RD05-Scala/Recent-Articles/Monoid.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="Monoid"><a href="#Monoid" class="headerlink" title="Monoid"></a>Monoid</h1><blockquote>
+<p>整理自《Functional Programming In Scala》第十章。</p>
+</blockquote>
+<p>Monoid(幺半群) 是一个代数定义，是<em>纯代数(purely algebraic)</em>的一种，它简单、普遍存在且很实用。除了满足同样的代数法则外不同 Monoid 实例之间很少有关联，但这种代数结构定义了用于实现实用的多态函数所必须的所有法则。</p>
+<p>操作列表、连接字符串或在循环中累加都可以被拆解成 Monoid。下面介绍它在两个方面的使用方式：将问题拆分成小部分然后并行计算；将简单的部分组装成复杂的计算。</p>
+<h2 id="1-什么是-Monoid"><a href="#1-什么是-Monoid" class="headerlink" title="1. 什么是 Monoid"></a>1. 什么是 Monoid</h2><p>比如在字符串拼接的代数表达中，“foo” + “bar” 得到“foobar”，空串是这个操作的<em>单位元(identity)</em>(或称“幺元”)元素，即 “”+s 与 s + “” 的值都是 s。进一步，如果将三个串相加，r + s + t，由于这个操作是可结合的(associative)，因此 (r +s) +t 与 r + (s+t) 的结果是一样的。</p>
+<p>该规则同样适用于整数相加，它也是可结合的。(x+y)+z 与 x +(y+z) 的结果相同，而且由一个单位元素 0，它去其他整数相加时不会影响结果。同样乘法也是一样，它的单位元元素是 1。</p>
+<p>布尔操作符 || 和 &amp;&amp; 同样是可结合的，它们的单位元元素是 true 和 false。</p>
+<p>像这样的代数便成为 Monoid，结合律(associativity)和同一律(identity)则一起被称为<em>monoid法则</em>。一个 Monoid 由如下几部分构成：</p>
+<ul>
+<li>一个类型 A；</li>
+<li>一个可结合的二元操作 OP，接收两个参数后返回相同类型的值，对于任何<code>x:A, y:A, z:A</code>来说，<code>OP(OP(x,y), z)</code>和<code>OP(x, OP(y,z))</code>是等价的；</li>
+<li>一个值<code>zero:A</code>，它是一个单位元，对于任何<code>x:A</code>来说，<code>zero</code>与它的操作都等于 x 自身：<code>OP(x, zero) == x</code>或<code>OP(zero, x) == x</code>。</li>
+</ul>
+<p>可以使用 Scala 表示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Monoid</span>[<span class="type">A</span>] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">op</span></span>(a1:<span class="type">A</span>, a2:<span class="type">A</span>): <span class="type">A</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">zero</span></span>: <span class="type">A</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后是 String 实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> stringMonoid = <span class="keyword">new</span> <span class="type">Monoid</span>[<span class="type">String</span>] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">op</span></span>(a1:<span class="type">String</span>, a2:<span class="type">String</span>) = a1 + a2</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">zero</span></span>:<span class="type">String</span> = <span class="string">""</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者是 List 的连接：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注意这里是 def，一个返回 Monoid 实例的函数，否则将丢失类型参数 A</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">listMonoid</span></span>[<span class="type">A</span>] = <span class="keyword">new</span> <span class="type">Monoid</span>[<span class="type">List</span>[<span class="type">A</span>]] &#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">op</span></span>(a1:<span class="type">List</span>[<span class="type">A</span>], a2:<span class="type">List</span>[<span class="type">A</span>]) = a1 ++ a2</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">zero</span></span>: <span class="type">Nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>“有”一个 Monoid，还是“是”一个 Monoid：</p>
+<p>当程序员和数学家讨论：一个类型是 Monoid，或，有一个 Monoid实例，有两种不一致的表述方式。程序员易于认为一个<code>Monoid[A]</code>的实例是 Monoid，但这并不准确。Monoid 实际上是类型和定义法则的实例。更准确的说是类型 A 和 <code>Monoid[A]</code>实例定义的操作构成了一个 Monoid。</p>
+</blockquote>
+<p><strong>一个类型、一个此类型的二元操作(满足结合律)、一个单位元元素，这三者构成一个 Monoid。</strong></p>
+<h2 id="2-使用-Monoid-折叠列表"><a href="#2-使用-Monoid-折叠列表" class="headerlink" title="2. 使用 Monoid 折叠列表"></a>2. 使用 Monoid 折叠列表</h2><p>Monoid 和列表联系紧密，从 List 的<code>foldLeft</code>/<code>foldRight</code>签名中可以发现参数的类型很特别：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foldRight</span></span>[<span class="type">B</span>](z: <span class="type">B</span>)(f: (<span class="type">A</span>, <span class="type">B</span>) =&gt; <span class="type">B</span>): <span class="type">B</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span></span>[<span class="type">B</span>](z: <span class="type">B</span>)(f: (<span class="type">B</span>, <span class="type">A</span>) =&gt; <span class="type">B</span>): <span class="type">B</span></span><br></pre></td></tr></table></figure>
+<p>当 A 和 B 类型一样时：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foldRight</span></span>(z: <span class="type">A</span>)(f: (<span class="type">A</span>, <span class="type">A</span>) =&gt; <span class="type">A</span>): <span class="type">A</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span></span>(z: <span class="type">A</span>)(f: (<span class="type">A</span>, <span class="type">A</span>) =&gt; <span class="type">A</span>): <span class="type">A</span></span><br></pre></td></tr></table></figure>
+<p>如果一个字符串的列表，可以传递 StringMonoid 中的 OP 和 zero，用于将字符串进行拼接：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> words = <span class="type">List</span>(<span class="string">"Hic"</span>, <span class="string">"Est"</span>, <span class="string">"Index"</span>)</span><br><span class="line"><span class="keyword">val</span> s = words.foldRight(stringMonoid.zero)(stringMonoid.op)	<span class="comment">// "HicEstIndex"</span></span><br><span class="line"><span class="keyword">val</span> t = words.foldLeft(stringMonoid.zero)(stringMonoid.op)	<span class="comment">// "HicEstIndex"</span></span><br></pre></td></tr></table></figure>
+<p>会发现两个操作的结果一样，这正是因为结合律与同一律法则，无论左右结合效果都一样。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">words.foldRight(<span class="string">""</span>)(_ + _) == ((<span class="string">""</span> + <span class="string">"Hic"</span>) + <span class="string">"Est"</span>) + <span class="string">"Index"</span></span><br><span class="line">words.foldLeft(<span class="string">""</span>)(_ + _) == <span class="string">"Hic"</span> + (<span class="string">"Est"</span> + (<span class="string">"Index"</span> + <span class="string">""</span>))</span><br></pre></td></tr></table></figure>
+<p>可以编写一个通用的 concatenate 函数，使用 Monoid 去折叠列表：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">concatenate</span></span>[<span class="type">A</span>](as:<span class="type">List</span>[<span class="type">A</span>], m:<span class="type">Monoid</span>[<span class="type">A</span>]) :<span class="type">A</span> = as.foldLeft(m.zero)(m.op)</span><br></pre></td></tr></table></figure>
+<p>但是假如列表中的元素类型不是 Monoid 实例该如何处理呢，总是可以将列表 map 成另外的类型：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">foldMap</span></span>[<span class="type">A</span>, <span class="type">B</span>](as:<span class="type">List</span>[<span class="type">A</span>], m:<span class="type">Monoid</span>[<span class="type">B</span>])(f: <span class="type">A</span> =&gt; <span class="type">B</span>): <span class="type">B</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-结合律与并行化"><a href="#3-结合律与并行化" class="headerlink" title="3. 结合律与并行化"></a>3. 结合律与并行化</h2><p>Monoid 操作的结合律意味着可以自由选择如何进行数据结构的折叠操作。前面展示了使用列表的 foldLeft 和 foldRight 去调用满足结合律的函数，对列表按照顺序向左或向右的 reduce。如果有个 Monoid 可以使用<em>平衡折叠法(balance fold)</em>对列表进行 reduce，这样一些操作可能更加高效或支持并行化。</p>
+<p>假设一个有序集 a, b, c, d，三种不同的折叠方式：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">op(a, op(b, op(c, d)))	<span class="comment">// foldRight</span></span><br><span class="line">op(op(op(a, b), c), d)	<span class="comment">// foldLeft</span></span><br><span class="line">op(op(a, b), op(c, d))	<span class="comment">// balance fold</span></span><br></pre></td></tr></table></figure>
+<p>在平衡折叠中，因为两个 op 是独立的，因此支持同时运行。当每个 op 的时间花费与参数的长度成正比时平衡树的结构可以变得更加高效，比如下面的表达式：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="string">"lorem"</span>, <span class="string">"ipsum"</span>, <span class="string">"dolor"</span>, <span class="string">"sit"</span>).foldLeft(<span class="string">""</span>)(_ + _)</span><br></pre></td></tr></table></figure>
+<p>其求值轨迹为：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">List</span>(<span class="string">"lorem"</span>, <span class="string">"ipsum"</span>, <span class="string">"dolor"</span>, <span class="string">"sit"</span>).foldLeft(<span class="string">""</span>)(_ + _)</span><br><span class="line"><span class="type">List</span>(<span class="string">"ipsum"</span>, <span class="string">"dolor"</span>, <span class="string">"sit"</span>).foldLeft(<span class="string">"lorem"</span>)(_ + _)</span><br><span class="line"><span class="type">List</span>(<span class="string">"dolor"</span>, <span class="string">"sit"</span>).foldLeft(<span class="string">"loremipsum"</span>)(_ + _)</span><br><span class="line"><span class="type">List</span>(<span class="string">"sit"</span>).foldLeft(<span class="string">"loremipsumdolor"</span>)(_ + _)</span><br><span class="line"><span class="type">List</span>().foldLeft(<span class="string">"loremipsumdolorsit"</span>)(_ + _)</span><br><span class="line"><span class="string">"loremipsumdolorsit"</span></span><br></pre></td></tr></table></figure>
+<p>每次折叠，分配一个临时的字符串(foldLeft 的第一个参数)然后丢弃，下次又要分配一个更大的字符串。字符串的值是不变的，当 a + b 时，需要分配一个字符数组然后将 a 和 b 的值复制到这个新数组。这个时间花费与 a、b 的总长度是成正比的。相比更高效的方式是对半组合顺序集，先构建“loremipsum”和“dolorsit”，然后将他们加在一起。</p>
+<h2 id="4-例子：并行解析"><a href="#4-例子：并行解析" class="headerlink" title="4. 例子：并行解析"></a>4. 例子：并行解析</h2><p>如果需要统计字符串中的单词数，可以按顺序扫描字符串，寻找空格然后对连续的非空格字符计数。这样按顺序解析，解析器的状态可以表达成最后一个字符是否是空格。</p>
+<p>但是如果要处理一个巨大的文件，达到单机内存装不下，需要对文件进行切分才能处理。策略是将文件拆分成多个可以管理的块(chunk)，并行处理这些块，最后将结果合并起来。这时，解析器的状态可能会复杂一些，需要可以合并中间结果，无论这个部分是文件的开头、中间或结尾。这意味这合并操作需要时可结合的。</p>
+<p>把下面的字符串当做一个大文件：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"lorem ipsum dolor sit amet"</span></span><br></pre></td></tr></table></figure>
+<p>假如对半拆分字符串，可能会将一个单词拆分。当累加这些字符串的计算结果时需要避免重复计入同一个单词。所以这里仅仅将单词作为整体来计数是不严谨的。需要一个数据结构能处理部分结果，并能记录完整的单词。单词计数的结果则可以表示成一个代数数据结构：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sealed</span> <span class="class"><span class="keyword">trait</span> <span class="title">WC</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Stub</span>(<span class="params">chars: <span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">WC</span></span></span><br><span class="line"><span class="class"><span class="title">case</span> <span class="title">class</span> <span class="title">Part</span>(<span class="params">lStub:<span class="type">String</span>, words:<span class="type">Int</span>, rStum:<span class="type">String</span></span>) <span class="keyword">extends</span> <span class="title">WC</span></span></span><br></pre></td></tr></table></figure>
+<p><code>Stub</code>表示没有看到任何完整的单词，<code>Part</code>保存看到的完整的单词的个数，以及左边的部分单词和右边的部分单词。</p>
+<p>比如上面的字符串，拆分成“lorem ipsum do”和“lor sit amet”，对前者计数的结果为<code>Part(&quot;lorem&quot;, 1, do)</code>，对后者的计数结果为<code>Part(&quot;lor&quot;, 2, &quot;&quot;)</code>。</p>
+<blockquote>
+<p>Monoid 同态</p>
+<p>可能你会发现 Monoid 的函数之间有个法则。比如字符串的连接 Monoid 和整数累加 Monoid。假如取两个字符串的长度相加，等于连接两个字符串然后取其长度：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="string">"foo"</span>.length + <span class="string">"bar"</span>.length == (<span class="string">"foo"</span> + <span class="string">"bar"</span>).length</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p><code>length</code>是一个函数，它将 String 转化为 Int 并保存 Monoid 结构。这样的结构称为<strong>Monoid 同态(homomorphism)</strong>，一个 Monoid 同态 f 定义为在 Monoid M 和 N 之间对所有的值及 x、y 都遵守以下规则：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="type">M</span>.op(f(x), f(y)) = f(<span class="type">N</span>.op(x, y))</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>当设计自己的库时这个特性很有用，加入两个类型是 Monoid 并且他们之前存在函数，好的做法是考虑这个函数是否可以保持 Monoid 结构，并且测试其是否为 Monoid 同态。</p>
+<p>某些时候两个 Monoid 之间是双向同态的，<strong>同质(isomorphic)</strong>是在 M 和 N 之间存在的两个同态的函数 f 和 g，而且<code>f andThen g</code>和<code>g andThen f</code>是等同的函数。</p>
+<p>比如， String 和 List[Char] monoid 的连接操作是同质的。两个 Boolean monoid (false, ||) 和 (true, &amp;&amp;)通过取反(!)同样也是同质的。</p>
+</blockquote>
+<h2 id="5-可折叠数据结构"><a href="#5-可折叠数据结构" class="headerlink" title="5. 可折叠数据结构"></a>5. 可折叠数据结构</h2><p>现在需要为 IndexedSeq 实现一个折叠函数。一般处理这类数据结构中的额数据时，通常不在意具体结构是什么，也不在意是否延时或者提供有效的随机读写，等等。</p>
+<p>比如有个结构中是整形，需要计算他们的总和，可以使用 foldRight：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ints.foldRight(<span class="number">0</span>)(_ + _)</span><br></pre></td></tr></table></figure>
+<p>不需要关心 ints 的具体结构类型，他可以是 Vector、Stream 或其他列表，或者任何一个包含 foldRight 方法的类型。把这种通用性表达成下面的 trait：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Foldable</span>[<span class="type">F</span>[_]] </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">foldRight</span></span>[<span class="type">A</span>,<span class="type">B</span>](as:<span class="type">F</span>[<span class="type">A</span>])(z:<span class="type">B</span>)(f: (<span class="type">A</span>,<span class="type">B</span>) =&gt; <span class="type">B</span>): <span class="type">B</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">foldLeft</span></span>[<span class="type">A</span>,<span class="type">B</span>](as:<span class="type">F</span>[<span class="type">A</span>])(z:<span class="type">B</span>)(f: (<span class="type">B</span>,<span class="type">A</span>) =&gt; <span class="type">B</span>): <span class="type">B</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">foldMap</span></span>[<span class="type">A</span>,<span class="type">B</span>](as:<span class="type">F</span>[<span class="type">A</span>])(f: <span class="type">A</span> =&gt; <span class="type">B</span>)(mb:<span class="type">Monoid</span>[<span class="type">B</span>]): <span class="type">B</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">concatenate</span></span>[<span class="type">A</span>](as:<span class="type">F</span>[<span class="type">A</span>])(m:<span class="type">Monoid</span>[<span class="type">A</span>]): <span class="type">A</span> = foldLeft(as)(m.zero)(m.op)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里抽象出一个类型构造器 F，就像在之前章节中构建的 Parser 类型。表示为<code>F[_]</code>，这里的下划线表示 F 不是一个类型而是一个类型构造器，它接收一个类型参数。就像接收别的函数作为参数的函数被称为高阶函数，Foldable 是<strong>高阶类型构造函数</strong>或<strong>高阶类型</strong>。</p>
+<h2 id="6-Monoid-组合"><a href="#6-Monoid-组合" class="headerlink" title="6. Monoid 组合"></a>6. Monoid 组合</h2><p>Monoid 的真正强大之处在于组合。比如 类型 A、B 是 Monoid，那么 Tuple 类型 (A, B) 也是 Monoid (称 product)。</p>
+<h3 id="6-1-组装更加复杂的-Monoid"><a href="#6-1-组装更加复杂的-Monoid" class="headerlink" title="6.1. 组装更加复杂的 Monoid"></a>6.1. 组装更加复杂的 Monoid</h3><p>只需要包含的元素是 monoid，某些数据结构就能构建成 Monoid。比如当 value 类型是 Monoid 时，合并 key-value 映射的操作就能够构建 monoid：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mapMergeMonoid</span></span>[<span class="type">K</span>, <span class="type">V</span>](<span class="type">V</span>: <span class="type">Monoid</span>[<span class="type">V</span>]): <span class="type">Monoid</span>[<span class="type">Map</span>[<span class="type">K</span>, <span class="type">V</span>]] = &#123;</span><br><span class="line">  <span class="keyword">new</span> <span class="type">Monoid</span>[<span class="type">Map</span>[<span class="type">K</span>, <span class="type">V</span>]] &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">zero</span> </span>= <span class="type">Map</span>[<span class="type">K</span>, <span class="type">V</span>]()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">op</span></span>(a:<span class="type">Map</span>[<span class="type">K</span>,<span class="type">V</span>], b:<span class="type">Map</span>[<span class="type">K</span>,<span class="type">V</span>]) = </span><br><span class="line">      (a.keySet ++ b.keySet).foldLeft(zero) &#123; (acc, k) =&gt;</span><br><span class="line">        acc.updated(k, v.op(a.getOrElse(k, <span class="type">V</span>.zero), b.getOrElse(k, <span class="type">V</span>.zero)))</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用这个简单的组合子(combinator)既可以组装出复杂的 Monoid：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> m:<span class="type">Monoid</span>[<span class="type">Map</span>[<span class="type">String</span>, <span class="type">Map</span>[<span class="type">String</span>, <span class="type">Int</span>]]] = </span><br><span class="line">  mapMergeMonoid(mapMergeMonoid(intAddition))</span><br></pre></td></tr></table></figure>
+<h3 id="6-2-使用组合的-Monoid-融合多个遍历"><a href="#6-2-使用组合的-Monoid-融合多个遍历" class="headerlink" title="6.2.使用组合的 Monoid 融合多个遍历"></a>6.2.使用组合的 Monoid 融合多个遍历</h3><p>多个 Monoid 可以被组合在一起，则折叠数据时可以同时执行多个计算。比如同时获得一个列表的总和与长度，来计算平均值：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> m = prodocutMonoid(intAddition, intAddition)</span><br><span class="line"><span class="keyword">val</span> p = listFoldable.foldMap(<span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>))(a =&gt; (<span class="number">1</span>,a))(m)</span><br><span class="line"><span class="keyword">val</span> mean = p<span class="number">.1</span> / p<span class="number">.2</span>.toDouble	<span class="comment">//=&gt; 2.5</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7. 总结"></a>7. 总结</h2><p>Monoid 是第一个纯抽象代数，它定义为抽象的操作和对应的法则。可以在不知道参数是什么，仅知道其类型可以构建 monoid的情况下编写可用的函数。</p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>

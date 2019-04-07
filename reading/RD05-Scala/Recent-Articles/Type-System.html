@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+
+    <title>infilos | 类型系统 </title>
+    <meta name="description" content>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <!-- fonts -->
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,600,700" rel="stylesheet">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="/style/doc.css">
+
+    <!-- favicon -->
+    <link rel="icon" href="/images/favicon.ico">
+
+    
+
+  </head>
+  <body>
+
+   <script>window.__INITIAL_STATE__ = {"page":{"title":"类型系统","path":"reading/RD05-Scala/Recent-Articles/Type-System.html","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}},"data":{"navigation":{"logo":{"text":"Infilos","type":"link","path":"index.html"},"main":[{"text":"Welcome","type":"link","path":"index.html"},{"text":"READING","type":"label"},{"text":"Operating System","type":"link","path":"reading/RD01-OS/index.html","children":[{"text":"现代操作系统","type":"link","path":"reading/RD01-OS/Modern-Operating-Systems/contents.html"}]},{"text":"Virtual\tMachine","type":"link","path":"reading/RD02-VM/index.html","children":[{"text":"深入理解 JVM","type":"link","path":"reading/RD02-VM/Dive-Into-Jvm/contents.html"}]},{"text":"Compile System","type":"link","path":"reading/RD03-Compile/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD03-Compile/Recent-Articles/content.html"}]},{"text":"Java Language","type":"link","path":"reading/RD04-Java/index.html","children":[{"text":"设计模式","type":"link","path":"reading/RD04-Java/Design-Patterns/content.html"}]},{"text":"Scala Language","type":"link","path":"reading/RD05-Scala/index.html","children":[{"text":"相关文章","type":"link","path":"reading/RD05-Scala/Recent-Articles/content.html"}]},{"text":"Concurrent","type":"link","path":"reading/RD06-Concurrent/index.html","children":[{"text":"深入并行编程","type":"link","path":"reading/RD06-Concurrent/Parallel-Programming/content.html"},{"text":"七并发模型","type":"link","path":"reading/RD06-Concurrent/Concurrency-Model/content.html"},{"text":"Java 内存模型","type":"link","path":"reading/RD06-Concurrent/Java-Memory-Model/content.html"},{"text":"Java 并发实战","type":"link","path":"reading/RD06-Concurrent/Java-Con-Practice/content.html"}]},{"text":"Networking","type":"link","path":"reading/RD07-Networking/index.html"},{"text":"Distribute System","type":"link","path":"reading/RD08-Distribute/index.html"},{"text":"Storage System","type":"link","path":"reading/RD09-Storage/index.html"},{"text":"Message System","type":"link","path":"reading/RD10-Messages/index.html"},{"text":"Realtime Processing","type":"link","path":"reading/RD11-Realtime/index.html"},{"text":"Monitoring/Tracing","type":"link","path":"reading/RD12-Monitoring/index.html"},{"text":"Architecture Pattern","type":"link","path":"reading/RD13-Architecture/index.html"},{"text":"User Interface","type":"link","path":"reading/RD14-UI/index.html"},{"text":"Dev Management","type":"link","path":"reading/RD15-Management/index.html"},{"text":"Resources","type":"link","path":"reading/RD99-Resources/index.html"},{"text":"RESEARCH","type":"label"},{"text":"Unified UDF Modeling","type":"link","path":"research/RS01-Unified-UDF/index.html"},{"text":"REFERENCE","type":"label"},{"text":"Infilow Reference","type":"link","path":"http://infilow.infilos.com/"},{"text":"Parboiled Reference","type":"link","path":"reference/RF04-Parboiled/index.html"}]}},"config":{"timezone":"UTC","root":"/","time_format":"HH:mm:ss","theme":"../node_modules/hexo-theme-doc","theme_config":{"swagger_ui":{"version":2,"permalinks":true,"api_explorer":true,"download":"Download specification","show_extensions":false,"deep_linking":true,"display_operation_id":false,"doc_expansion":"none"},"search":{"skip":false,"background":false,"route":"/lunr.json"},"favicon":"/images/favicon.ico","google_analytics":"UA-123062585-1","support":{"link_url":"https://github.com/infilos/infilos.github.io/issues/new","link_text":"Raise an Issue on Github.","text":"Didn't find what you are looking for or find some errors? <br /> Try searching again on the left menu or","navigation":true,"navigation_label":"SUPPORT/FEEDBACK"}}}}</script>
+
+    <div id="react-navigation-root"><div class="doc-navigation" data-reactroot><nav class="doc-navbar"><a href="/index.html" class="doc-navbar__logo"><img src="/images/logo.png" class="doc-navbar__logo__img"><span class="doc-navbar__logo__text">Infilos</span></a><i class="dc-icon dc-icon--close dc-icon--interactive doc-sidebar-close doc-navbar__sidebar-close doc-navbar__sidebar-close--desktop"></i><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-navbar__sidebar-toggle"></i></nav><nav class="doc-sidebar"><div class="doc-sidebar__vertical-menu"><i class="dc-icon dc-icon--menu dc-icon--interactive doc-sidebar-toggle doc-sidebar-toggle--primary doc-sidebar__vertical-menu__item"></i><i class="dc-icon dc-icon--search dc-icon--interactive doc-sidebar__vertical-menu__item doc-sidebar__vertical-menu__item--primary"></i></div><div class="doc-sidebar-content"><div class="doc-sidebar__search-form"></div><ul class="doc-sidebar-list"><li class="doc-sidebar-list__item doc-sidebar-list__item--label"><span class>SUPPORT/FEEDBACK</span></li><li class="doc-sidebar-list__item doc-sidebar-list__item--link"><a class href="https://github.com/infilos/infilos.github.io/issues/new" target="_blank"><span>Raise an Issue on Github.</span></a></li></ul></div></nav></div></div>
+    <div class="doc-content">
+  <div class="dc-page">
+    <div class="dc-card">
+      <div id="react-search-results-root"></div>
+      <div id="page-content" class="doc-formatting">
+        <h1 id="类型系统"><a href="#类型系统" class="headerlink" title="类型系统"></a>类型系统</h1><p><strong>什么是类型系统(type-system)？</strong></p>
+<p><em>A type system is a tractable syntactic method for proving the absence of certain program behaviors by classifying phrases according to the kinds of values the compute.</em>  — Benjamin Pierce</p>
+<p>一个类型系统是一种易于理解的语法方法，根据所计算的值的类别对短语进行分类，以证明某些程序行为的缺失。</p>
+<p><strong>什么是类型(type)？</strong></p>
+<ul>
+<li>一个类型定义了一个变量可以拥有的一组值，以及一组能够应用于这些值的函数；</li>
+<li>一组值可以被定义为：<ul>
+<li>笛卡尔产品类型(Cartesian product Types)，比如 <code>case</code> 类或元组；</li>
+<li>总和类型(Sum Types)，比如 <code>Either</code>。</li>
+</ul>
+</li>
+<li>类型可以是抽象的和(或)多态的。</li>
+</ul>
+<p><strong>为什么需要类型？</strong></p>
+<ul>
+<li><em>Make illegal states unrepresentable.</em> — Yaron Minsky<ul>
+<li>使非法状态无法表示</li>
+</ul>
+</li>
+<li><em>Where static typing fits, do it every time because it has just fantastic maintenance benefits.</em> — Simon Peyton<ul>
+<li>在合适的场景总是使用静态类型，因为它具有非常好的维护优势</li>
+</ul>
+</li>
+<li><em>Compiler can use Type informations to optimize compiled code.</em> <ul>
+<li>编译器可以使用类型信息来优化被编译的代码</li>
+</ul>
+</li>
+</ul>
+<p><strong>Scala 的类型系统？</strong></p>
+<ul>
+<li>Scala 是一种同时支持面向对象和函数式的多范式语言</li>
+<li>Scala 拥有<strong>强大</strong>的<strong>静态</strong>类型系统<ul>
+<li>会在编译期检查类型</li>
+<li>编译器能够通过推断类型</li>
+<li>函数也可以作为类型：<code>A =&gt; B</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>类型的用途？</strong></p>
+<p>类型可以用于定义：</p>
+<ul>
+<li>(抽象)类</li>
+<li>对象</li>
+<li>特质</li>
+</ul>
+<p><strong><a href="http://stackoverflow.com/questions/7432146/what-is-scalas-powerful-type-system" target="_blank" rel="noopener">Scala 中类型相关的特性？</a></strong></p>
+<h2 id="设计目的"><a href="#设计目的" class="headerlink" title="设计目的"></a>设计目的</h2><blockquote>
+<p>本部分整理至 Martin Odersky 的访谈，原文地址：<a href="http://www.artima.com/scalazine/articles/scalas_type_system.html" target="_blank" rel="noopener">The Purpose of Scala’s Type System</a>，中文地址：<a href="http://www.infoq.com/cn/articles/scala-type-system" target="_blank" rel="noopener">Scala类型系统的目的</a>。</p>
+</blockquote>
+<h3 id="可伸缩性-scalability"><a href="#可伸缩性-scalability" class="headerlink" title="可伸缩性(scalability)"></a>可伸缩性(scalability)</h3><p>Scala 可以让你不必混用多种专用语言，无论是小型程序还是大型程序，无论是通用用途还是特定应用领域，Scala 都可以胜任。这样，可以避免你在多种语言环境中传递数据。</p>
+<p>比如你想跨越数据边界传递数据，像 JDBC，从 Java 像数据库发起一次 SQL 查询，那么发出的查询最终将会是个字符串。这就意味着如果程序中只要有小小的拼写错误，在最终运行时，就会表现为一次非法查询，从而导致一系列相关错误。整个过程中编译器和类型系统不会告诉你那里写错了。</p>
+<p>同时，如果仅使用一种语言，则只需要面对一套环境和工具。</p>
+<h3 id="可扩展性-extensibility"><a href="#可扩展性-extensibility" class="headerlink" title="可扩展性(extensibility)"></a>可扩展性(extensibility)</h3><p>“可伸缩性“的维度是”从小到大“。而可扩展性表示从”从通用用途到特定需求“。你可以强化 Scala 语言，使之涵盖你特别关注的领域。</p>
+<p>比如数字类型，不同领域有很多不同的数字类型，密码学中的大数、商务人士用的十进制大数、科学家用的复数等等。但如果在语言中加入所有这些可能的类型，则会变得非常笨重。</p>
+<p>因此我们可以留给外部库实现，但是又想像使用内置类型的代码一样干净、优雅。为此，你需要语言提供某些扩展机制，是你能够编写用起来不像库的库。</p>
+<h3 id="小规模编程中的类型"><a href="#小规模编程中的类型" class="headerlink" title="小规模编程中的类型"></a>小规模编程中的类型</h3><p>小规模编程中类型会显得不那么重要。类型的价值分布在一条长长的光谱上，一端表示超级有用，一端表示极度麻烦。通常说它麻烦是因为类型定义可能会太过冗余，要求你手动指定大量类型。有用则是因为，类型能避免运行时错误，能够提供 API 签名文档，能够为代码重构提供安全底线。</p>
+<p>Scala 的类型推断，试图尽可能减少类型的麻烦之处。这意味着你编写脚本时并不需要涉及类型，系统会自动进行推断，同时编译器内部仍然会考虑类型。因此仍然能够享受类型检查带来的便利。</p>
+<h3 id="单元测试与随心所欲的表达式"><a href="#单元测试与随心所欲的表达式" class="headerlink" title="单元测试与随心所欲的表达式"></a>单元测试与随心所欲的表达式</h3><p>仍然需要单元测试来测试你的程序逻辑。但相比动态类型语言，不需要额外对类型进行琐碎的单元测试，因此 Scala 中的单元测试也会精练很多。</p>
+<p>另一条针对类型系统的反对意见是：静态类型对表达式限制太严。比如”我想更自由的表达自己，不想要类型系统的条条框框“。我(Martin)认为这种意见不靠谱，第一，Scala 的类型系统实际上很灵活，所以通常它可以让你用非常灵活的模式排列组合，而像 Java 这种类型系统偏弱的语言则难以实现；第二，通过模式匹配，你可以通过非常灵活的方式提取类型信息，甚至根本感觉不到类型信息的损失。</p>
+<h3 id="鸭子类型，Java-中的缺失"><a href="#鸭子类型，Java-中的缺失" class="headerlink" title="鸭子类型，Java 中的缺失"></a>鸭子类型，Java 中的缺失</h3><p>只要它具备我需要的功能，那么就可以把它当真。比如我需要某种支持关闭操作的资源，我可以以这种方式声明”它必须有 close 方法“，因此我不用关心它是 File、Channel 等等。</p>
+<p>要想在 Java 中实现的话，需要定义一个包含该方法的通用接口，然后大家都需要实现这个接口。首先为了实现这一切就会带来大量接口和样板代码。其次，如果有了即成事实之后，你才想到要提个接口，那么几乎不可能做到。如果事先就写了一个类，鉴于这些类早已存在，那么你不改代码就无法加入该接口，除非修改所有客户端代码。所以，这一切都是类型系统强加给你的限制。</p>
+<p>而 Scala 中则能表达鸭子类型。你完全可以用 Scala 把某一类型定义为：”任何拥有 close 方法并且该方法返回 Unit 的类型“。同时还可以把类型定义与其他约束结合起来。则可以这样定义类型：任何继承自某个类型，且拥有某某方法签名的类型。还可以这样定义，任何继承自某某类，且拥有某某类型的内部类的类型。从本质上讲，你可以通过定义类型汇总有哪些东西将为你所用，来描绘类型的结构。</p>
+<h3 id="既存类型-existential-types"><a href="#既存类型-existential-types" class="headerlink" title="既存类型(existential types)"></a>既存类型(existential types)</h3><p>既存类型已有 20 多年历史，它表示，给定某种类型，比如 List，但其内部元素是未知类型。你只知道它是由某种特定类型元素构成的 List，然而并不知道这个特定类型具体是哪种类型。这个概念在 Scala 中可以用既存类型来表达。比如：<code>List[T] forSome {type T}</code>。稍微有点笨重，这也算有意为之。因为事实证明，既存类型往往不大好处理。Scala 有更好的选择，因此不那么需要既存类型，因为 Scala 的类型可以包含其他类型作为内部成员。</p>
+<p>归根结底，Scala 只有三种情况需要既存类型。</p>
+<ul>
+<li>Scala 需要能表示 Java 通配符的语义。</li>
+<li>Scala 需要能表示 Java 的 raw 类型，因为有许多库使用类非泛型类型，会出现 raw 类型。如果有一个 Java raw 类型 <code>java.util.List</code>，那么它其实是位置元素类型的 List。</li>
+<li>既存类型可以把虚拟机中的实现细节反映到上层。类似 Java ，Scala 使用的泛型模型时”擦除类型“。所以在程序运行起来以后，我们就再也找不到类型参数了。之所以要进行擦除，是为了与 Java 的对象模型进行互操作。可是，如果我们需要反射，或者需要表达虚拟机的实现细节时该怎么办呢？我们需要有能力用 Scala 中的某些类型表示虚拟机的行为。</li>
+</ul>
+<p>有了既存类型，即使某一类型中的某些方面尚不可知，我们仍然可以操作该类型。</p>
+<p>比如，Scala 中的 List，我希望能够描述 head 方法的返回类型。在虚拟机级别，List 类型是 <code>List[T] forSome {type T}</code>。我们不知道 T 是什么。只知道 head 返回 T。既存类型理论告诉我们，该类型是”某些类型 T 中的 T“。也就相当于根类型 Object。那么我们从 head 方法中取回的就是 Object。因此 Scala 中我们要是知道更多信息，就可以直接指定具体类型而不用既存类型的限定规则。但是如果没有更多信息，我们就留着既存类型，让既存类型理论帮我们推断出返回类型。</p>
+<p>如果 Java 采用的是”具现化“的泛型类型系统，不支持 raw 类型或通配符类型，那么 Scala 中的既存类型在意义不大，恐怕不会实现既存类型。</p>
+<h2 id="Java-与-Scala-中的型变"><a href="#Java-与-Scala-中的型变" class="headerlink" title="Java 与 Scala 中的型变"></a>Java 与 Scala 中的型变</h2><p>Java 的型变是定义在使用通配符的代码之处，而 Scala 则是在类型定义之处，当然 Scala 的既存类型一样支持通配符，支持使用 Java 的写法，但并不推荐这么做。</p>
+<p>首先，什么是”类型定义之处的型变“？当你定义某个类的类型参数时，例如 <code>List[T]</code>，会有一个问题，如果你给一个苹果列表，那这个列表算不算水果列表呢？显然算，只要苹果是水果的子类型，<code>List[Appke]</code>就是<code>List[Fruit]</code>的子类型，这称为协变。</p>
+<p>但某些情况下种种关系不成立，比如我有一个变量，只能用来保存 Apple，那么这个变量就是对类型 Apple 的引用。这个变量并不能当做 Fruit 类型的引用，因为我不能把任意 Fruit 赋值给这个变量，它只能是 Apple。因此可以发现，上述子类型关系在有些情况下适用，有些则不适用。</p>
+<p>Scala 中的解决方案是给类型参数添加一个标志。如果 List 中的 T 支持协变，则写作<code>List[+T]</code>。这将意味着任意 List 之间的关系都可以随着其 T 的关系而协变。要想支持协变，必须遵守协变的附加条件。举例来说，只有 List 内容不可变式，List 才能支持协变，否则将会遇到刚才引用变量中类似的问题，而导致无法协变。</p>
+<p>Scala 中的机制是这样的：程序员可以声明”我觉得 List 应用支持协变“，即，要求 List 必须遵守子类型关系，然后给 List 的类型参数加上加号标志，仅需一次，List 的所有用户都可以使用。然后编译器会去找出 List 内的所有定义实际上是否兼容协变，确保 List 中不存在导致冲突的成员签名。</p>
+<p>相比之下，以 Java 的方式使用通配符，这就意味着库的作者对协变爱莫能助，只能草草定义成 <code>List&lt;T&gt;</code>了事。但接下来如果用户需要协变 List，却不能写作<code>List&lt;Fruit&gt;</code>，而是<code>List&lt;? extends Fruit&gt;</code>。通配符就是这样用的。问题在于这是用户代码啊，用户总不能人人都像设计库的人那么专业吧。此外，这些标注之间，只要有一处不匹配，就会导致类型错误。</p>
+<p>Scala 中可以在库中处理型变，让用户感觉不到型变存在，不必手动处理型变。</p>
+<h3 id="抽象类型成员"><a href="#抽象类型成员" class="headerlink" title="抽象类型成员"></a>抽象类型成员</h3><p>抽象类型与泛型参数看似类似，但拥有更多好处。对于抽象，业界有两套不同的机制：参数化和抽象类型成员。Java 也一样支持两套抽象，只不过 Java 的两套抽象取决于对什么进行抽象。Java 支持抽象方法，但不支持把方法作为参数；Java 不支持抽象字段，但支持把值作为参数；Java 不支持抽象类型成员，但支持把类型作为参数。所以在 Java 中三者均可抽象，但是之间的原理有所区别。</p>
+<p>在 Scala 中试图把这些抽象支持的更完备、更正交，即对上述三类成员都采用相同的构造原理。因此，你可以使用抽象字段，也可以使用值参数；可以把方法(函数)作为参数，也可以声明抽象方法；即可以指定类型参数也可以声明抽象类型。至少在原则上，我们可以用同一种面向对象抽象成员的形式，表达全部三类参数。</p>
+<p>抽象类型能够更好的处理先前谈到的协变问题。比如，一个 Ainmal 类，其中一个 eat 方法。问题是，如果从 Animal 派生一个类，比如 Cow，那么就能吃某一种食物，比如 Grass。Cow 不可以吃 Fish 之类的其他食物。你希望有办法可以声明 Cow 拥有一个 eat 方法，且该方法只能吃 Grass。实际上，这个需求在 Java 中实现不了，因为你一定会构造出有矛盾的情形，类似之前把 Fruit 复制给 Apple 一样。</p>
+<p>Scala 中则可以增加一个类型成员，比如声明一个 SuitableFood 类型，它不定义具体是什么，这就是抽象类型，直接让 Animal 的 eat 方法吃下 SuitableFood 即可。然后在 Cow 中指定其为 Grass 即可。</p>
+<p>所以，抽象类型提供了一种机制：先在父类中声明未知类型，稍后再在子类中填上某种已知类型。</p>
+<p>你可能会说用参数也可以实现同样功能。确实可以。你可以给 Animal 增加参数，表示能吃的食物。但实践中，当你需要支持许多不同的功能是就会导致参数爆炸。而且通常更要命的问题是参数的边界。</p>
+<h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><h3 id="类型推断"><a href="#类型推断" class="headerlink" title="类型推断"></a>类型推断</h3><p>Scala 拥有类型推断，这表示我们可以省略掉类型注解。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">Thing</span></span></span><br><span class="line"><span class="class"><span class="title">def</span> <span class="title">getThing</span> </span>= <span class="keyword">new</span> <span class="type">Thing</span> &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// without Type Ascription, the type is infered to be `Thing`</span></span><br><span class="line"><span class="keyword">val</span> infered = getThing</span><br><span class="line"></span><br><span class="line"><span class="comment">// with Type Ascription</span></span><br><span class="line"><span class="keyword">val</span> thing: <span class="type">Thing</span> = getThing</span><br></pre></td></tr></table></figure>
+<p>在这些情况下都是可以编译通过的。所以都有哪些地方不能省略类型注解呢：</p>
+<ul>
+<li>参数</li>
+<li>公共方法返回值</li>
+<li>递归或重载方法</li>
+<li>需要包含类型签名来加快编译速度</li>
+<li>需要类型签名来使代码更易读</li>
+</ul>
+<h3 id="统一的类型系统-—-Any、AnyRef、AnyVal"><a href="#统一的类型系统-—-Any、AnyRef、AnyVal" class="headerlink" title="统一的类型系统 — Any、AnyRef、AnyVal"></a>统一的类型系统 — Any、AnyRef、AnyVal</h3><p>我们之所以称 Scala 的类型系统是统一的，是因为它拥有一个顶层类型 Any。这与 Java 不同，它有一些原始类型(int/long/float/double/byte/char/short/boolean)并非扩展自 Java 中看起来像是顶层类型的 Object。</p>
+<p>Any 作为顶层类型，下面有 AnyVal 和 AnyRef 两种子类型。</p>
+<p>AnyRef 相当于 Java 中 对象的世界，对应于 Object，作为所有对象的超类。而 AnyVal 表示了 Java 中的 值世界，像 int 或其他 JVM 原始类型。</p>
+<p>因此我们可以定义一个接收 Any 类型的方法，同时能够处理 Int 或 String。这对类型系统来说是透明的虽然在虚拟机层 Int 实例会被打包成一个对象。通过查看字节码能够发现：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Method</span> scala/runtime/<span class="type">BoxesRunTime</span>.boxToInteger:(<span class="type">I</span>)<span class="type">Ljava</span>/lang/<span class="type">Integer</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Conventional types</li>
+<li>Value type classes</li>
+<li>Nonnullable type</li>
+<li>Monad types</li>
+<li>Trait types</li>
+<li>Singlton object types</li>
+<li>Compound types</li>
+<li>Functional Types</li>
+<li>Case classes</li>
+<li>Path-dependent types</li>
+<li>Anonymous types</li>
+<li>Self types</li>
+<li>Type aliases</li>
+<li>Package object</li>
+<li>Generic types<ul>
+<li>类型擦除问题</li>
+</ul>
+</li>
+<li>Pattern Match</li>
+<li>Bounded generic types</li>
+<li>Type Variance</li>
+<li>Higher kinded types</li>
+<li>Abstract types</li>
+<li>Existential types</li>
+<li>Implicit types</li>
+<li>View bounded types</li>
+<li>Structural types</li>
+<li>Dotty?</li>
+</ul>
+<p>TODO: <a href="http://ktoso.github.io/scala-types-of-types/#type-of-an-code-object-code" target="_blank" rel="noopener">http://ktoso.github.io/scala-types-of-types/#type-of-an-code-object-code</a></p>
+<h2 id="社区评论"><a href="#社区评论" class="headerlink" title="社区评论"></a>社区评论</h2><p><a href="https://www.zhihu.com/question/28573046" target="_blank" rel="noopener">Scala 的语言设计有哪些缺陷？</a></p>
+<p>Scala 中提供了相当多的便利，但这与<strong>类型系统</strong>的强大无关，仅仅是因为与<strong>类型</strong>有关。而类型系统的强大之处在于其强大的表现力，能够表示在其它语言中无法表示的事情。</p>
+<p>事实上，类型推断是类型系统效率的直接影响因素—它并非那么强大，有些语言拥有完整的类型推断，比如 Haskell。</p>
+<p>Scala 中采用局部的基于流的推导，而不是全局式的 HM 推导，导致有些情况不如 Haskell 的推导那么强大。</p>
+<p><a href="https://en.wikipedia.org/wiki/Type_inference" target="_blank" rel="noopener">维基百科：类型推断</a></p>
+<p><a href="https://www.quora.com/Why-doesnt-every-programming-language-have-type-inference" target="_blank" rel="noopener">为什么有的语言不支持类型推断？</a></p>
+<p>图灵完备：<a href="http://www.tuicool.com/articles/rqUjAb" target="_blank" rel="noopener">http://www.tuicool.com/articles/rqUjAb</a></p>
+
+        <div id="react-support-footer-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+<script>
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-123062585-1', 'auto');
+    ga('send', 'pageview');
+  }
+</script>
+
+
+
+    
+
+    <!-- js vendors -->
+    <script src="//code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lunr.js/2.1.0/lunr.min.js"></script>
+
+    <!-- js source  -->
+    <script src="/script/doc.js"></script>
+
+    
+
+  </body>
+</html>
