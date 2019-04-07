@@ -41,6 +41,10 @@ main:
 - text: Java Language
   type: link
   path: reading/RD04-Java/index.html
+  children:
+    - text: 设计模式
+      type: link
+      path: reading/RD04-Java/Design-Patterns/content.html
 
 #...............................................................................#
 - text: Scala Language
